@@ -1,10 +1,5 @@
 import { motion } from "framer-motion";
 
-interface AnalysisResultProps {
-  onConfirm: () => void;
-  onAdjust: () => void;
-}
-
 const RESULT = {
   space: { type: "客厅", area: "25㎡", shape: "长方形", features: ["采光好", "客餐一体"] },
   style: { primary: "北欧简约", colors: ["#F5F1E8", "#E8E8E8", "#F0EBE0"], mood: "温馨放松" },
@@ -17,7 +12,7 @@ const RESULT = {
   lifestyle: "居家型 · 高频使用 · 看电视、窝沙发",
 };
 
-const AnalysisResult = ({ onConfirm, onAdjust }: AnalysisResultProps) => (
+const AnalysisResult = () => (
   <motion.div
     initial={{ opacity: 0, y: 8 }}
     animate={{ opacity: 1, y: 0 }}
@@ -32,7 +27,6 @@ const AnalysisResult = ({ onConfirm, onAdjust }: AnalysisResultProps) => (
     </div>
 
     <div className="p-4 space-y-3">
-      {/* Space */}
       <InfoRow icon="🏠" label="SPACE">
         <span className="text-xs">
           {RESULT.space.type} · {RESULT.space.area} · {RESULT.space.shape}
@@ -44,7 +38,6 @@ const AnalysisResult = ({ onConfirm, onAdjust }: AnalysisResultProps) => (
         </div>
       </InfoRow>
 
-      {/* Style */}
       <InfoRow icon="🎨" label="STYLE">
         <span className="text-xs">
           {RESULT.style.primary} · {RESULT.style.mood}
@@ -60,13 +53,11 @@ const AnalysisResult = ({ onConfirm, onAdjust }: AnalysisResultProps) => (
         </div>
       </InfoRow>
 
-      {/* Budget */}
       <InfoRow icon="💰" label="BUDGET">
         <span className="font-mono-data text-sm font-semibold">{RESULT.budget.range}</span>
         <span className="text-[10px] text-muted-foreground ml-2">{RESULT.budget.flexibility}</span>
       </InfoRow>
 
-      {/* Priority */}
       <InfoRow icon="🎯" label="PRIORITY">
         <div className="space-y-1.5 w-full">
           {RESULT.priority.map((p) => (
@@ -88,7 +79,6 @@ const AnalysisResult = ({ onConfirm, onAdjust }: AnalysisResultProps) => (
         </div>
       </InfoRow>
 
-      {/* Lifestyle */}
       <InfoRow icon="🛋️" label="LIFE">
         <span className="text-xs">{RESULT.lifestyle}</span>
       </InfoRow>
@@ -110,20 +100,16 @@ const AnalysisResult = ({ onConfirm, onAdjust }: AnalysisResultProps) => (
       </div>
     </div>
 
-    {/* Actions */}
-    <div className="px-4 pb-4 flex gap-2">
-      <button
-        onClick={onConfirm}
-        className="flex-1 py-2 bg-primary text-primary-foreground text-xs font-medium rounded-button"
-      >
-        确认，开始设计
-      </button>
-      <button
-        onClick={onAdjust}
-        className="flex-1 py-2 bg-secondary text-secondary-foreground text-xs font-medium rounded-button"
-      >
-        需要调整
-      </button>
+    {/* Auto-proceeding hint */}
+    <div className="px-4 pb-3">
+      <div className="flex items-center gap-1.5">
+        <motion.div
+          animate={{ opacity: [0.3, 1, 0.3] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+          className="w-1.5 h-1.5 rounded-full bg-primary"
+        />
+        <span className="text-[10px] text-muted-foreground">正在根据分析结果生成设计方案...</span>
+      </div>
     </div>
   </motion.div>
 );
