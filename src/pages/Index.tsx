@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ChatHeader from "@/components/chat/ChatHeader";
-import ChatInput from "@/components/chat/ChatInput";
+import ChatInput, { type ChatInputHandle } from "@/components/chat/ChatInput";
 import MessageBubble from "@/components/chat/MessageBubble";
 import AnalysisProcess from "@/components/chat/AnalysisProcess";
 import AnalysisResult from "@/components/chat/AnalysisResult";
