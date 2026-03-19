@@ -22,7 +22,7 @@ const Index = () => {
   const [showDesignSolution, setShowDesignSolution] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<{ focus: () => void }>(null);
+  const inputRef = useRef<ChatInputHandle>(null);
 
   const scrollToBottom = useCallback(() => {
     setTimeout(() => {
