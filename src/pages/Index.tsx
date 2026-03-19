@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ChatHeader from "@/components/chat/ChatHeader";
-import ChatInput from "@/components/chat/ChatInput";
+import ChatInput, { type ChatInputHandle } from "@/components/chat/ChatInput";
 import MessageBubble from "@/components/chat/MessageBubble";
 import AnalysisProcess from "@/components/chat/AnalysisProcess";
 import AnalysisResult from "@/components/chat/AnalysisResult";
 import DesignSolutionCard from "@/components/chat/DesignSolutionCard";
+import SolutionSheet from "@/components/chat/SolutionSheet";
 import WelcomeScreen from "@/components/chat/WelcomeScreen";
 import { mockDesignSolution } from "@/data/mockDesignSolution";
 import type { ChatMessage } from "@/types/chat";
@@ -19,7 +20,9 @@ const Index = () => {
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [analysisComplete, setAnalysisComplete] = useState(false);
   const [showDesignSolution, setShowDesignSolution] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<ChatInputHandle>(null);
 
   const scrollToBottom = useCallback(() => {
     setTimeout(() => {
@@ -45,10 +48,8 @@ const Index = () => {
     []
   );
 
-  // After analysis completes, auto-proceed to design solution
   const handleAnalysisComplete = useCallback(() => {
     setAnalysisComplete(true);
-    // Auto-proceed: show typing then design solution
     setTimeout(() => {
       setIsTyping(true);
       setTimeout(() => {
@@ -80,7 +81,6 @@ const Index = () => {
       if (phase === "welcome") setPhase("chat");
 
       if (messages.length === 0) {
-        // First message → start analysis
         setIsTyping(true);
         setTimeout(() => {
           setIsTyping(false);
@@ -103,6 +103,21 @@ const Index = () => {
     },
     [messages, phase, addAssistantMessage]
   );
+
+  const handleViewDetail = useCallback(() => {
+    setSheetOpen(true);
+  }, []);
+
+  const handleModify = useCallback(() => {
+    // Close sheet (or keep half-open) and focus input
+    setSheetOpen(false);
+    setTimeout(() => {
+      inputRef.current?.focus();
+      addAssistantMessage({
+        content: "请告诉我您想调整方案的哪些方面？比如：\n• 更换沙发材质或颜色\n• 调整预算分配\n• 修改风格方向\n• 增减某件商品\n我会实时更新方案。",
+      });
+    }, 300);
+  }, [addAssistantMessage]);
 
   return (
     <div className="h-dvh flex flex-col bg-background">
@@ -139,7 +154,11 @@ const Index = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="mb-4"
               >
-                <DesignSolutionCard solution={mockDesignSolution} />
+                <DesignSolutionCard
+                  solution={mockDesignSolution}
+                  onViewDetail={handleViewDetail}
+                  onModify={handleModify}
+                />
               </motion.div>
             )}
 
@@ -168,7 +187,15 @@ const Index = () => {
         </div>
       </div>
 
-      <ChatInput onSend={handleSend} disabled={isTyping} />
+      {/* Solution detail sheet */}
+      <SolutionSheet
+        solution={mockDesignSolution}
+        isOpen={sheetOpen}
+        onClose={() => setSheetOpen(false)}
+        onModify={handleModify}
+      />
+
+      <ChatInput ref={inputRef} onSend={handleSend} disabled={isTyping} />
     </div>
   );
 };

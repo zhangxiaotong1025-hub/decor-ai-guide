@@ -1,14 +1,22 @@
-import { useState, useRef, type KeyboardEvent } from "react";
+import { useState, useRef, useImperativeHandle, forwardRef, type KeyboardEvent } from "react";
 import { Send, ImagePlus } from "lucide-react";
 
-interface ChatInputProps {
+export interface ChatInputProps {
   onSend: (text: string) => void;
   disabled?: boolean;
 }
 
-const ChatInput = ({ onSend, disabled }: ChatInputProps) => {
+export interface ChatInputHandle {
+  focus: () => void;
+}
+
+const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(({ onSend, disabled }, ref) => {
   const [text, setText] = useState("");
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  useImperativeHandle(ref, () => ({
+    focus: () => inputRef.current?.focus(),
+  }));
 
   const handleSend = () => {
     const trimmed = text.trim();
@@ -26,7 +34,7 @@ const ChatInput = ({ onSend, disabled }: ChatInputProps) => {
   };
 
   return (
-    <div className="flex-shrink-0 border-t border-border bg-card/80 backdrop-blur-sm px-4 py-3">
+    <div className="flex-shrink-0 border-t border-border bg-card/80 backdrop-blur-sm px-4 py-3 z-[60] relative">
       <div className="max-w-2xl mx-auto">
         <div className="flex items-end gap-2 bg-secondary/50 rounded-outer p-2">
           <button
@@ -60,6 +68,8 @@ const ChatInput = ({ onSend, disabled }: ChatInputProps) => {
       </div>
     </div>
   );
-};
+});
+
+ChatInput.displayName = "ChatInput";
 
 export default ChatInput;
