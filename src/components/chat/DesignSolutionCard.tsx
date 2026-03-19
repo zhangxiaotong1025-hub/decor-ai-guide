@@ -1,14 +1,13 @@
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import type { DesignSolution } from "@/types/chat";
 
 interface DesignSolutionCardProps {
   solution: DesignSolution;
+  onViewDetail: () => void;
+  onModify: () => void;
 }
 
-const DesignSolutionCard = ({ solution }: DesignSolutionCardProps) => {
-  const navigate = useNavigate();
-
+const DesignSolutionCard = ({ solution, onViewDetail, onModify }: DesignSolutionCardProps) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -27,8 +26,8 @@ const DesignSolutionCard = ({ solution }: DesignSolutionCardProps) => {
         </div>
       </div>
 
-      {/* Render image */}
-      <div className="relative">
+      {/* Render image - tappable */}
+      <button onClick={onViewDetail} className="relative w-full text-left">
         <img
           src={solution.renderImages[0]}
           alt={`${solution.name}效果图`}
@@ -41,35 +40,21 @@ const DesignSolutionCard = ({ solution }: DesignSolutionCardProps) => {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.5 + i * 0.15 }}
-            className="absolute group"
+            className="absolute"
             style={{ left: `${ann.position.x}%`, top: `${ann.position.y}%` }}
           >
-            <div className="w-4 h-4 rounded-full bg-primary/80 border-2 border-primary-foreground shadow-elevated flex items-center justify-center cursor-pointer">
+            <div className="w-4 h-4 rounded-full bg-primary/80 border-2 border-primary-foreground shadow-elevated flex items-center justify-center">
               <div className="w-1.5 h-1.5 rounded-full bg-primary-foreground" />
-            </div>
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block z-10">
-              <div className="bg-foreground text-background text-[10px] px-2 py-1 rounded-button whitespace-nowrap shadow-float">
-                {ann.label}
-              </div>
             </div>
           </motion.div>
         ))}
-        {/* View switcher */}
-        <div className="absolute bottom-2 right-2 flex gap-1">
-          {["正面", "侧面", "俯视"].map((v, i) => (
-            <span
-              key={v}
-              className={`text-[9px] px-1.5 py-0.5 rounded-button backdrop-blur-sm ${
-                i === 0
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-foreground/30 text-primary-foreground"
-              }`}
-            >
-              {v}
-            </span>
-          ))}
+        {/* Tap hint */}
+        <div className="absolute inset-0 bg-gradient-to-t from-foreground/30 to-transparent flex items-end justify-center pb-3">
+          <span className="text-[10px] text-primary-foreground bg-foreground/40 backdrop-blur-sm px-2.5 py-1 rounded-button">
+            点击查看完整方案 ↗
+          </span>
         </div>
-      </div>
+      </button>
 
       {/* Design concept summary */}
       <div className="p-4 space-y-3">
@@ -127,13 +112,16 @@ const DesignSolutionCard = ({ solution }: DesignSolutionCardProps) => {
       {/* Actions */}
       <div className="px-4 pb-4 flex gap-2">
         <button
-          onClick={() => navigate(`/solution/${solution.id}`)}
+          onClick={onViewDetail}
           className="flex-1 py-2.5 bg-primary text-primary-foreground text-xs font-medium rounded-button"
         >
           查看完整方案
         </button>
-        <button className="flex-1 py-2.5 bg-secondary text-secondary-foreground text-xs font-medium rounded-button">
-          进入修改对话
+        <button
+          onClick={onModify}
+          className="flex-1 py-2.5 bg-secondary text-secondary-foreground text-xs font-medium rounded-button"
+        >
+          对话修改方案
         </button>
       </div>
     </motion.div>
