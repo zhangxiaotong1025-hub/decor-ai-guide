@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   X, Send, Palette, RotateCcw, Eye, EyeOff,
   Sun, Moon, SlidersHorizontal, ChevronDown, Sparkles,
-  LayoutGrid, Paintbrush, Box, ArrowLeftRight, Check
+  LayoutGrid, Paintbrush, Box, ArrowLeftRight, Check,
+  Image, Mic, MicOff, Plus, Crosshair, Wand2, Wrench
 } from "lucide-react";
 
 const RoomViewer3D = lazy(() => import("./RoomViewer3D"));
@@ -78,6 +79,219 @@ const SPEC_OPTIONS = [
   { category: "茶几规格", options: ["圆形 Ø80cm", "长方形 120×60cm", "椭圆形 100×55cm"], active: 1 },
   { category: "灯具色温", options: ["暖白 3000K", "自然光 4000K", "冷白 5000K"], active: 0 },
 ];
+
+/* ─── Editor input modes ─── */
+type InputMode = "chat" | "visual" | "execute";
+
+const INPUT_MODES: { key: InputMode; icon: typeof Wand2; label: string }[] = [
+  { key: "chat", icon: Sparkles, label: "对话" },
+  { key: "visual", icon: Crosshair, label: "视觉编辑" },
+  { key: "execute", icon: Wrench, label: "功能执行" },
+];
+
+const VISUAL_ACTIONS = [
+  { label: "框选替换", desc: "框选区域，AI 替换内容", icon: "🖼️" },
+  { label: "拍照参考", desc: "上传照片，匹配风格", icon: "📸" },
+  { label: "截图标注", desc: "截取当前视角并标注", icon: "✏️" },
+  { label: "色彩提取", desc: "从图片提取配色方案", icon: "🎨" },
+];
+
+const EXECUTE_ACTIONS = [
+  { label: "生成效果图", desc: "AI 渲染高清效果图", icon: "🖥️" },
+  { label: "导出方案", desc: "输出 PDF 设计报告", icon: "📄" },
+  { label: "动线分析", desc: "自动分析空间动线", icon: "🔄" },
+  { label: "预算计算", desc: "重新计算方案总价", icon: "💰" },
+  { label: "一键换装", desc: "整套风格快速切换", icon: "✨" },
+  { label: "分享方案", desc: "生成分享链接", icon: "🔗" },
+];
+
+/* ─── EditorInput component ─── */
+const EditorInput = ({
+  inputRef, inputText, setInputText, onSend, onKeyDown, onFocus, isTyping, addBotMessage,
+}: {
+  inputRef: React.RefObject<HTMLTextAreaElement>;
+  inputText: string;
+  setInputText: (v: string) => void;
+  onSend: () => void;
+  onKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
+  onFocus: () => void;
+  isTyping: boolean;
+  addBotMessage: (content: string, stateChange?: Partial<SceneState>) => void;
+}) => {
+  const [inputMode, setInputMode] = useState<InputMode>("chat");
+  const [isRecording, setIsRecording] = useState(false);
+  const [showActions, setShowActions] = useState(false);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
+  const toggleRecording = useCallback(() => {
+    if (isRecording) {
+      setIsRecording(false);
+      setInputText(inputText + (inputText ? " " : "") + "把沙发换成灰蓝色");
+    } else {
+      setIsRecording(true);
+      setTimeout(() => setIsRecording(false), 8000);
+    }
+  }, [isRecording, inputText, setInputText]);
+
+  const handleVisualAction = useCallback((action: typeof VISUAL_ACTIONS[number]) => {
+    setShowActions(false);
+    if (action.label === "拍照参考") {
+      imageInputRef.current?.click();
+      return;
+    }
+    addBotMessage(`🎯 已启动「${action.label}」— ${action.desc}\n\n请在 3D 场景中操作，完成后我会自动处理。`);
+  }, [addBotMessage]);
+
+  const handleExecuteAction = useCallback((action: typeof EXECUTE_ACTIONS[number]) => {
+    setShowActions(false);
+    addBotMessage(`⚡ 正在执行「${action.label}」...\n\n${action.desc}，请稍候。`);
+  }, [addBotMessage]);
+
+  const hasContent = inputText.trim().length > 0;
+
+  return (
+    <div className="flex-shrink-0 border-t border-border/15 pb-safe">
+      <input ref={imageInputRef} type="file" className="hidden" accept="image/*"
+        onChange={() => { addBotMessage("📸 已收到参考图片，正在分析风格特征..."); }} />
+
+      {/* Mode tabs */}
+      <div className="flex items-center gap-0.5 px-4 pt-1.5 pb-1">
+        {INPUT_MODES.map((m) => (
+          <button
+            key={m.key}
+            onClick={() => { setInputMode(m.key); setShowActions(false); }}
+            className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-medium transition-all ${
+              inputMode === m.key
+                ? "bg-foreground/8 text-foreground"
+                : "text-muted-foreground/60 hover:text-muted-foreground"
+            }`}
+          >
+            <m.icon className="w-3 h-3" />
+            {m.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Action panels */}
+      <AnimatePresence>
+        {inputMode === "visual" && showActions && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="grid grid-cols-2 gap-1.5 px-4 py-2">
+              {VISUAL_ACTIONS.map((a) => (
+                <button
+                  key={a.label}
+                  onClick={() => handleVisualAction(a)}
+                  className="flex items-center gap-2 px-2.5 py-2 rounded-xl bg-secondary/30 hover:bg-secondary/50 transition-colors text-left"
+                >
+                  <span className="text-base">{a.icon}</span>
+                  <div>
+                    <span className="text-[10px] font-medium text-foreground block">{a.label}</span>
+                    <span className="text-[9px] text-muted-foreground">{a.desc}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {inputMode === "execute" && showActions && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="grid grid-cols-3 gap-1.5 px-4 py-2">
+              {EXECUTE_ACTIONS.map((a) => (
+                <button
+                  key={a.label}
+                  onClick={() => handleExecuteAction(a)}
+                  className="flex flex-col items-center gap-1 py-2.5 rounded-xl bg-secondary/30 hover:bg-secondary/50 transition-colors"
+                >
+                  <span className="text-lg">{a.icon}</span>
+                  <span className="text-[10px] font-medium text-foreground">{a.label}</span>
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Input row */}
+      <div className="px-4 py-2">
+        <div className="flex items-end gap-1.5 bg-secondary/30 rounded-xl p-1.5">
+          {/* Plus / action toggle */}
+          <button
+            onClick={() => setShowActions(!showActions)}
+            className={`flex-shrink-0 p-1.5 rounded-lg transition-all ${
+              showActions ? "bg-foreground/10 text-foreground rotate-45" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <Plus className="w-4 h-4 transition-transform" />
+          </button>
+
+          {/* Text input */}
+          <textarea
+            ref={inputRef}
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            onKeyDown={onKeyDown}
+            onFocus={onFocus}
+            placeholder={
+              inputMode === "chat" ? "描述你想要的空间效果..."
+                : inputMode === "visual" ? "描述要编辑的视觉区域..."
+                : "输入要执行的操作..."
+            }
+            rows={1}
+            className="flex-1 bg-transparent text-[11px] resize-none outline-none placeholder:text-muted-foreground/40 max-h-20 py-1.5 px-1 leading-relaxed"
+          />
+
+          {/* Voice */}
+          <button
+            onClick={toggleRecording}
+            className={`flex-shrink-0 p-1.5 rounded-lg transition-all ${
+              isRecording ? "bg-red-500/15 text-red-500" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {isRecording ? (
+              <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 1, repeat: Infinity }}>
+                <MicOff className="w-4 h-4" />
+              </motion.div>
+            ) : (
+              <Mic className="w-4 h-4" />
+            )}
+          </button>
+
+          {/* Image upload (visual mode) */}
+          {inputMode === "visual" && (
+            <button
+              onClick={() => imageInputRef.current?.click()}
+              className="flex-shrink-0 p-1.5 rounded-lg text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Image className="w-4 h-4" />
+            </button>
+          )}
+
+          {/* Send */}
+          <button
+            onClick={onSend}
+            disabled={isTyping || !hasContent}
+            className={`flex-shrink-0 p-1.5 rounded-lg transition-all ${
+              hasContent && !isTyping ? "bg-primary text-primary-foreground" : "bg-primary/20 text-primary-foreground/30"
+            }`}
+          >
+            <Send className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 /* ─── Mock AI responses ─── */
 const MOCK_RESPONSES: Record<string, { content: string; stateChange?: Partial<SceneState> }> = {
@@ -522,28 +736,17 @@ const ThreeDEditor = ({ isOpen, onClose }: ThreeDEditorProps) => {
             </div>
           )}
 
-          {/* Input */}
-          <div className="flex-shrink-0 px-4 py-2 border-t border-border/15 pb-safe">
-            <div className="flex items-end gap-2 bg-secondary/30 rounded-xl p-1.5">
-              <textarea
-                ref={inputRef}
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyDown={handleKeyDown}
-                onFocus={() => setChatExpanded(true)}
-                placeholder="描述你想要的空间效果..."
-                rows={1}
-                className="flex-1 bg-transparent text-[11px] resize-none outline-none placeholder:text-muted-foreground/40 max-h-20 py-1.5 px-2 leading-relaxed"
-              />
-              <button
-                onClick={handleSend}
-                disabled={isTyping || !inputText.trim()}
-                className="flex-shrink-0 p-1.5 bg-primary text-primary-foreground rounded-lg disabled:opacity-20 transition-opacity"
-              >
-                <Send className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
+          {/* Input with mode switching */}
+          <EditorInput
+            inputRef={inputRef}
+            inputText={inputText}
+            setInputText={setInputText}
+            onSend={handleSend}
+            onKeyDown={handleKeyDown}
+            onFocus={() => setChatExpanded(true)}
+            isTyping={isTyping}
+            addBotMessage={addBotMessage}
+          />
         </motion.div>
       </motion.div>
     </AnimatePresence>
