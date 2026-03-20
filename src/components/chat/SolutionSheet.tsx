@@ -92,9 +92,6 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify, onSelectProduct, o
                 <div className="flex-1">
                   <span className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground/60 font-light">专属生活提案</span>
                 </div>
-                <button onClick={() => setIsFullScreen(!isFullScreen)} className="p-1.5 hover:bg-secondary rounded-full transition-colors">
-                  {isFullScreen ? <Minimize2 className="w-3.5 h-3.5 text-muted-foreground" /> : <Maximize2 className="w-3.5 h-3.5 text-muted-foreground" />}
-                </button>
                 <button onClick={onClose} className="p-1.5 hover:bg-secondary rounded-full transition-colors ml-0.5">
                   <X className="w-3.5 h-3.5 text-muted-foreground" />
                 </button>
