@@ -12,13 +12,18 @@ interface BudgetAgentProps {
   onClose: () => void;
 }
 
-const easeOut = [0.25, 0.46, 0.45, 0.94] as const;
+const EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94];
 
 const fadeUp = {
   initial: { opacity: 0, y: 16 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.4, ease: easeOut as unknown as [number, number, number, number] },
+  transition: { duration: 0.4, ease: EASE },
 };
+
+const fadeUpDelay = (delay: number) => ({
+  ...fadeUp,
+  transition: { duration: 0.4, ease: EASE, delay },
+});
 
 /* ─── price breakdown per item ─── */
 const priceBreakdowns: Record<string, { factory: number; material: number; labor: number; brand: number; channel: number }> = {
