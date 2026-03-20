@@ -78,7 +78,7 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify, onSelectProduct, o
           <motion.div
             initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 28, stiffness: 300 }}
-            className="fixed left-0 right-0 z-50 bg-background flex flex-col top-[env(safe-area-inset-top,0px)] bottom-0 rounded-t-[20px]"
+            className="fixed left-0 right-0 z-[70] bg-background flex flex-col top-[env(safe-area-inset-top,0px)] bottom-0 rounded-t-[20px]"
             style={{
               boxShadow: "0 -4px 40px rgba(0,0,0,0.08), 0 -1px 6px rgba(0,0,0,0.04)",
             }}
