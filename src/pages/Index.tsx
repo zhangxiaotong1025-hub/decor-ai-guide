@@ -229,7 +229,7 @@ const Index = () => {
 
       {/* Quick action buttons */}
       {showQuickActions && (
-        <QuickActionBar onAction={handleQuickAction} activeAction={activeAction} />
+        <QuickActionBar onAction={handleQuickAction} activeAction={activeAction} hasActiveGroupBuy={hasActiveGroupBuy} />
       )}
 
       {/* Agent panel (design/budget/consult) */}
