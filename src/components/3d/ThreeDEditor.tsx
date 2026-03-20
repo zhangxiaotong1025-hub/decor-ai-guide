@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   X, Send, Palette, RotateCcw, Eye, EyeOff,
   Sun, Moon, SlidersHorizontal, ChevronDown, Sparkles,
-  LayoutGrid, Paintbrush, Box, ArrowLeftRight, Check
+  LayoutGrid, Paintbrush, Box, ArrowLeftRight, Check,
+  Image, Mic, MicOff, Plus, Crosshair, Wand2, Wrench
 } from "lucide-react";
 
 const RoomViewer3D = lazy(() => import("./RoomViewer3D"));
