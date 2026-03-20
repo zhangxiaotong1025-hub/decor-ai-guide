@@ -7,6 +7,7 @@ interface AgentPanelProps {
   activeAction: QuickActionType;
   onClose: () => void;
   onOpenSolution: () => void;
+  onOpenBudget: () => void;
 }
 
 const AgentPanel = ({ activeAction, onClose, onOpenSolution }: AgentPanelProps) => (
