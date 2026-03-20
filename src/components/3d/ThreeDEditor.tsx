@@ -523,28 +523,17 @@ const ThreeDEditor = ({ isOpen, onClose }: ThreeDEditorProps) => {
             </div>
           )}
 
-          {/* Input */}
-          <div className="flex-shrink-0 px-4 py-2 border-t border-border/15 pb-safe">
-            <div className="flex items-end gap-2 bg-secondary/30 rounded-xl p-1.5">
-              <textarea
-                ref={inputRef}
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyDown={handleKeyDown}
-                onFocus={() => setChatExpanded(true)}
-                placeholder="描述你想要的空间效果..."
-                rows={1}
-                className="flex-1 bg-transparent text-[11px] resize-none outline-none placeholder:text-muted-foreground/40 max-h-20 py-1.5 px-2 leading-relaxed"
-              />
-              <button
-                onClick={handleSend}
-                disabled={isTyping || !inputText.trim()}
-                className="flex-shrink-0 p-1.5 bg-primary text-primary-foreground rounded-lg disabled:opacity-20 transition-opacity"
-              >
-                <Send className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
+          {/* Input with mode switching */}
+          <EditorInput
+            inputRef={inputRef}
+            inputText={inputText}
+            setInputText={setInputText}
+            onSend={handleSend}
+            onKeyDown={handleKeyDown}
+            onFocus={() => setChatExpanded(true)}
+            isTyping={isTyping}
+            addBotMessage={addBotMessage}
+          />
         </motion.div>
       </motion.div>
     </AnimatePresence>
