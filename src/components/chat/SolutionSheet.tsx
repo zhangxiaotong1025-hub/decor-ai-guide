@@ -375,7 +375,7 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
       <div className="w-1 h-1 rounded-full bg-border/40" />
       <div className="flex-1 h-[0.5px] bg-border/30" />
     </div>
-    <h2 className="font-serif text-[15px] text-foreground font-normal tracking-wide">{children}</h2>
+    <h2 className="font-serif text-base text-foreground font-normal tracking-wide">{children}</h2>
   </div>
 );
 
