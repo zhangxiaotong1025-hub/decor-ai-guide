@@ -414,7 +414,7 @@ const ImmersiveProductCard = ({ item, index }: {
       <div className="px-4 pb-3">
         <div className="flex flex-wrap gap-1.5">
           {[item.material, item.color, item.style].filter(Boolean).map((tag) => (
-            <span key={tag} className="text-[8px] px-2 py-[3px] bg-background/60 rounded-full text-muted-foreground/60 font-light">{tag}</span>
+            <span key={tag} className="text-[10px] px-2 py-[3px] bg-background/60 rounded-full text-muted-foreground">{tag}</span>
           ))}
         </div>
       </div>
