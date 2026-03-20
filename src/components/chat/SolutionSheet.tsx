@@ -259,29 +259,30 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetPro
               </div>
 
               {/* ═══════════════════════════════════════════════════
-                  🛋️ 第三层：空间解构 — 构成理想生活的物品
+                  🛋️ 第三层：方案清单与拼团详情（双引擎模式）
                   ═══════════════════════════════════════════════════ */}
               <div ref={ref("items")}>
-                <SectionLabel>构成理想生活的 {solution.productSelection.items.length} 件物品</SectionLabel>
+                <SectionLabel>方案清单与拼团详情</SectionLabel>
 
-                <div className="px-6 space-y-6">
-                  {solution.productSelection.items.map((item, i) => (
-                    <ImmersiveProductCard key={i} item={item} index={i} />
+                <div className="px-6 space-y-4">
+                  {mockProducts.map((product, i) => (
+                    <GroupBuyProductCard key={product.id} product={product} index={i} />
                   ))}
                 </div>
 
-                {/* Total + group buy hint */}
-                <div className="px-6 mt-8 mb-4">
-                  <div className="bg-secondary/20 rounded-2xl p-5 text-center">
-                    <span className="text-xs text-muted-foreground block mb-1">全套直供价</span>
-                    <span className="font-mono text-3xl text-foreground">
-                      ¥{totalPrice.toLocaleString()}
-                    </span>
-                    <div className="mt-3 pt-3 border-t border-border/20">
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-accent/60 mr-1 animate-pulse" />
-                        系统正在为你寻找第 3 位热爱这种风格的同路人...
-                        <br />凑满 10 人可再省 ¥1,300
+                {/* Total + group buy summary */}
+                <div className="px-6 mt-6 mb-4">
+                  <div className="bg-secondary/20 rounded-2xl p-5">
+                    <div className="flex items-baseline justify-between mb-2">
+                      <span className="text-xs text-muted-foreground">全套直供总价</span>
+                      <span className="font-mono text-2xl text-foreground">
+                        ¥{mockProducts.reduce((s, p) => s + p.price, 0).toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="pt-3 border-t border-border/20">
+                      <p className="text-xs text-accent leading-relaxed">
+                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-primary mr-1.5 animate-pulse" />
+                        预计拼团后可再省 ¥{mockProducts.reduce((s, p) => s + (p.price - p.groupBuy.targetPrice), 0).toLocaleString()}
                       </p>
                     </div>
                   </div>
