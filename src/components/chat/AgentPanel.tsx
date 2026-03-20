@@ -10,7 +10,7 @@ interface AgentPanelProps {
   onOpenBudget: () => void;
 }
 
-const AgentPanel = ({ activeAction, onClose, onOpenSolution }: AgentPanelProps) => (
+const AgentPanel = ({ activeAction, onClose, onOpenSolution, onOpenBudget }: AgentPanelProps) => (
   <AnimatePresence>
     {activeAction && (
       <motion.div
