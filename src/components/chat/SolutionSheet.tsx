@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Maximize2, Minimize2, ChevronRight, Shield, Factory, Award, Truck, Users, Zap, Box } from "lucide-react";
+import { X, ChevronRight, Shield, Factory, Award, Truck, Users, Zap, Box } from "lucide-react";
 import type { DesignSolution } from "@/types/chat";
 import { mockProducts } from "@/data/mockProducts";
 import type { ProductItem } from "@/types/product";
