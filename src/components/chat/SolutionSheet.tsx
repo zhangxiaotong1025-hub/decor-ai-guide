@@ -2,6 +2,11 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Maximize2, Minimize2 } from "lucide-react";
 import type { DesignSolution } from "@/types/chat";
+import textureWood from "@/assets/texture-wood.jpg";
+import textureFabric from "@/assets/texture-fabric.jpg";
+import textureMetal from "@/assets/texture-metal.jpg";
+import texturePlant from "@/assets/texture-plant.jpg";
+import floorplanImg from "@/assets/floorplan-layout.png";
 
 interface SolutionSheetProps {
   solution: DesignSolution;
@@ -186,117 +191,177 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetPro
               </div>
 
               {/* ════ MOOD BOARD ════ */}
-              <div ref={ref("mood")} className="px-5 pb-8">
-                <ProposalLabel text="MOOD BOARD" />
-                <h3 className="font-serif text-sm text-foreground mb-4">氛围与材质</h3>
-
-                {/* Color palette - large swatches */}
-                <div className="flex gap-3 mb-5">
-                  {[
-                    { bg: "36 30% 78%", name: "浅木色", note: "温暖·自然", pct: 40 },
-                    { bg: "0 0% 91%", name: "灰白色", note: "明亮·宁静", pct: 40 },
-                    { bg: "140 40% 55%", name: "点缀绿", note: "生机·活力", pct: 20 },
-                  ].map((c, i) => (
-                    <div key={i} className="flex-1">
-                      <div
-                        className="w-full aspect-[3/4] rounded-lg mb-2"
-                        style={{ backgroundColor: `hsl(${c.bg})` }}
-                      />
-                      <span className="text-[10px] font-medium text-foreground block">{c.name}</span>
-                      <span className="text-[8px] text-muted-foreground">{c.note} · {c.pct}%</span>
-                    </div>
-                  ))}
+              <div ref={ref("mood")} className="pb-8">
+                <div className="px-5">
+                  <ProposalLabel text="MOOD BOARD" />
+                  <h3 className="font-serif text-sm text-foreground mb-1">氛围与材质</h3>
+                  <p className="text-[9px] text-muted-foreground font-light mb-4 leading-relaxed">
+                    通过色彩心理学与材质质感的精心组合，营造温暖、放松、有呼吸感的空间氛围
+                  </p>
                 </div>
 
-                {/* Material board */}
-                <div className="flex gap-3 mb-5">
-                  {[
-                    { emoji: "🪵", name: "实木", use: "茶几·电视柜" },
-                    { emoji: "🧶", name: "布艺", use: "沙发·抱枕" },
-                    { emoji: "⚙️", name: "金属", use: "灯具·装饰" },
-                    { emoji: "🌿", name: "绿植", use: "龟背竹·琴叶榕" },
-                  ].map((m, i) => (
-                    <div key={i} className="flex-1 text-center">
-                      <div className="w-full aspect-square rounded-full bg-secondary/80 flex items-center justify-center mb-1.5">
-                        <span className="text-xl">{m.emoji}</span>
-                      </div>
-                      <span className="text-[9px] font-medium text-foreground block">{m.name}</span>
-                      <span className="text-[8px] text-muted-foreground leading-tight block">{m.use}</span>
+                {/* Color palette - full-width gradient strip */}
+                <div className="px-5 mb-5">
+                  <div className="flex h-16 rounded-lg overflow-hidden mb-2">
+                    <div className="flex-[4]" style={{ backgroundColor: "hsl(36 30% 78%)" }} />
+                    <div className="flex-[4]" style={{ backgroundColor: "hsl(0 0% 93%)" }} />
+                    <div className="flex-[2]" style={{ backgroundColor: "hsl(140 40% 55%)" }} />
+                  </div>
+                  <div className="flex">
+                    <div className="flex-[4] pr-2">
+                      <span className="text-[10px] font-medium text-foreground block">浅木色 40%</span>
+                      <span className="text-[8px] text-muted-foreground">主色调 · 温暖自然，营造放松感</span>
                     </div>
-                  ))}
+                    <div className="flex-[4] pr-2">
+                      <span className="text-[10px] font-medium text-foreground block">灰白色 40%</span>
+                      <span className="text-[8px] text-muted-foreground">辅助色 · 放大空间感，保持明亮</span>
+                    </div>
+                    <div className="flex-[2]">
+                      <span className="text-[10px] font-medium text-foreground block">绿 20%</span>
+                      <span className="text-[8px] text-muted-foreground">点缀色</span>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Lighting scenes as minimal cards */}
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { icon: "☀️", name: "日间", config: "4000K · 主灯50%" },
-                    { icon: "🎬", name: "观影", config: "3000K · 落地灯30%" },
-                    { icon: "📖", name: "阅读", config: "4000K · 主灯100%" },
-                    { icon: "🌙", name: "夜间", config: "3000K · 柔和混合" },
-                  ].map((s, i) => (
-                    <div key={i} className="flex items-center gap-2.5 py-2.5 px-3 bg-secondary/40 rounded-lg">
-                      <span className="text-base">{s.icon}</span>
-                      <div>
-                        <span className="text-[10px] font-medium text-foreground block">{s.name}</span>
-                        <span className="text-[8px] text-muted-foreground">{s.config}</span>
+                {/* Material textures - real photos in grid */}
+                <div className="px-5 mb-5">
+                  <span className="text-[8px] tracking-[0.15em] uppercase text-muted-foreground/60 font-mono block mb-2">MATERIALS</span>
+                  <div className="grid grid-cols-4 gap-2">
+                    {[
+                      { img: textureWood, name: "白橡木", use: "茶几·电视柜·地板", feel: "温润自然" },
+                      { img: textureFabric, name: "科技布", use: "沙发·抱枕·窗帘", feel: "柔软亲肤" },
+                      { img: textureMetal, name: "黄铜", use: "灯具·把手·装饰", feel: "精致点缀" },
+                      { img: texturePlant, name: "绿植", use: "龟背竹·琴叶榕", feel: "自然生机" },
+                    ].map((m, i) => (
+                      <div key={i}>
+                        <div className="w-full aspect-square rounded-lg overflow-hidden mb-1.5">
+                          <img src={m.img} alt={m.name} className="w-full h-full object-cover" />
+                        </div>
+                        <span className="text-[9px] font-medium text-foreground block">{m.name}</span>
+                        <span className="text-[7px] text-muted-foreground leading-tight block">{m.feel}</span>
+                        <span className="text-[7px] text-muted-foreground/60 leading-tight block">{m.use}</span>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+                </div>
+
+                {/* Texture layering explanation */}
+                <div className="px-5 mb-5">
+                  <div className="border-l-[1.5px] border-accent/40 pl-4">
+                    <p className="text-[9px] text-muted-foreground leading-[1.8] font-light italic">
+                      "不同材质的层叠组合赋予空间丰富的触感维度 —— 木质的温暖、布艺的柔软、金属的精致、绿植的生机，让每一次触碰都是享受"
+                    </p>
+                  </div>
+                </div>
+
+                {/* Lighting design - visual scene cards */}
+                <div className="px-5">
+                  <span className="text-[8px] tracking-[0.15em] uppercase text-muted-foreground/60 font-mono block mb-2">LIGHTING DESIGN</span>
+                  <p className="text-[9px] text-muted-foreground font-light mb-3">三层照明系统，一键切换四种生活氛围</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { icon: "☀️", name: "明亮工作", temp: "4000K", desc: "主灯50% + 自然光", gradient: "from-amber-50 to-white" },
+                      { icon: "🎬", name: "沉浸观影", temp: "3000K", desc: "仅落地灯30%", gradient: "from-amber-100 to-orange-50" },
+                      { icon: "📖", name: "护眼阅读", temp: "4000K", desc: "主灯100%", gradient: "from-yellow-50 to-white" },
+                      { icon: "🌙", name: "温馨夜晚", temp: "3000K", desc: "主灯30% + 落地灯50%", gradient: "from-orange-100 to-amber-50" },
+                    ].map((s, i) => (
+                      <div key={i} className="relative overflow-hidden rounded-lg border border-border/30">
+                        <div className={`absolute inset-0 bg-gradient-to-br ${s.gradient} opacity-40`} />
+                        <div className="relative p-3">
+                          <span className="text-xl block mb-1">{s.icon}</span>
+                          <span className="text-[10px] font-medium text-foreground block">{s.name}</span>
+                          <span className="text-[8px] text-muted-foreground">{s.temp} · {s.desc}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
               {/* ════ SPACE ════ */}
               <div ref={ref("space")} className="px-5 pb-8">
-                <ProposalLabel text="SPATIAL ANALYSIS" />
-                <h3 className="font-serif text-sm text-foreground mb-4">空间规划</h3>
+                <ProposalLabel text="SPATIAL DESIGN" />
+                <h3 className="font-serif text-sm text-foreground mb-1">空间规划</h3>
+                <p className="text-[9px] text-muted-foreground font-light mb-4 leading-relaxed">
+                  基于您25㎡客厅的精确尺寸，我为您进行了专业的功能分区与动线规划
+                </p>
 
-                {/* Key metrics - large editorial numbers */}
-                <div className="grid grid-cols-3 gap-3 mb-5">
+                {/* Floor plan image */}
+                <div className="rounded-lg overflow-hidden border border-border/30 mb-4">
+                  <img src={floorplanImg} alt="户型布局平面图" className="w-full" />
+                </div>
+
+                {/* Design rationale */}
+                <div className="border-l-[1.5px] border-primary/40 pl-4 mb-5">
+                  <p className="text-[9px] text-muted-foreground leading-[1.8] font-light italic">
+                    "采用黄金比例布局 —— 沙发区占60%作为生活核心，电视区占30%保持简洁，10%留给动线确保流畅。每个区域的尺寸都经过精确计算，让空间既不拥挤，也不空旷"
+                  </p>
+                </div>
+
+                {/* Zoning cards */}
+                <div className="mb-5">
+                  <span className="text-[8px] tracking-[0.15em] uppercase text-muted-foreground/60 font-mono block mb-2">ZONING</span>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { icon: "🛋️", zone: "会客区", size: "60%", items: "沙发 + 茶几", role: "核心生活区域" },
+                      { icon: "📺", zone: "视听区", size: "30%", items: "电视 + 电视柜", role: "简洁实用，不抢戏" },
+                      { icon: "📦", zone: "储物区", size: "隐藏", items: "电视柜 + 边柜", role: "收纳不外露" },
+                      { icon: "🌿", zone: "装饰区", size: "点缀", items: "绿植 + 挂画", role: "视觉焦点" },
+                    ].map((z, i) => (
+                      <div key={i} className="py-2.5 px-3 bg-secondary/30 rounded-lg">
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <span className="text-sm">{z.icon}</span>
+                          <span className="text-[10px] font-medium text-foreground">{z.zone}</span>
+                          <span className="ml-auto font-mono-data text-[9px] text-primary">{z.size}</span>
+                        </div>
+                        <span className="text-[8px] text-muted-foreground block">{z.items}</span>
+                        <span className="text-[7px] text-muted-foreground/60">{z.role}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Circulation design */}
+                <div className="mb-5">
+                  <span className="text-[8px] tracking-[0.15em] uppercase text-muted-foreground/60 font-mono block mb-2">CIRCULATION</span>
+                  <p className="text-[9px] text-muted-foreground font-light mb-3">三条精心规划的动线，确保日常生活流畅自如</p>
+                  <div className="space-y-2">
+                    {[
+                      { width: "1.2m", label: "主动线", path: "入户 → 客厅 → 阳台", note: "足够宽敞，轮椅也能轻松通过", color: "primary" },
+                      { width: "0.8m", label: "次动线", path: "沙发 → 厨房", note: "方便取物，不绕路", color: "accent" },
+                      { width: "∞", label: "视线动线", path: "沙发 → 电视", note: "无任何遮挡，最佳观影体验", color: "primary" },
+                    ].map((c, i) => (
+                      <div key={i} className="flex items-center gap-3 py-2.5 px-3 border border-border/30 rounded-lg">
+                        <div className="text-center flex-shrink-0 w-12">
+                          <span className={`font-mono-data text-base font-light text-${c.color} block`}>{c.width}</span>
+                          <span className="text-[7px] text-muted-foreground">{c.label}</span>
+                        </div>
+                        <div className="flex-1 border-l border-border/30 pl-3">
+                          <span className="text-[9px] font-medium text-foreground block">{c.path}</span>
+                          <span className="text-[8px] text-muted-foreground">{c.note}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Space metrics + opportunities */}
+                <div className="grid grid-cols-3 gap-2 mb-4">
                   {[
                     { value: "25", unit: "㎡", label: "总面积" },
                     { value: "18", unit: "㎡", label: "可用面积" },
                     { value: "2.8", unit: "m", label: "层高" },
                   ].map((m, i) => (
-                    <div key={i} className="text-center py-3 border border-border/50 rounded-lg">
+                    <div key={i} className="text-center py-3 border border-border/30 rounded-lg">
                       <div className="flex items-baseline justify-center">
-                        <span className="font-mono-data text-2xl font-light text-foreground">{m.value}</span>
-                        <span className="text-[9px] text-muted-foreground ml-0.5">{m.unit}</span>
+                        <span className="font-mono-data text-xl font-light text-foreground">{m.value}</span>
+                        <span className="text-[8px] text-muted-foreground ml-0.5">{m.unit}</span>
                       </div>
-                      <span className="text-[8px] text-muted-foreground tracking-wide">{m.label}</span>
+                      <span className="text-[7px] text-muted-foreground tracking-wide">{m.label}</span>
                     </div>
                   ))}
                 </div>
 
-                {/* Layout ratio - elegant bar */}
-                <div className="mb-5">
-                  <span className="text-[9px] text-muted-foreground tracking-wide block mb-2">布局比例</span>
-                  <div className="flex h-8 rounded-lg overflow-hidden gap-[2px]">
-                    <div className="bg-primary/70 flex items-center justify-center rounded-l-lg" style={{ width: "60%" }}>
-                      <span className="text-[8px] text-primary-foreground font-medium">沙发区 60%</span>
-                    </div>
-                    <div className="bg-accent/60 flex items-center justify-center" style={{ width: "30%" }}>
-                      <span className="text-[8px] text-accent-foreground font-medium">电视区 30%</span>
-                    </div>
-                    <div className="bg-muted flex items-center justify-center rounded-r-lg" style={{ width: "10%" }} />
-                  </div>
-                </div>
-
-                {/* Circulation - editorial metric cards */}
-                <div className="flex gap-2 mb-5">
-                  {[
-                    { val: "1.2m", label: "主动线", path: "入户 → 阳台" },
-                    { val: "0.8m", label: "次动线", path: "沙发 → 厨房" },
-                    { val: "∞", label: "视线", path: "无遮挡" },
-                  ].map((c, i) => (
-                    <div key={i} className="flex-1 text-center py-3 bg-secondary/40 rounded-lg">
-                      <span className="font-mono-data text-lg font-light text-primary block">{c.val}</span>
-                      <span className="text-[9px] font-medium text-foreground block mt-0.5">{c.label}</span>
-                      <span className="text-[7px] text-muted-foreground">{c.path}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Opportunities + Challenges - clean two-column */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <span className="text-[8px] tracking-wider text-accent font-medium block mb-2">OPPORTUNITIES</span>
