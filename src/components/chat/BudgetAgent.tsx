@@ -250,7 +250,7 @@ const BudgetAgent = ({ isOpen, onClose }: BudgetAgentProps) => {
           </motion.div>
 
           {/* ─── Optimization Recommendations ─── */}
-          <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.2 }} className="px-4 pb-4">
+          <motion.div {...fadeUpDelay(0.2)} className="px-4 pb-4">
             <button
               onClick={() => setShowSaveDetail(!showSaveDetail)}
               className="w-full flex items-center justify-between mb-3"
