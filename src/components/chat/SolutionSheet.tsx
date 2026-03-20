@@ -30,7 +30,7 @@ type SceneMode = "morning" | "night";
 
 const SolutionSheet = ({ solution, isOpen, onClose, onModify, onSelectProduct, onOpen3DEditor }: SolutionSheetProps) => {
   const [activeTab, setActiveTab] = useState("immerse");
-  const [isFullScreen, setIsFullScreen] = useState(false);
+  const isFullScreen = true;
   const [sceneMode, setSceneMode] = useState<SceneMode>("morning");
   const scrollRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
