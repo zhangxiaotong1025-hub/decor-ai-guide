@@ -123,7 +123,7 @@ const BudgetAgent = ({ isOpen, onClose }: BudgetAgentProps) => {
           </motion.div>
 
           {/* ─── Per-item Breakdown ─── */}
-          <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }} className="px-4 pb-4">
+          <motion.div {...fadeUpDelay(0.1)} className="px-4 pb-4">
             <div className="flex items-center gap-2 mb-3">
               <Eye className="w-3.5 h-3.5 text-primary" />
               <span className="text-xs font-semibold text-foreground">逐项价格透视</span>
