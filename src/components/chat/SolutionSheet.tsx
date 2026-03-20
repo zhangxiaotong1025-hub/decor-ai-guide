@@ -440,8 +440,8 @@ const ImmersiveProductCard = ({ item, index }: {
                   <Factory className="w-3.5 h-3.5 text-muted-foreground" />
                   <span className="text-xs font-medium text-foreground">制造大揭秘</span>
                 </div>
-                <p className="text-[10px] text-muted-foreground/60 font-light leading-relaxed">
-                  <p className="text-xs text-muted-foreground leading-relaxed">来自广东佛山 · 顾家/芝华士同源代工厂
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  来自广东佛山 · 顾家/芝华士同源代工厂
                 </p>
                 <div className="flex gap-2 mt-2">
                   <span className="text-[8px] px-2 py-1 bg-accent/10 text-accent rounded-full">SGS 耐磨 10 万次</span>
