@@ -137,6 +137,10 @@ const Index = () => {
   }, []);
 
   const handleQuickAction = useCallback((type: QuickActionType) => {
+    if (type === "budget") {
+      setBudgetOpen(true);
+      return;
+    }
     setActiveAction(type);
   }, []);
 
