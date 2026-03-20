@@ -249,7 +249,7 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetPro
                   <div className="rounded-2xl overflow-hidden mb-3">
                     <img src={fabricMacro} alt="科技布微距特写" className="w-full h-48 object-cover" />
                   </div>
-                  <p className="text-[9px] text-muted-foreground/60 font-light text-center">
+                  <p className="text-xs text-muted-foreground text-center">
                     纳米级防抓防污科技布 · 水滴滚落不留痕 · 养猫家庭的救星
                   </p>
                 </div>
