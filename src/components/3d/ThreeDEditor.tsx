@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect, lazy, Suspense, type KeyboardEvent } from "react";
+import { useState, useRef, useCallback, useEffect, type KeyboardEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X, Send, Eye, EyeOff, Sun, Moon, Check,
@@ -9,8 +9,7 @@ import {
   Map, Move3d, Ruler, Video, Grid3x3,
   Home, Mic, MicOff, Plus, Image as ImageIcon
 } from "lucide-react";
-
-const RoomViewer3D = lazy(() => import("./RoomViewer3D").catch(() => import("./RoomViewer3D")));
+import RoomViewer3D from "./RoomViewer3D";
 
 interface ThreeDEditorProps {
   isOpen: boolean;
