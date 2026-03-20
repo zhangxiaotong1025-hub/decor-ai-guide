@@ -16,16 +16,15 @@ interface SolutionSheetProps {
 }
 
 const TABS = [
-  { key: "hero", label: "总览" },
-  { key: "mood", label: "氛围" },
-  { key: "space", label: "空间" },
-  { key: "scenes", label: "场景" },
-  { key: "curation", label: "选品" },
-  { key: "invest", label: "投资" },
+  { key: "feel", label: "感觉" },
+  { key: "understand", label: "懂你" },
+  { key: "pro", label: "专业" },
+  { key: "picks", label: "选品" },
+  { key: "invest", label: "预算" },
 ];
 
 const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetProps) => {
-  const [activeTab, setActiveTab] = useState("hero");
+  const [activeTab, setActiveTab] = useState("feel");
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -36,7 +35,6 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetPro
     sectionRefs.current[key]?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
-  // Scroll spy
   useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
@@ -83,14 +81,14 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetPro
               boxShadow: "0 -4px 40px rgba(0,0,0,0.08), 0 -1px 6px rgba(0,0,0,0.04)",
             }}
           >
-            {/* Minimal header */}
+            {/* Header */}
             <div className="flex-shrink-0">
               <div className="flex justify-center pt-2 pb-1">
                 <div className="w-10 h-[3px] bg-muted-foreground/15 rounded-full" />
               </div>
               <div className="flex items-center px-5 py-1">
                 <div className="flex-1">
-                  <span className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground font-light">Design Proposal</span>
+                  <span className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground font-light">为你定制的方案</span>
                 </div>
                 <button onClick={() => setIsFullScreen(!isFullScreen)} className="p-1.5 hover:bg-secondary rounded-full transition-colors">
                   {isFullScreen ? <Minimize2 className="w-3.5 h-3.5 text-muted-foreground" /> : <Maximize2 className="w-3.5 h-3.5 text-muted-foreground" />}
@@ -100,360 +98,271 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetPro
                 </button>
               </div>
 
-              {/* Tab bar - minimal underline style */}
+              {/* Tab bar */}
               <div className="flex px-5 gap-4 border-b border-border/50">
                 {TABS.map((tab) => (
-                  <button
-                    key={tab.key}
-                    onClick={() => scrollToSection(tab.key)}
-                    className="relative pb-2.5"
-                  >
+                  <button key={tab.key} onClick={() => scrollToSection(tab.key)} className="relative pb-2.5">
                     <span className={`text-[10px] tracking-wide transition-colors ${
                       activeTab === tab.key ? "text-foreground font-medium" : "text-muted-foreground font-light"
                     }`}>
                       {tab.label}
                     </span>
                     {activeTab === tab.key && (
-                      <motion.div
-                        layoutId="tab-indicator"
-                        className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-foreground rounded-full"
-                      />
+                      <motion.div layoutId="tab-indicator" className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-foreground rounded-full" />
                     )}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Scrollable proposal content */}
+            {/* Scrollable content */}
             <div ref={scrollRef} className="flex-1 overflow-y-auto overscroll-contain scroll-smooth">
 
-              {/* ════ HERO ════ */}
-              <div ref={ref("hero")}>
+              {/* ═══════════════════════════════════════════
+                  🟥 第一层：打感觉 — 让用户一眼觉得"这套挺对的"
+                  ═══════════════════════════════════════════ */}
+              <div ref={ref("feel")}>
+                {/* Hero image - 像真实能住的家 */}
                 <div className="relative">
                   <motion.img
                     key={activeImage}
                     initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                     src={solution.renderImages[activeImage]}
-                    alt="效果图"
-                    className={`w-full object-cover ${isFullScreen ? "h-64" : "h-48"}`}
+                    alt="你未来的家"
+                    className={`w-full object-cover ${isFullScreen ? "h-72" : "h-52"}`}
                   />
-                  {/* Annotations */}
-                  {solution.annotations.map((ann, i) => (
-                    <div key={i} className="absolute group cursor-pointer" style={{ left: `${ann.position.x}%`, top: `${ann.position.y}%` }}>
-                      <div className="w-[18px] h-[18px] rounded-full border border-primary-foreground/80 bg-primary/60 backdrop-blur-sm flex items-center justify-center">
-                        <div className="w-[5px] h-[5px] rounded-full bg-primary-foreground" />
-                      </div>
-                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-10">
-                        <div className="bg-foreground/90 backdrop-blur-sm text-background text-[9px] px-3 py-1.5 rounded-lg whitespace-nowrap">
-                          <div className="font-medium">{ann.label}</div>
-                          <div className="text-background/60 text-[8px]">{ann.description}</div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  {/* Elegant gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/10 to-transparent" />
-                  {/* Image selector */}
-                  <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-2">
-                    {["正面", "侧面", "俯视"].map((label, i) => (
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/5 to-transparent" />
+
+                  {/* Image dots */}
+                  <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-1.5">
+                    {solution.renderImages.map((_, i) => (
                       <button
-                        key={label}
+                        key={i}
                         onClick={() => setActiveImage(i)}
-                        className={`text-[9px] px-3 py-1 rounded-full backdrop-blur-md transition-all ${
-                          i === activeImage
-                            ? "bg-primary-foreground/90 text-foreground"
-                            : "bg-primary-foreground/20 text-primary-foreground/80"
+                        className={`w-1.5 h-1.5 rounded-full transition-all ${
+                          i === activeImage ? "bg-primary-foreground w-4" : "bg-primary-foreground/40"
                         }`}
-                      >
-                        {label}
-                      </button>
+                      />
                     ))}
                   </div>
-                  {/* Title overlay on gradient */}
-                  <div className="absolute bottom-0 left-0 right-0 px-5 pb-4">
-                    <h2 className="font-serif text-xl font-normal text-foreground tracking-tight leading-tight">
-                      {solution.name}
+
+                  {/* 生活化标题 — 不讲风格，讲感受 */}
+                  <div className="absolute bottom-0 left-0 right-0 px-5 pb-5">
+                    <h2 className="font-serif text-lg font-normal text-foreground leading-snug">
+                      一个待着很舒服、不会乱的客厅
                     </h2>
-                    <p className="text-[10px] text-muted-foreground font-light mt-0.5 tracking-wide">
-                      Less is More · 自然呼吸
-                    </p>
-                  </div>
-                </div>
-
-                {/* Concept quote */}
-                <div className="px-5 py-5">
-                  <div className="border-l-[1.5px] border-primary/40 pl-4">
-                    <p className="text-[11px] text-muted-foreground leading-[1.8] font-light italic">
-                      "{solution.designThinking.concept}"
+                    <p className="text-[11px] text-muted-foreground/80 font-light mt-1">
+                      适合每天回家能放松下来的那种空间
                     </p>
                   </div>
                 </div>
               </div>
 
-              {/* ════ MOOD BOARD ════ */}
-              <div ref={ref("mood")} className="pb-8">
-                <div className="px-5">
-                  <ProposalLabel text="MOOD BOARD" />
-                  <h3 className="font-serif text-sm text-foreground mb-1">氛围与材质</h3>
-                  <p className="text-[9px] text-muted-foreground font-light mb-4 leading-relaxed">
-                    通过色彩心理学与材质质感的精心组合，营造温暖、放松、有呼吸感的空间氛围
-                  </p>
-                </div>
-
-                {/* Color palette - full-width gradient strip */}
-                <div className="px-5 mb-5">
-                  <div className="flex h-16 rounded-lg overflow-hidden mb-2">
-                    <div className="flex-[4]" style={{ backgroundColor: "hsl(36 30% 78%)" }} />
-                    <div className="flex-[4]" style={{ backgroundColor: "hsl(0 0% 93%)" }} />
-                    <div className="flex-[2]" style={{ backgroundColor: "hsl(140 40% 55%)" }} />
-                  </div>
-                  <div className="flex">
-                    <div className="flex-[4] pr-2">
-                      <span className="text-[10px] font-medium text-foreground block">浅木色 40%</span>
-                      <span className="text-[8px] text-muted-foreground">主色调 · 温暖自然，营造放松感</span>
-                    </div>
-                    <div className="flex-[4] pr-2">
-                      <span className="text-[10px] font-medium text-foreground block">灰白色 40%</span>
-                      <span className="text-[8px] text-muted-foreground">辅助色 · 放大空间感，保持明亮</span>
-                    </div>
-                    <div className="flex-[2]">
-                      <span className="text-[10px] font-medium text-foreground block">绿 20%</span>
-                      <span className="text-[8px] text-muted-foreground">点缀色</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Material textures - real photos in grid */}
-                <div className="px-5 mb-5">
-                  <span className="text-[8px] tracking-[0.15em] uppercase text-muted-foreground/60 font-mono block mb-2">MATERIALS</span>
-                  <div className="grid grid-cols-4 gap-2">
-                    {[
-                      { img: textureWood, name: "白橡木", use: "茶几·电视柜·地板", feel: "温润自然" },
-                      { img: textureFabric, name: "科技布", use: "沙发·抱枕·窗帘", feel: "柔软亲肤" },
-                      { img: textureMetal, name: "黄铜", use: "灯具·把手·装饰", feel: "精致点缀" },
-                      { img: texturePlant, name: "绿植", use: "龟背竹·琴叶榕", feel: "自然生机" },
-                    ].map((m, i) => (
-                      <div key={i}>
-                        <div className="w-full aspect-square rounded-lg overflow-hidden mb-1.5">
-                          <img src={m.img} alt={m.name} className="w-full h-full object-cover" />
-                        </div>
-                        <span className="text-[9px] font-medium text-foreground block">{m.name}</span>
-                        <span className="text-[7px] text-muted-foreground leading-tight block">{m.feel}</span>
-                        <span className="text-[7px] text-muted-foreground/60 leading-tight block">{m.use}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Texture layering explanation */}
-                <div className="px-5 mb-5">
-                  <div className="border-l-[1.5px] border-accent/40 pl-4">
-                    <p className="text-[9px] text-muted-foreground leading-[1.8] font-light italic">
-                      "不同材质的层叠组合赋予空间丰富的触感维度 —— 木质的温暖、布艺的柔软、金属的精致、绿植的生机，让每一次触碰都是享受"
+              {/* ═══════════════════════════════════════════
+                  🟧 第二层：你懂我 — 建立信任，不是模板
+                  ═══════════════════════════════════════════ */}
+              <div ref={ref("understand")} className="px-5 py-6">
+                <div className="space-y-4">
+                  {/* 像人在说话，不是说明书 */}
+                  <div className="bg-secondary/30 rounded-2xl p-4">
+                    <p className="text-[12px] text-foreground leading-[2] font-light">
+                      你这个空间大概 <span className="font-medium">25㎡</span>，
+                      客餐一体的格局，实际能用的大约 18㎡。
                     </p>
-                  </div>
-                </div>
-
-                {/* Lighting design - visual scene cards */}
-                <div className="px-5">
-                  <span className="text-[8px] tracking-[0.15em] uppercase text-muted-foreground/60 font-mono block mb-2">LIGHTING DESIGN</span>
-                  <p className="text-[9px] text-muted-foreground font-light mb-3">三层照明系统，一键切换四种生活氛围</p>
-                  <div className="grid grid-cols-2 gap-2">
-                    {[
-                      { icon: "☀️", name: "明亮工作", temp: "4000K", desc: "主灯50% + 自然光", gradient: "from-amber-50 to-white" },
-                      { icon: "🎬", name: "沉浸观影", temp: "3000K", desc: "仅落地灯30%", gradient: "from-amber-100 to-orange-50" },
-                      { icon: "📖", name: "护眼阅读", temp: "4000K", desc: "主灯100%", gradient: "from-yellow-50 to-white" },
-                      { icon: "🌙", name: "温馨夜晚", temp: "3000K", desc: "主灯30% + 落地灯50%", gradient: "from-orange-100 to-amber-50" },
-                    ].map((s, i) => (
-                      <div key={i} className="relative overflow-hidden rounded-lg border border-border/30">
-                        <div className={`absolute inset-0 bg-gradient-to-br ${s.gradient} opacity-40`} />
-                        <div className="relative p-3">
-                          <span className="text-xl block mb-1">{s.icon}</span>
-                          <span className="text-[10px] font-medium text-foreground block">{s.name}</span>
-                          <span className="text-[8px] text-muted-foreground">{s.temp} · {s.desc}</span>
+                    <p className="text-[12px] text-foreground leading-[2] font-light mt-2">
+                      说实话，如果东西稍微多一点，就会显得乱，
+                      <br />而且待久了会有点压抑。
+                    </p>
+                    <div className="mt-4 pt-3 border-t border-border/30">
+                      <p className="text-[12px] text-foreground leading-[2] font-light">
+                        所以这套方案，我优先做了两件事：
+                      </p>
+                      <div className="mt-2 space-y-2">
+                        <div className="flex items-start gap-2">
+                          <span className="text-accent mt-0.5">✓</span>
+                          <span className="text-[12px] text-foreground font-light">让空间看起来更干净</span>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <span className="text-accent mt-0.5">✓</span>
+                          <span className="text-[12px] text-foreground font-light">让你日常待着更轻松</span>
                         </div>
                       </div>
-                    ))}
+                    </div>
+                  </div>
+
+                  {/* 色彩不讲"北欧"，讲感受 */}
+                  <div>
+                    <p className="text-[11px] text-muted-foreground leading-[1.9] font-light">
+                      整体用了浅色 + 木色，不是为了好看，
+                      <br />而是让空间更放松，待久一点也不会累。
+                    </p>
+
+                    {/* 色彩条 — 极简 */}
+                    <div className="flex h-10 rounded-xl overflow-hidden mt-3 mb-2">
+                      <div className="flex-[4]" style={{ backgroundColor: "hsl(36 30% 78%)" }} />
+                      <div className="flex-[4]" style={{ backgroundColor: "hsl(0 0% 93%)" }} />
+                      <div className="flex-[2]" style={{ backgroundColor: "hsl(140 40% 55%)" }} />
+                    </div>
+                    <div className="flex text-[9px] text-muted-foreground font-light">
+                      <span className="flex-[4]">浅木色 · 温暖放松</span>
+                      <span className="flex-[4]">灰白 · 干净透气</span>
+                      <span className="flex-[2]">绿 · 提神</span>
+                    </div>
+                  </div>
+
+                  {/* 材质 — 触感叙事 */}
+                  <div>
+                    <p className="text-[11px] text-muted-foreground leading-[1.9] font-light mb-3">
+                      不同的材质搭在一起，<br />是为了让你每次碰到、坐上去，都觉得舒服。
+                    </p>
+                    <div className="grid grid-cols-4 gap-2">
+                      {[
+                        { img: textureWood, name: "木质", feel: "温暖踏实" },
+                        { img: textureFabric, name: "布艺", feel: "柔软放松" },
+                        { img: textureMetal, name: "金属", feel: "一点精致" },
+                        { img: texturePlant, name: "绿植", feel: "活的气息" },
+                      ].map((m, i) => (
+                        <div key={i}>
+                          <div className="w-full aspect-square rounded-xl overflow-hidden mb-1.5">
+                            <img src={m.img} alt={m.name} className="w-full h-full object-cover" />
+                          </div>
+                          <span className="text-[10px] font-medium text-foreground block">{m.name}</span>
+                          <span className="text-[8px] text-muted-foreground">{m.feel}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* ════ SPACE ════ */}
-              <div ref={ref("space")} className="px-5 pb-8">
-                <ProposalLabel text="SPATIAL DESIGN" />
-                <h3 className="font-serif text-sm text-foreground mb-1">空间规划</h3>
-                <p className="text-[9px] text-muted-foreground font-light mb-4 leading-relaxed">
-                  基于您25㎡客厅的精确尺寸，我为您进行了专业的功能分区与动线规划
-                </p>
+              {/* ═══════════════════════════════════════════
+                  🟨 第三层：专业性 — 让人相信这不是拍脑袋
+                  ═══════════════════════════════════════════ */}
+              <div ref={ref("pro")} className="px-5 pb-8">
+                <SectionDivider />
 
-                {/* Floor plan image */}
-                <div className="rounded-lg overflow-hidden border border-border/30 mb-4">
-                  <img src={floorplanImg} alt="户型布局平面图" className="w-full" />
-                </div>
-
-                {/* Design rationale */}
-                <div className="border-l-[1.5px] border-primary/40 pl-4 mb-5">
-                  <p className="text-[9px] text-muted-foreground leading-[1.8] font-light italic">
-                    "采用黄金比例布局 —— 沙发区占60%作为生活核心，电视区占30%保持简洁，10%留给动线确保流畅。每个区域的尺寸都经过精确计算，让空间既不拥挤，也不空旷"
+                {/* 1. 空间动线 — 最有说服力 */}
+                <div className="mb-6">
+                  <h3 className="text-[13px] font-medium text-foreground mb-2">走起来不会挤</h3>
+                  <p className="text-[11px] text-muted-foreground leading-[1.9] font-light mb-3">
+                    我帮你把主要动线留出来了：
+                    <br />从门口进来 → 沙发 → 阳台，是顺的，不会被家具挡住。
+                    <br />日常走动不会绕，也不会挤。
                   </p>
-                </div>
 
-                {/* Zoning cards */}
-                <div className="mb-5">
-                  <span className="text-[8px] tracking-[0.15em] uppercase text-muted-foreground/60 font-mono block mb-2">ZONING</span>
-                  <div className="grid grid-cols-2 gap-2">
-                    {[
-                      { icon: "🛋️", zone: "会客区", size: "60%", items: "沙发 + 茶几", role: "核心生活区域" },
-                      { icon: "📺", zone: "视听区", size: "30%", items: "电视 + 电视柜", role: "简洁实用，不抢戏" },
-                      { icon: "📦", zone: "储物区", size: "隐藏", items: "电视柜 + 边柜", role: "收纳不外露" },
-                      { icon: "🌿", zone: "装饰区", size: "点缀", items: "绿植 + 挂画", role: "视觉焦点" },
-                    ].map((z, i) => (
-                      <div key={i} className="py-2.5 px-3 bg-secondary/30 rounded-lg">
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <span className="text-sm">{z.icon}</span>
-                          <span className="text-[10px] font-medium text-foreground">{z.zone}</span>
-                          <span className="ml-auto font-mono-data text-[9px] text-primary">{z.size}</span>
-                        </div>
-                        <span className="text-[8px] text-muted-foreground block">{z.items}</span>
-                        <span className="text-[7px] text-muted-foreground/60">{z.role}</span>
-                      </div>
-                    ))}
+                  {/* 户型图 */}
+                  <div className="rounded-xl overflow-hidden border border-border/30 mb-3">
+                    <img src={floorplanImg} alt="动线规划" className="w-full" />
                   </div>
-                </div>
 
-                {/* Circulation design */}
-                <div className="mb-5">
-                  <span className="text-[8px] tracking-[0.15em] uppercase text-muted-foreground/60 font-mono block mb-2">CIRCULATION</span>
-                  <p className="text-[9px] text-muted-foreground font-light mb-3">三条精心规划的动线，确保日常生活流畅自如</p>
+                  {/* 动线卡片 — 翻译成生活影响 */}
                   <div className="space-y-2">
                     {[
-                      { width: "1.2m", label: "主动线", path: "入户 → 客厅 → 阳台", note: "足够宽敞，轮椅也能轻松通过", color: "primary" },
-                      { width: "0.8m", label: "次动线", path: "沙发 → 厨房", note: "方便取物，不绕路", color: "accent" },
-                      { width: "∞", label: "视线动线", path: "沙发 → 电视", note: "无任何遮挡，最佳观影体验", color: "primary" },
+                      { width: "1.2m", label: "主通道", desc: "从门口到阳台，一路畅通", note: "推婴儿车、轮椅都没问题" },
+                      { width: "0.8m", label: "去厨房", desc: "沙发到厨房，方便拿东西", note: "不用绕路" },
+                      { width: "—", label: "看电视", desc: "沙发正对电视，中间没遮挡", note: "2.8米，55寸的最佳距离" },
                     ].map((c, i) => (
-                      <div key={i} className="flex items-center gap-3 py-2.5 px-3 border border-border/30 rounded-lg">
-                        <div className="text-center flex-shrink-0 w-12">
-                          <span className={`font-mono-data text-base font-light text-${c.color} block`}>{c.width}</span>
-                          <span className="text-[7px] text-muted-foreground">{c.label}</span>
+                      <div key={i} className="flex items-center gap-3 py-2.5 px-3 bg-secondary/20 rounded-xl">
+                        <div className="text-center flex-shrink-0 w-10">
+                          <span className="font-mono text-sm font-light text-foreground">{c.width}</span>
                         </div>
-                        <div className="flex-1 border-l border-border/30 pl-3">
-                          <span className="text-[9px] font-medium text-foreground block">{c.path}</span>
-                          <span className="text-[8px] text-muted-foreground">{c.note}</span>
+                        <div className="flex-1">
+                          <span className="text-[10px] font-medium text-foreground">{c.desc}</span>
+                          <span className="text-[9px] text-muted-foreground block">{c.note}</span>
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* Space metrics + opportunities */}
-                <div className="grid grid-cols-3 gap-2 mb-4">
-                  {[
-                    { value: "25", unit: "㎡", label: "总面积" },
-                    { value: "18", unit: "㎡", label: "可用面积" },
-                    { value: "2.8", unit: "m", label: "层高" },
-                  ].map((m, i) => (
-                    <div key={i} className="text-center py-3 border border-border/30 rounded-lg">
-                      <div className="flex items-baseline justify-center">
-                        <span className="font-mono-data text-xl font-light text-foreground">{m.value}</span>
-                        <span className="text-[8px] text-muted-foreground ml-0.5">{m.unit}</span>
-                      </div>
-                      <span className="text-[7px] text-muted-foreground tracking-wide">{m.label}</span>
-                    </div>
-                  ))}
+                {/* 2. 收纳逻辑 — 生活感 */}
+                <div className="mb-6">
+                  <h3 className="text-[13px] font-medium text-foreground mb-2">不容易乱</h3>
+                  <p className="text-[11px] text-muted-foreground leading-[1.9] font-light">
+                    电视柜选了带收纳的，日常零碎可以直接收进去。
+                    <br />茶几下面也有一层，遥控器、杂志有地方放。
+                    <br />空间会更干净，不容易乱。
+                  </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <span className="text-[8px] tracking-wider text-accent font-medium block mb-2">OPPORTUNITIES</span>
-                    {solution.spaceUnderstanding.opportunities.map((o, i) => (
-                      <div key={i} className="flex items-start gap-1.5 mb-2">
-                        <div className="w-1 h-1 rounded-full bg-accent mt-1.5 flex-shrink-0" />
-                        <span className="text-[9px] text-muted-foreground leading-snug">{o}</span>
+                {/* 3. 灯光 — 讲感受不讲参数 */}
+                <div className="mb-6">
+                  <h3 className="text-[13px] font-medium text-foreground mb-2">灯光可以换心情</h3>
+                  <p className="text-[11px] text-muted-foreground leading-[1.9] font-light mb-3">
+                    设了三层灯，不同时候开不同的，感觉完全不一样。
+                  </p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { scene: "白天工作", feel: "明亮但不刺眼", gradient: "from-amber-50/60 to-white" },
+                      { scene: "晚上看电影", feel: "暗一点，不反光", gradient: "from-amber-100/60 to-orange-50/40" },
+                      { scene: "睡前放松", feel: "暖暖的，很安心", gradient: "from-orange-100/60 to-amber-50/40" },
+                      { scene: "朋友来了", feel: "全开，亮堂温馨", gradient: "from-yellow-50/60 to-white" },
+                    ].map((s, i) => (
+                      <div key={i} className="relative overflow-hidden rounded-xl border border-border/20">
+                        <div className={`absolute inset-0 bg-gradient-to-br ${s.gradient}`} />
+                        <div className="relative p-3">
+                          <span className="text-[11px] font-medium text-foreground block">{s.scene}</span>
+                          <span className="text-[9px] text-muted-foreground font-light">{s.feel}</span>
+                        </div>
                       </div>
                     ))}
                   </div>
-                  <div>
-                    <span className="text-[8px] tracking-wider text-destructive/70 font-medium block mb-2">CHALLENGES</span>
-                    {solution.spaceUnderstanding.challenges.map((c, i) => (
-                      <div key={i} className="flex items-start gap-1.5 mb-2">
-                        <div className="w-1 h-1 rounded-full bg-destructive/50 mt-1.5 flex-shrink-0" />
-                        <span className="text-[9px] text-muted-foreground leading-snug">{c}</span>
-                      </div>
-                    ))}
-                  </div>
+                </div>
+
+                {/* 留一句"不完美"的真实感 */}
+                <div className="bg-secondary/20 rounded-xl p-3.5">
+                  <p className="text-[10px] text-muted-foreground leading-[1.8] font-light">
+                    💡 如果你更喜欢亮一点的氛围，落地灯可以换成色温更高的款，随时跟我说。
+                  </p>
                 </div>
               </div>
 
-              {/* ════ SCENES ════ */}
-              <div ref={ref("scenes")} className="pb-8">
-                <div className="px-5">
-                  <ProposalLabel text="LIVING SCENARIOS" />
-                  <h3 className="font-serif text-sm text-foreground mb-4">生活场景</h3>
-                </div>
-                <div className="flex gap-3 overflow-x-auto px-5 pb-2 snap-x snap-mandatory">
-                  {solution.lifeScenarios.map((s, i) => (
-                    <div key={i} className="flex-shrink-0 w-[72%] snap-center">
-                      {/* Large icon */}
-                      <div className="w-full aspect-[16/9] bg-secondary/50 rounded-lg flex flex-col items-center justify-center mb-2.5">
-                        <span className="text-4xl mb-1">{s.name.split(" ")[0]}</span>
-                        <span className="text-[11px] font-medium text-foreground">{s.name.split(" ").slice(1).join(" ")}</span>
-                        <span className="text-[9px] text-muted-foreground mt-0.5">{s.description}</span>
-                      </div>
-                      {/* Design points */}
-                      <div className="space-y-1">
-                        {s.design.split("\n").filter(Boolean).map((line, j) => (
-                          <p key={j} className="text-[9px] text-muted-foreground leading-snug pl-2 border-l border-border/50">{line.trim()}</p>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              {/* ═══════════════════════════════════════════
+                  🟩 第四层：选品 — 每一个都有"为什么是它"
+                  ═══════════════════════════════════════════ */}
+              <div ref={ref("picks")} className="px-5 pb-8">
+                <SectionDivider />
+                <p className="text-[11px] text-muted-foreground leading-[1.9] font-light mb-4">
+                  每一件都不是随便选的，
+                  <br />是根据你的空间和生活方式，一件件匹配出来的。
+                </p>
 
-              {/* ════ CURATION ════ */}
-              <div ref={ref("curation")} className="px-5 pb-8">
-                <ProposalLabel text="CURATED SELECTION" />
-                <h3 className="font-serif text-sm text-foreground mb-1">精选方案</h3>
-                <p className="text-[9px] text-muted-foreground mb-4 font-light">{solution.productSelection.principle}</p>
-
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {solution.productSelection.items.map((item, i) => (
-                    <CurationCard key={i} item={item} />
+                    <PersuasionProductCard key={i} item={item} />
                   ))}
                 </div>
 
-                {/* Total */}
-                <div className="mt-4 pt-3 border-t border-border/50 flex items-baseline justify-between">
-                  <span className="text-[10px] text-muted-foreground tracking-wide">合计</span>
-                  <span className="font-mono-data text-lg font-light text-foreground">
+                {/* 合计 */}
+                <div className="mt-5 pt-3 border-t border-border/30 flex items-baseline justify-between">
+                  <span className="text-[11px] text-muted-foreground">全部加起来</span>
+                  <span className="font-mono text-lg font-light text-foreground">
                     ¥{solution.productSelection.items.reduce((s, i) => s + i.price, 0).toLocaleString()}
                   </span>
                 </div>
               </div>
 
-              {/* ════ INVESTMENT ════ */}
+              {/* ═══════════════════════════════════════════
+                  🟦 第五层 + 🟪 第六层：预算 + 行动
+                  ═══════════════════════════════════════════ */}
               <div ref={ref("invest")} className="px-5 pb-8">
-                <ProposalLabel text="INVESTMENT" />
-                <h3 className="font-serif text-sm text-foreground mb-4">预算建议</h3>
+                <SectionDivider />
 
-                {/* Hero price */}
-                <div className="text-center py-6 mb-5 border border-border/50 rounded-lg">
-                  <span className="text-[9px] text-muted-foreground tracking-wider block mb-1">TOTAL INVESTMENT</span>
-                  <span className="font-mono-data text-3xl font-light text-foreground">
+                {/* 总价 */}
+                <div className="text-center py-5 mb-4 bg-secondary/20 rounded-xl">
+                  <span className="text-[10px] text-muted-foreground block mb-1">这套方案总共</span>
+                  <span className="font-mono text-3xl font-light text-foreground">
                     ¥{solution.costOptimization.current.toLocaleString()}
                   </span>
                 </div>
 
-                {/* Budget breakdown - clean bar */}
+                {/* 费用构成 */}
                 <div className="mb-5">
-                  <span className="text-[9px] text-muted-foreground tracking-wide block mb-2">费用构成</span>
-                  <div className="flex h-3 rounded-full overflow-hidden gap-[1px] mb-2">
+                  <div className="flex h-2.5 rounded-full overflow-hidden gap-[1px] mb-2">
                     {solution.productSelection.items.map((item, i) => {
                       const pct = (item.price / solution.costOptimization.current) * 100;
                       const opacities = ["opacity-90", "opacity-70", "opacity-50", "opacity-35", "opacity-20"];
-                      return (
-                        <div key={i} className={`bg-primary ${opacities[i]} rounded-sm`} style={{ width: `${pct}%` }} />
-                      );
+                      return <div key={i} className={`bg-primary ${opacities[i]} rounded-sm`} style={{ width: `${pct}%` }} />;
                     })}
                   </div>
                   <div className="flex flex-wrap gap-x-3 gap-y-1">
@@ -466,45 +375,56 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetPro
                   </div>
                 </div>
 
-                {/* Flexible range */}
-                <div className="grid grid-cols-2 gap-3 mb-5">
-                  <div className="py-3 px-3 border border-accent/30 rounded-lg">
-                    <span className="text-[8px] tracking-wider text-accent font-medium block mb-2">CAN SAVE</span>
+                {/* 弹性空间 — 说人话 */}
+                <div className="space-y-3 mb-5">
+                  <div className="p-3.5 border border-accent/20 rounded-xl">
+                    <span className="text-[10px] font-medium text-accent block mb-2">如果预算紧一点</span>
                     {solution.costOptimization.canSave.map((s, i) => (
-                      <div key={i} className="flex items-center justify-between mb-1.5 last:mb-0">
-                        <span className="text-[9px] text-foreground">{s.item}</span>
-                        <span className="font-mono-data text-[9px] text-accent">-¥{s.savings.toLocaleString()}</span>
+                      <div key={i} className="mb-2 last:mb-0">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[11px] text-foreground">{s.item}</span>
+                          <span className="font-mono text-[11px] text-accent">能省 ¥{s.savings.toLocaleString()}</span>
+                        </div>
+                        <p className="text-[9px] text-muted-foreground font-light mt-0.5 leading-relaxed">{s.tradeoff}</p>
                       </div>
                     ))}
                   </div>
-                  <div className="py-3 px-3 border border-primary/30 rounded-lg">
-                    <span className="text-[8px] tracking-wider text-primary font-medium block mb-2">CAN UPGRADE</span>
+
+                  <div className="p-3.5 border border-primary/20 rounded-xl">
+                    <span className="text-[10px] font-medium text-primary block mb-2">如果想再好一点</span>
                     {solution.costOptimization.canUpgrade.map((u, i) => (
-                      <div key={i} className="flex items-center justify-between mb-1.5 last:mb-0">
-                        <span className="text-[9px] text-foreground">{u.item}</span>
-                        <span className="font-mono-data text-[9px] text-primary">+¥{u.cost.toLocaleString()}</span>
+                      <div key={i} className="mb-2 last:mb-0">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[11px] text-foreground">{u.item}</span>
+                          <span className="font-mono text-[11px] text-primary">+¥{u.cost.toLocaleString()}</span>
+                        </div>
+                        <p className="text-[9px] text-muted-foreground font-light mt-0.5 leading-relaxed">{u.benefit}</p>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* Recommendation */}
-                <div className="border-l-[1.5px] border-primary/40 pl-4 py-1">
-                  <span className="text-[8px] tracking-wider text-primary font-medium block mb-1">RECOMMENDATION</span>
-                  <p className="text-[9px] text-muted-foreground leading-relaxed font-light">
+                {/* 建议 */}
+                <div className="bg-secondary/20 rounded-xl p-3.5 mb-6">
+                  <p className="text-[11px] text-muted-foreground leading-[1.8] font-light">
                     {solution.costOptimization.recommendation}
                   </p>
                 </div>
-              </div>
 
-              {/* CTA */}
-              <div className="px-5 pb-8">
+                {/* 社交暗示 — 轻，不套路 */}
+                <div className="text-center mb-4">
+                  <p className="text-[10px] text-muted-foreground/60 font-light">
+                    刚好这几件最近选的人挺多，一起买可能会便宜一点
+                  </p>
+                </div>
+
+                {/* CTA — 轻行动，不是"购买" */}
                 <div className="flex gap-3">
-                  <button onClick={onClose} className="flex-1 py-3 bg-foreground text-background text-[11px] font-medium rounded-lg tracking-wide">
-                    选择此方案
+                  <button onClick={onClose} className="flex-1 py-3.5 bg-foreground text-background text-[12px] font-medium rounded-xl tracking-wide">
+                    这套我先用着
                   </button>
-                  <button onClick={() => { setIsFullScreen(false); onModify(); }} className="flex-1 py-3 border border-border text-foreground text-[11px] font-medium rounded-lg tracking-wide">
-                    对话修改
+                  <button onClick={() => { setIsFullScreen(false); onModify(); }} className="flex-1 py-3.5 border border-border text-foreground text-[12px] font-light rounded-xl tracking-wide">
+                    我想改改
                   </button>
                 </div>
               </div>
@@ -518,36 +438,44 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetPro
 
 /* ─── Sub-components ─── */
 
-const ProposalLabel = ({ text }: { text: string }) => (
-  <span className="text-[8px] tracking-[0.2em] uppercase text-muted-foreground/60 font-mono block mb-1">{text}</span>
+const SectionDivider = () => (
+  <div className="flex items-center gap-3 mb-5">
+    <div className="flex-1 h-[0.5px] bg-border/40" />
+    <div className="w-1 h-1 rounded-full bg-border/60" />
+    <div className="flex-1 h-[0.5px] bg-border/40" />
+  </div>
 );
 
-const CurationCard = ({ item }: { item: { category: string; name: string; brand: string; price: number; brief: string; why: string; material: string; color: string; performance: string; style: string } }) => {
+const PersuasionProductCard = ({ item }: {
+  item: { category: string; name: string; brand: string; price: number; brief: string; why: string; material: string; color: string; performance: string; style: string };
+}) => {
   const [open, setOpen] = useState(false);
+
+  // 把"why"翻译成更口语化的结构
   return (
-    <div className="border border-border/50 rounded-lg p-3.5">
-      <div className="flex items-start justify-between mb-2">
-        <div className="flex items-center gap-2.5">
-          <span className="text-xl">{item.category.split(" ")[0]}</span>
+    <div className="bg-secondary/15 rounded-xl p-4">
+      {/* 头部 */}
+      <div className="flex items-start justify-between mb-1">
+        <div className="flex items-center gap-2">
+          <span className="text-lg">{item.category.split(" ")[0]}</span>
           <div>
-            <span className="text-[11px] font-medium text-foreground block">{item.name}</span>
-            <span className="text-[9px] text-muted-foreground font-light">{item.brand}</span>
+            <span className="text-[12px] font-medium text-foreground">{item.name}</span>
+            <span className="text-[9px] text-muted-foreground font-light block">{item.brand} · {item.brief}</span>
           </div>
         </div>
-        <span className="font-mono-data text-[13px] font-light text-foreground">¥{item.price.toLocaleString()}</span>
+        <span className="font-mono text-[14px] font-light text-foreground flex-shrink-0">¥{item.price.toLocaleString()}</span>
       </div>
 
-      {/* Tags */}
-      <div className="flex flex-wrap gap-1.5 mb-2">
-        {[item.material, item.color, item.performance, item.style].map((tag) => (
-          <span key={tag} className="text-[8px] px-2 py-[3px] border border-border/50 rounded-full text-muted-foreground font-light">{tag}</span>
+      {/* 标签 */}
+      <div className="flex flex-wrap gap-1.5 my-2.5">
+        {[item.material, item.color, item.performance].filter(Boolean).map((tag) => (
+          <span key={tag} className="text-[8px] px-2 py-[3px] bg-background/60 rounded-full text-muted-foreground font-light">{tag}</span>
         ))}
       </div>
 
-      <p className="text-[9px] text-muted-foreground font-light mb-1.5">{item.brief}</p>
-
-      <button onClick={() => setOpen(!open)} className="text-[9px] text-primary/80 font-light tracking-wide">
-        {open ? "收起" : "设计师选品理由 →"}
+      {/* 选品理由 — "为什么是它" */}
+      <button onClick={() => setOpen(!open)} className="text-[10px] text-primary/80 font-light">
+        {open ? "收起理由" : "为什么选它 →"}
       </button>
       <AnimatePresence>
         {open && (
@@ -555,9 +483,11 @@ const CurationCard = ({ item }: { item: { category: string; name: string; brand:
             initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <p className="text-[9px] text-muted-foreground leading-relaxed mt-2 pl-3 border-l border-primary/30 font-light italic">
-              {item.why}
-            </p>
+            <div className="mt-2.5 pt-2.5 border-t border-border/20">
+              <p className="text-[11px] text-muted-foreground leading-[1.9] font-light">
+                {item.why}
+              </p>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
