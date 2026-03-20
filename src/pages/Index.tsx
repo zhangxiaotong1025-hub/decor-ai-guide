@@ -243,6 +243,9 @@ const Index = () => {
       {/* Budget Agent full-screen */}
       <BudgetAgent isOpen={budgetOpen} onClose={() => setBudgetOpen(false)} />
 
+      {/* Group Buy Panel */}
+      <GroupBuyPanel isOpen={groupBuyOpen} onClose={() => setGroupBuyOpen(false)} />
+
       {/* Solution detail sheet */}
       <SolutionSheet
         solution={mockDesignSolution}
