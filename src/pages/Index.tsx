@@ -260,6 +260,21 @@ const Index = () => {
         product={selectedProduct}
         isOpen={productDetailOpen}
         onClose={handleCloseProductDetail}
+        onReserve={(product) => {
+          setHasActiveGroupBuy(true);
+          // Add chat message about reservation
+          setTimeout(() => {
+            setMessages((prev) => [
+              ...prev,
+              {
+                id: crypto.randomUUID(),
+                role: "assistant",
+                content: `好，${product.name}的价格先帮你留住了 👍\n\n当前进度：**8 / 10 人**\n大概还差 2 人\n\n我这边会继续帮你凑人，有进展第一时间告诉你。你可以在「拼单助手」里随时查看。`,
+                timestamp: Date.now(),
+              },
+            ]);
+          }, 1500);
+        }}
       />
 
       <ChatInput ref={inputRef} onSend={handleSend} disabled={isTyping} />
