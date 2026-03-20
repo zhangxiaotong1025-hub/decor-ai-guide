@@ -421,10 +421,10 @@ const ImmersiveProductCard = ({ item, index }: {
 
       {/* Expand for price deconstruction */}
       <button onClick={() => setExpanded(!expanded)} className="w-full px-4 py-2.5 border-t border-border/10 flex items-center justify-between">
-        <span className="text-[10px] text-primary/70 font-light">
+        <span className="text-xs text-primary">
           {expanded ? "收起详情" : "看看这个价格到底值不值 →"}
         </span>
-        <span className="font-mono text-[14px] text-foreground font-light">¥{item.price.toLocaleString()}</span>
+        <span className="font-mono text-sm text-foreground">¥{item.price.toLocaleString()}</span>
       </button>
 
       <AnimatePresence>
