@@ -451,7 +451,7 @@ const ImmersiveProductCard = ({ item, index }: {
 
               {/* Price deconstruction */}
               <div className="bg-background/50 rounded-xl p-3">
-                <span className="text-[9px] text-muted-foreground/50 block mb-2">价格解构</span>
+                <span className="text-xs text-muted-foreground block mb-2">价格解构</span>
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] text-muted-foreground/50 font-light line-through">品牌门店价</span>
