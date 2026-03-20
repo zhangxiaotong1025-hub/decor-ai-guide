@@ -138,7 +138,7 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetPro
                     className={`w-full object-cover ${isFullScreen ? "h-80" : "h-56"}`}
                   />
                   {/* Gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/10 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
 
                   {/* Scene mode switches */}
                   <div className="absolute bottom-16 left-5 flex gap-2">
