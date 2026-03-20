@@ -304,7 +304,7 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetPro
                   ].map((g, i) => (
                     <div key={i} className="flex items-center gap-3 py-3 px-4 bg-secondary/15 rounded-xl">
                       <g.icon className="w-4 h-4 text-muted-foreground/50 flex-shrink-0" />
-                      <span className="text-[11px] text-foreground font-light">{g.text}</span>
+                      <span className="text-sm text-foreground">{g.text}</span>
                     </div>
                   ))}
                 </div>
