@@ -161,6 +161,7 @@ const Index = () => {
 
   // Show quick actions when design solution has been shown and no panels are open
   const showQuickActions = showDesignSolution && !sheetOpen && !productDetailOpen && !activeAction && !budgetOpen && !groupBuyOpen && !threeDEditorOpen;
+  const hideChatInput = sheetOpen || productDetailOpen || budgetOpen || groupBuyOpen || threeDEditorOpen;
 
   const handleOpen3DEditor = useCallback(() => {
     setSheetOpen(false);
@@ -291,7 +292,7 @@ const Index = () => {
         }}
       />
 
-      <ChatInput ref={inputRef} onSend={handleSend} disabled={isTyping} />
+      {!hideChatInput && <ChatInput ref={inputRef} onSend={handleSend} disabled={isTyping} />}
     </div>
   );
 };

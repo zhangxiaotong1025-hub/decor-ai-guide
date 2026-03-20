@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect, lazy, Suspense, type KeyboardEvent } from "react";
+import { useState, useRef, useCallback, useEffect, type KeyboardEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X, Send, Eye, EyeOff, Sun, Moon, Check,
@@ -9,8 +9,7 @@ import {
   Map, Move3d, Ruler, Video, Grid3x3,
   Home, Mic, MicOff, Plus, Image as ImageIcon
 } from "lucide-react";
-
-const RoomViewer3D = lazy(() => import("./RoomViewer3D").catch(() => import("./RoomViewer3D")));
+import RoomViewer3D from "./RoomViewer3D";
 
 interface ThreeDEditorProps {
   isOpen: boolean;
@@ -308,15 +307,9 @@ const ThreeDEditor = ({ isOpen, onClose }: ThreeDEditorProps) => {
 
         {/* ═══ 3D CANVAS ═══ */}
         <div className="flex-1 relative overflow-hidden">
-          <Suspense
-            fallback={
-              <div className="w-full h-full flex items-center justify-center bg-black/50">
-                <motion.div animate={{ rotateY: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} className="text-3xl">🏠</motion.div>
-              </div>
-            }
-          >
+          <div className="w-full h-full">
             <RoomViewer3D className="w-full h-full" sceneState={sceneState} onSceneStateChange={setSceneState} />
-          </Suspense>
+          </div>
 
           {/* ── Edit panel (slide from bottom-left) ── */}
           <AnimatePresence>
