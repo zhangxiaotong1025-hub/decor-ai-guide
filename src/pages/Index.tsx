@@ -11,6 +11,7 @@ import WelcomeScreen from "@/components/chat/WelcomeScreen";
 import ProductDetailCard from "@/components/chat/ProductDetailCard";
 import QuickActionBar, { type QuickActionType } from "@/components/chat/QuickActionBar";
 import AgentPanel from "@/components/chat/AgentPanel";
+import BudgetAgent from "@/components/chat/BudgetAgent";
 import { mockDesignSolution } from "@/data/mockDesignSolution";
 import type { ChatMessage } from "@/types/chat";
 import type { ProductItem } from "@/types/product";

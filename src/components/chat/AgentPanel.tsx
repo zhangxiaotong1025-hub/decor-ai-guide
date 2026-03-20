@@ -82,50 +82,35 @@ const DesignPanel = ({ onOpenSolution }: { onOpenSolution: () => void }) => (
   </div>
 );
 
-const BudgetPanel = () => {
+const BudgetPanelPreview = ({ onOpenBudget }: { onOpenBudget: () => void }) => {
   const sol = mockDesignSolution;
   const total = sol.costOptimization.current;
   const canSaveTotal = sol.costOptimization.canSave.reduce((s, i) => s + i.savings, 0);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <div className="flex items-baseline justify-between">
         <span className="text-sm text-muted-foreground">当前方案总价</span>
         <span className="font-mono text-xl font-semibold text-foreground">¥{total.toLocaleString()}</span>
       </div>
-
-      <div className="space-y-2">
-        <div className="flex items-center gap-2 text-sm">
-          <TrendingDown className="w-4 h-4 text-accent" />
-          <span className="text-foreground">可以省</span>
-          <span className="ml-auto font-mono text-accent">-¥{canSaveTotal.toLocaleString()}</span>
-        </div>
-        {sol.costOptimization.canSave.map((s, i) => (
-          <div key={i} className="bg-secondary/30 rounded-lg p-3">
-            <div className="flex justify-between text-xs">
-              <span className="text-foreground">{s.item}</span>
-              <span className="text-accent font-mono">-¥{s.savings.toLocaleString()}</span>
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">{s.tradeoff}</p>
-          </div>
-        ))}
+      <div className="flex items-center gap-2 text-sm">
+        <TrendingDown className="w-4 h-4 text-accent" />
+        <span className="text-foreground">AI 已识别可节省</span>
+        <span className="ml-auto font-mono text-accent font-semibold">-¥{canSaveTotal.toLocaleString()}</span>
       </div>
-
-      <div className="space-y-2">
-        <div className="flex items-center gap-2 text-sm">
-          <TrendingUp className="w-4 h-4 text-primary" />
-          <span className="text-foreground">可以升级</span>
-        </div>
-        {sol.costOptimization.canUpgrade.map((u, i) => (
-          <div key={i} className="bg-secondary/30 rounded-lg p-3">
-            <div className="flex justify-between text-xs">
-              <span className="text-foreground">{u.item}</span>
-              <span className="text-primary font-mono">+¥{u.cost.toLocaleString()}</span>
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">{u.benefit}</p>
+      <button
+        onClick={onOpenBudget}
+        className="w-full flex items-center justify-between bg-primary/5 border border-primary/15 rounded-xl p-4 hover:bg-primary/10 transition-colors"
+      >
+        <div className="flex items-center gap-3">
+          <Sparkles className="w-5 h-5 text-primary" />
+          <div className="text-left">
+            <p className="text-sm font-medium text-foreground">查看完整报价分析</p>
+            <p className="text-xs text-muted-foreground mt-0.5">逐项价格透视 · 品牌溢价剥离 · 省钱方案</p>
           </div>
-        ))}
-      </div>
+        </div>
+        <span className="text-xs text-primary">打开 →</span>
+      </button>
     </div>
   );
 };
