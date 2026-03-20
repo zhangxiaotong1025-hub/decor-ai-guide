@@ -144,6 +144,10 @@ const Index = () => {
       setBudgetOpen(true);
       return;
     }
+    if (type === "groupbuy") {
+      setGroupBuyOpen(true);
+      return;
+    }
     setActiveAction(type);
   }, []);
 
