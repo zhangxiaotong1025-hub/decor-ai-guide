@@ -69,13 +69,11 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify, onSelectProduct, o
     <AnimatePresence>
       {isOpen && (
         <>
-          {isFullScreen && (
-            <motion.div
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-foreground/20 z-40"
-              onClick={() => setIsFullScreen(false)}
-            />
-          )}
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-foreground/20 z-40"
+            onClick={onClose}
+          />
 
           <motion.div
             initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
