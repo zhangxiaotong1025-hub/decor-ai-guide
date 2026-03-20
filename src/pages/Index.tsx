@@ -35,6 +35,7 @@ const Index = () => {
   const [budgetOpen, setBudgetOpen] = useState(false);
   const [groupBuyOpen, setGroupBuyOpen] = useState(false);
   const [hasActiveGroupBuy, setHasActiveGroupBuy] = useState(false);
+  const [threeDEditorOpen, setThreeDEditorOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<ChatInputHandle>(null);
 

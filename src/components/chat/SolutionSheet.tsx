@@ -26,7 +26,7 @@ const TABS = [
 ];
 
 type SceneMode = "morning" | "night";
-type ViewMode = "2d" | "3d";
+
 
 const SolutionSheet = ({ solution, isOpen, onClose, onModify, onSelectProduct, onOpen3DEditor }: SolutionSheetProps) => {
   const [activeTab, setActiveTab] = useState("immerse");
