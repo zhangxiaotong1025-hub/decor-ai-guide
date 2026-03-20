@@ -437,8 +437,8 @@ const ImmersiveProductCard = ({ item, index }: {
               {/* Factory sourcing */}
               <div className="py-3 mb-3">
                 <div className="flex items-center gap-2 mb-2">
-                  <Factory className="w-3.5 h-3.5 text-muted-foreground/40" />
-                  <span className="text-[10px] font-medium text-foreground">制造大揭秘</span>
+                  <Factory className="w-3.5 h-3.5 text-muted-foreground" />
+                  <span className="text-xs font-medium text-foreground">制造大揭秘</span>
                 </div>
                 <p className="text-[10px] text-muted-foreground/60 font-light leading-relaxed">
                   来自广东佛山 · 顾家/芝华士同源代工厂
