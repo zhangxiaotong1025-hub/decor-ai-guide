@@ -248,36 +248,36 @@ interface RoomViewer3DProps {
   onSceneStateChange: (state: SceneState) => void;
 }
 
-const RoomViewer3D = ({ className, sceneState, onSceneStateChange }: RoomViewer3DProps) => (
-  <div className={`relative ${className ?? ""}`} style={{ background: "linear-gradient(180deg, #f8f6f3 0%, #efebe6 100%)" }}>
-    <Canvas
-      shadows
-      camera={{ position: [5, 4, 6], fov: 45, near: 0.1, far: 50 }}
-      gl={{ antialias: true, alpha: false, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.1 }}
-      dpr={[1, 1.5]}
-    >
-      <color attach="background" args={["#f8f6f3"]} />
-      <fog attach="fog" args={["#f8f6f3", 12, 25]} />
-      <Suspense fallback={null}>
-        <RoomScene sceneState={sceneState} />
-        <CameraRig autoRotate={sceneState.autoRotate} />
-        <OrbitControls
-          enablePan
-          enableZoom
-          minDistance={3}
-          maxDistance={12}
-          maxPolarAngle={Math.PI / 2.1}
-          minPolarAngle={0.2}
-          target={[0, 0.5, 0]}
-          onStart={() => onSceneStateChange({ ...sceneState, autoRotate: false })}
-        />
-        <Environment preset="apartment" environmentIntensity={light?.envInt ?? 0.6} />
-      </Suspense>
-    </Canvas>
-  </div>
-);
-
-// Need light in scope for the component — use a fallback
-const light = LIGHTING.morning;
+const RoomViewer3D = ({ className, sceneState, onSceneStateChange }: RoomViewer3DProps) => {
+  const envInt = LIGHTING[sceneState.lighting]?.envInt ?? 0.6;
+  return (
+    <div className={`relative ${className ?? ""}`} style={{ background: "linear-gradient(180deg, #f8f6f3 0%, #efebe6 100%)" }}>
+      <Canvas
+        shadows
+        camera={{ position: [5, 4, 6], fov: 45, near: 0.1, far: 50 }}
+        gl={{ antialias: true, alpha: false, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.1 }}
+        dpr={[1, 1.5]}
+      >
+        <color attach="background" args={["#f8f6f3"]} />
+        <fog attach="fog" args={["#f8f6f3", 12, 25]} />
+        <Suspense fallback={null}>
+          <RoomScene sceneState={sceneState} />
+          <CameraRig autoRotate={sceneState.autoRotate} />
+          <OrbitControls
+            enablePan
+            enableZoom
+            minDistance={3}
+            maxDistance={12}
+            maxPolarAngle={Math.PI / 2.1}
+            minPolarAngle={0.2}
+            target={[0, 0.5, 0]}
+            onStart={() => onSceneStateChange({ ...sceneState, autoRotate: false })}
+          />
+          <Environment preset="apartment" environmentIntensity={envInt} />
+        </Suspense>
+      </Canvas>
+    </div>
+  );
+};
 
 export default RoomViewer3D;
