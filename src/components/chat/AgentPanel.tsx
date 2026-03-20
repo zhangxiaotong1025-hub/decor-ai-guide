@@ -44,7 +44,7 @@ const AgentPanel = ({ activeAction, onClose, onOpenSolution, onOpenBudget }: Age
         {/* Content */}
         <div className="flex-1 overflow-y-auto px-5 pb-5">
           {activeAction === "design" && <DesignPanel onOpenSolution={onOpenSolution} />}
-          {activeAction === "budget" && <BudgetPanel />}
+          {activeAction === "budget" && <BudgetPanelPreview onOpenBudget={onOpenBudget} />}
           {activeAction === "consult" && <ConsultPanel />}
         </div>
       </motion.div>
