@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ChatHeader from "@/components/chat/ChatHeader";
 import ChatInput, { type ChatInputHandle } from "@/components/chat/ChatInput";
@@ -16,6 +16,8 @@ import GroupBuyPanel from "@/components/groupbuy/GroupBuyPanel";
 import { mockDesignSolution } from "@/data/mockDesignSolution";
 import type { ChatMessage } from "@/types/chat";
 import type { ProductItem } from "@/types/product";
+
+const ThreeDEditor = lazy(() => import("@/components/3d/ThreeDEditor"));
 
 const MOCK_DELAY = 800;
 
