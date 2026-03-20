@@ -17,7 +17,11 @@ import { mockDesignSolution } from "@/data/mockDesignSolution";
 import type { ChatMessage } from "@/types/chat";
 import type { ProductItem } from "@/types/product";
 
-const ThreeDEditor = lazy(() => import("@/components/3d/ThreeDEditor"));
+const ThreeDEditor = lazy(() =>
+  import("@/components/3d/ThreeDEditor").catch(() => ({
+    default: () => <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80"><p className="text-muted-foreground">3D 编辑器加载失败，请刷新重试</p></div>,
+  }))
+);
 
 const MOCK_DELAY = 800;
 const DEFAULT_CHAT_INPUT_HEIGHT = 92;
