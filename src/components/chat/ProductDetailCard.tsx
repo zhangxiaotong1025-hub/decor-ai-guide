@@ -15,8 +15,7 @@ interface ProductDetailCardProps {
 const ProductDetailCard = ({ product, isOpen, onClose, onReserve }: ProductDetailCardProps) => {
   const [reserved, setReserved] = useState(false);
 
-  if (!product) return null;
-  const isCustom = product.groupBuy.type === "custom";
+  const isCustom = product ? product.groupBuy.type === "custom" : false;
 
   const handleReserve = () => {
     setReserved(true);
@@ -30,13 +29,13 @@ const ProductDetailCard = ({ product, isOpen, onClose, onReserve }: ProductDetai
 
   return (
     <AnimatePresence>
-      {isOpen && (
+      {isOpen && product && (
         <motion.div
           initial={{ y: "100%" }}
           animate={{ y: 0 }}
           exit={{ y: "100%" }}
           transition={{ type: "spring", damping: 28, stiffness: 300 }}
-          className="fixed inset-x-0 top-0 bottom-[56px] z-[50] bg-background flex flex-col rounded-t-[20px]"
+          className="fixed inset-x-0 top-0 bottom-0 z-[70] bg-background flex flex-col"
           style={{
             boxShadow: "0 -4px 40px rgba(0,0,0,0.12), 0 -1px 6px rgba(0,0,0,0.06)",
           }}

@@ -45,7 +45,7 @@ const BudgetAgent = ({ isOpen, onClose }: BudgetAgentProps) => {
         animate={{ y: 0 }}
         exit={{ y: "100%" }}
         transition={{ type: "spring", damping: 30, stiffness: 300 }}
-        className="fixed inset-x-0 top-0 bottom-[56px] z-[50] bg-background flex flex-col"
+        className="fixed inset-x-0 top-0 bottom-0 z-[70] bg-background flex flex-col"
       >
         {/* Header */}
         <div className="flex-shrink-0 border-b border-border">
