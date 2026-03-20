@@ -472,7 +472,7 @@ const GroupBuyProductCard = ({ product, index, onSelect }: { product: ProductIte
 
       {/* CTA: go to detail */}
       <button
-        onClick={() => navigate(`/product/${product.id}`)}
+        onClick={() => onSelect(product)}
         className="w-full px-4 py-3 border-t border-border/10 flex items-center justify-between hover:bg-secondary/20 transition-colors"
       >
         <span className="text-xs text-primary">查看详情与拼团</span>
