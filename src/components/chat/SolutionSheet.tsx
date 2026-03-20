@@ -2,6 +2,11 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Maximize2, Minimize2 } from "lucide-react";
 import type { DesignSolution } from "@/types/chat";
+import textureWood from "@/assets/texture-wood.jpg";
+import textureFabric from "@/assets/texture-fabric.jpg";
+import textureMetal from "@/assets/texture-metal.jpg";
+import texturePlant from "@/assets/texture-plant.jpg";
+import floorplanImg from "@/assets/floorplan-layout.png";
 
 interface SolutionSheetProps {
   solution: DesignSolution;
