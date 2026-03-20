@@ -219,8 +219,8 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetPro
 
                 {/* 色彩心理学 */}
                 <div className="px-6 mb-8">
-                  <h3 className="text-[13px] font-medium text-foreground mb-2">治愈系色彩</h3>
-                  <p className="text-[11px] text-muted-foreground leading-[1.9] font-light mb-3">
+                  <h3 className="text-sm font-medium text-foreground mb-2">治愈系色彩</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">
                     配色不只是为了好看，<br />而是让你下班后的心理压力一点点卸掉。
                   </p>
 
