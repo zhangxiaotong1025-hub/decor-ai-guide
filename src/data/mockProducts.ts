@@ -1,4 +1,11 @@
 import type { ProductItem } from "@/types/product";
+import sofaHero from "@/assets/product-sofa-hero.jpg";
+import sofaTexture from "@/assets/product-sofa-texture.jpg";
+import sofaLifestyle from "@/assets/product-sofa-lifestyle.jpg";
+import tvHero from "@/assets/product-tv-hero.jpg";
+import tvTexture from "@/assets/product-tv-texture.jpg";
+import factoryImg from "@/assets/product-factory.jpg";
+import spaceLayout from "@/assets/product-space-layout.jpg";
 
 export const mockProducts: ProductItem[] = [
   {
@@ -16,6 +23,16 @@ export const mockProducts: ProductItem[] = [
     storage: "底部隐形储物",
     texture: "细腻柔软，亲肤透气",
     style: "低矮重心，视觉轻盈",
+    heroImage: sofaHero,
+    textureImage: sofaTexture,
+    lifestyleImage: sofaLifestyle,
+    factoryImage: factoryImg,
+    spaceImage: spaceLayout,
+    gallery: [
+      { src: sofaHero, alt: "云朵沙发全貌", caption: "低矮重心，放在客厅里不压空间" },
+      { src: sofaTexture, alt: "纳米防污科技布微距", caption: "水珠落上去会自动滚落" },
+      { src: sofaLifestyle, alt: "日常使用场景", caption: "猫咪也能安心同住" },
+    ],
     factory: {
       location: "广东佛山",
       name: "顾家同源代工厂",
@@ -54,6 +71,14 @@ export const mockProducts: ProductItem[] = [
     unit: "㎡",
     unitPrice: 699,
     brandUnitPrice: 1200,
+    heroImage: tvHero,
+    textureImage: tvTexture,
+    factoryImage: factoryImg,
+    spaceImage: spaceLayout,
+    gallery: [
+      { src: tvHero, alt: "悬浮电视柜全貌", caption: "离地 15cm，扫地机器人自由通行" },
+      { src: tvTexture, alt: "实木贴皮微距", caption: "天然木纹，每一块都不一样" },
+    ],
     factory: {
       location: "江苏宿迁",
       name: "全屋定制超级工厂",
