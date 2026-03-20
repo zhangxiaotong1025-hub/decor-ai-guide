@@ -160,7 +160,12 @@ const Index = () => {
   }, []);
 
   // Show quick actions when design solution has been shown and no panels are open
-  const showQuickActions = showDesignSolution && !sheetOpen && !productDetailOpen && !activeAction && !budgetOpen && !groupBuyOpen;
+  const showQuickActions = showDesignSolution && !sheetOpen && !productDetailOpen && !activeAction && !budgetOpen && !groupBuyOpen && !threeDEditorOpen;
+
+  const handleOpen3DEditor = useCallback(() => {
+    setSheetOpen(false);
+    setTimeout(() => setThreeDEditorOpen(true), 300);
+  }, []);
 
   return (
     <div className="h-dvh flex flex-col bg-background">
