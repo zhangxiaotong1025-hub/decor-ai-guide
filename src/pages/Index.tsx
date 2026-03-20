@@ -150,7 +150,7 @@ const Index = () => {
   }, []);
 
   // Show quick actions when design solution has been shown and no panels are open
-  const showQuickActions = showDesignSolution && !sheetOpen && !productDetailOpen && !activeAction;
+  const showQuickActions = showDesignSolution && !sheetOpen && !productDetailOpen && !activeAction && !budgetOpen;
 
   return (
     <div className="h-dvh flex flex-col bg-background">
