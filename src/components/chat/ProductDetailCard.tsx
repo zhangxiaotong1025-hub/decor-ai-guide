@@ -62,11 +62,11 @@ const ProductDetailCard = ({ product, isOpen, onClose, onReserve }: ProductDetai
             ) : (
               <StandardProductDetail product={product} />
             )}
-            <div className="h-24" />
+            <div className="h-32" />
           </div>
 
           {/* Bottom CTA */}
-          <div className="flex-shrink-0 bg-background/90 backdrop-blur-md border-t border-border/30 px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+          <div className="flex-shrink-0 bg-background/90 backdrop-blur-md border-t border-border/30 px-5 py-3">
             <button
               onClick={handleReserve}
               disabled={reserved}
