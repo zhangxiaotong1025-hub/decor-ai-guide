@@ -347,14 +347,14 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetPro
 
                 {/* CTA */}
                 <div className="flex gap-3">
-                  <button onClick={onClose} className="flex-1 py-3.5 bg-foreground text-background text-[12px] font-medium rounded-xl tracking-wide">
+                  <button onClick={onClose} className="flex-1 py-3.5 bg-foreground text-background text-sm font-medium rounded-xl tracking-wide">
                     ⚡ 一键拿下这套生活
                   </button>
-                  <button onClick={() => { setIsFullScreen(false); onModify(); }} className="flex-[0.6] py-3.5 border border-border text-foreground text-[12px] font-light rounded-xl tracking-wide">
+                  <button onClick={() => { setIsFullScreen(false); onModify(); }} className="flex-[0.6] py-3.5 border border-border text-foreground text-sm rounded-xl tracking-wide">
                     💬 微调一下
                   </button>
                 </div>
-                <p className="text-[9px] text-muted-foreground/40 text-center mt-2.5">
+                <p className="text-xs text-muted-foreground text-center mt-2.5">
                   全套 ¥{totalPrice.toLocaleString()} · 预计拼团后可再省 ¥1,300
                 </p>
               </div>
