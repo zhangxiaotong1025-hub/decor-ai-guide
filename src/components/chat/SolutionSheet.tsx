@@ -340,7 +340,7 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetPro
 
                 {/* Real talk */}
                 <div className="bg-secondary/10 rounded-xl p-3.5 mb-8">
-                  <p className="text-[10px] text-muted-foreground/60 leading-[1.8] font-light">
+                  <p className="text-xs text-muted-foreground leading-relaxed">
                     💡 {solution.costOptimization.recommendation}
                   </p>
                 </div>
