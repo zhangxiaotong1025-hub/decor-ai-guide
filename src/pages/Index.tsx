@@ -261,7 +261,13 @@ const Index = () => {
         onClose={() => setSheetOpen(false)}
         onModify={handleModify}
         onSelectProduct={handleSelectProduct}
+        onOpen3DEditor={handleOpen3DEditor}
       />
+
+      {/* 3D Editor full-screen */}
+      <Suspense fallback={null}>
+        <ThreeDEditor isOpen={threeDEditorOpen} onClose={() => setThreeDEditorOpen(false)} />
+      </Suspense>
 
       {/* Product detail full-screen card */}
       <ProductDetailCard
