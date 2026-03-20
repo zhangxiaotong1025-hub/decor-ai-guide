@@ -470,10 +470,10 @@ const ImmersiveProductCard = ({ item, index }: {
                     </div>
                   </div>
                   <div className="flex items-center justify-between pt-1">
-                    <span className="text-[11px] text-foreground font-medium">直供底价</span>
-                    <span className="text-[14px] text-foreground font-mono font-medium">¥{item.price.toLocaleString()}</span>
+                     <span className="text-sm text-foreground font-medium">直供底价</span>
+                    <span className="text-sm text-foreground font-mono font-medium">¥{item.price.toLocaleString()}</span>
                   </div>
-                  <p className="text-[9px] text-accent/60 font-light">为你省下 ¥{(brandPrice - item.price).toLocaleString()} 的中间环节费用</p>
+                  <p className="text-xs text-accent">为你省下 ¥{(brandPrice - item.price).toLocaleString()} 的中间环节费用</p>
                 </div>
               </div>
             </div>
