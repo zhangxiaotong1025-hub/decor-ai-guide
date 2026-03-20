@@ -31,6 +31,8 @@ const Index = () => {
   const [productDetailOpen, setProductDetailOpen] = useState(false);
   const [activeAction, setActiveAction] = useState<QuickActionType>(null);
   const [budgetOpen, setBudgetOpen] = useState(false);
+  const [groupBuyOpen, setGroupBuyOpen] = useState(false);
+  const [hasActiveGroupBuy, setHasActiveGroupBuy] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<ChatInputHandle>(null);
 
