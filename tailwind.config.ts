@@ -14,8 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
+      sans: ['Inter', 'system-ui', 'sans-serif'],
+      serif: ['Playfair Display', 'Georgia', 'serif'],
+      mono: ['JetBrains Mono', 'monospace'],
       },
       letterSpacing: {
         display: '-0.02em',
