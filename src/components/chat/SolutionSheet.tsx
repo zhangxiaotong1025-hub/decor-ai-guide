@@ -312,27 +312,27 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetPro
                 {/* Budget flexibility */}
                 <div className="space-y-3 mb-8">
                   <div className="p-4 border border-accent/15 rounded-2xl">
-                    <span className="text-[10px] font-medium text-accent block mb-2">预算紧一点？</span>
+                     <span className="text-xs font-medium text-accent block mb-2">预算紧一点？</span>
                     {solution.costOptimization.canSave.map((s, i) => (
                       <div key={i} className="mb-2 last:mb-0">
                         <div className="flex items-center justify-between">
-                          <span className="text-[11px] text-foreground font-light">{s.item}</span>
-                          <span className="font-mono text-[11px] text-accent">-¥{s.savings.toLocaleString()}</span>
+                          <span className="text-sm text-foreground">{s.item}</span>
+                          <span className="font-mono text-sm text-accent">-¥{s.savings.toLocaleString()}</span>
                         </div>
-                        <p className="text-[9px] text-muted-foreground/60 font-light mt-0.5 leading-relaxed">{s.tradeoff}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{s.tradeoff}</p>
                       </div>
                     ))}
                   </div>
 
                   <div className="p-4 border border-primary/15 rounded-2xl">
-                    <span className="text-[10px] font-medium text-primary block mb-2">想再好一点？</span>
+                    <span className="text-xs font-medium text-primary block mb-2">想再好一点？</span>
                     {solution.costOptimization.canUpgrade.map((u, i) => (
                       <div key={i} className="mb-2 last:mb-0">
                         <div className="flex items-center justify-between">
-                          <span className="text-[11px] text-foreground font-light">{u.item}</span>
-                          <span className="font-mono text-[11px] text-primary">+¥{u.cost.toLocaleString()}</span>
+                          <span className="text-sm text-foreground">{u.item}</span>
+                          <span className="font-mono text-sm text-primary">+¥{u.cost.toLocaleString()}</span>
                         </div>
-                        <p className="text-[9px] text-muted-foreground/60 font-light mt-0.5 leading-relaxed">{u.benefit}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{u.benefit}</p>
                       </div>
                     ))}
                   </div>
