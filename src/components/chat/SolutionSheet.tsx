@@ -355,7 +355,7 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify, onSelectProduct, o
                   <button onClick={onClose} className="flex-1 py-3.5 bg-foreground text-background text-sm font-medium rounded-xl tracking-wide">
                     ⚡ 一键拿下这套生活
                   </button>
-                  <button onClick={() => { setIsFullScreen(false); onModify(); }} className="flex-[0.6] py-3.5 border border-border text-foreground text-sm rounded-xl tracking-wide">
+                  <button onClick={() => { onModify(); }} className="flex-[0.6] py-3.5 border border-border text-foreground text-sm rounded-xl tracking-wide">
                     💬 微调一下
                   </button>
                 </div>
