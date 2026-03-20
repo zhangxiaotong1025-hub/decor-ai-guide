@@ -10,7 +10,7 @@ import {
   Home, Mic, MicOff, Plus, Image as ImageIcon
 } from "lucide-react";
 
-const RoomViewer3D = lazy(() => import("./RoomViewer3D"));
+const RoomViewer3D = lazy(() => import("./RoomViewer3D").catch(() => import("./RoomViewer3D")));
 
 interface ThreeDEditorProps {
   isOpen: boolean;
