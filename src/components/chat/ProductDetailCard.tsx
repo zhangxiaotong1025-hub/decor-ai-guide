@@ -15,8 +15,7 @@ interface ProductDetailCardProps {
 const ProductDetailCard = ({ product, isOpen, onClose, onReserve }: ProductDetailCardProps) => {
   const [reserved, setReserved] = useState(false);
 
-  if (!product) return null;
-  const isCustom = product.groupBuy.type === "custom";
+  const isCustom = product ? product.groupBuy.type === "custom" : false;
 
   const handleReserve = () => {
     setReserved(true);
