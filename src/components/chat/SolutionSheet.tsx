@@ -20,7 +20,7 @@ interface SolutionSheetProps {
 const TABS = [
   { key: "immerse", label: "沉浸" },
   { key: "why", label: "设计" },
-  { key: "items", label: "空间解构" },
+  { key: "items", label: "拼团清单" },
   { key: "trust", label: "保障" },
 ];
 
