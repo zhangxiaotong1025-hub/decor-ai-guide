@@ -19,7 +19,7 @@ const AgentPanel = ({ activeAction, onClose, onOpenSolution, onOpenBudget }: Age
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: "100%", opacity: 0 }}
         transition={{ type: "spring", damping: 28, stiffness: 300 }}
-        className="fixed inset-x-0 bottom-[56px] z-[55] bg-card rounded-t-[20px] max-h-[50dvh] flex flex-col"
+        className="fixed inset-x-0 bottom-[56px] z-[50] bg-card rounded-t-[20px] max-h-[50dvh] flex flex-col"
         style={{
           boxShadow: "0 -4px 30px rgba(0,0,0,0.06), 0 -1px 4px rgba(0,0,0,0.03)",
         }}
