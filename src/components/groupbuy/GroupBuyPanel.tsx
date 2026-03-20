@@ -116,7 +116,7 @@ const ListView = ({
   onSelect: (b: UserGroupBuy) => void;
   onSimulateFormed: () => void;
 }) => (
-  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="px-4 pt-4 pb-8">
+  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="px-4 pt-4 pb-16">
     {/* Active group buys */}
     <div className="flex items-center gap-2 mb-3">
       <Package className="w-3.5 h-3.5 text-muted-foreground" />
@@ -218,7 +218,7 @@ const DetailView = ({ buy, onConfirmOrder }: { buy: UserGroupBuy; onConfirmOrder
   const label = stateLabel[buy.userState] ?? { text: buy.userState, color: "bg-secondary text-foreground" };
 
   return (
-    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="px-4 pt-4 pb-8">
+    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="px-4 pt-4 pb-16">
       {/* Status badge */}
       <div className="flex items-center justify-between mb-4">
         <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${label.color}`}>{label.text}</span>
@@ -404,7 +404,7 @@ const ConfirmView = ({ buy, onPay }: { buy: UserGroupBuy; onPay: () => void }) =
   const price = pool.finalPrice ?? pool.priceRange[0];
 
   return (
-    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="px-4 pt-4 pb-8">
+    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="px-4 pt-4 pb-16">
       {/* Order summary */}
       <div className="rounded-xl border border-border p-4 mb-4">
         <div className="flex gap-3 mb-3">
@@ -487,7 +487,7 @@ const OrderSuccessView = ({ onBackToList }: { onBackToList: () => void }) => (
   <motion.div
     initial={{ opacity: 0, scale: 0.95 }}
     animate={{ opacity: 1, scale: 1 }}
-    className="px-4 pt-12 pb-8 text-center"
+    className="px-4 pt-12 pb-16 text-center"
   >
     <motion.div
       initial={{ scale: 0 }}
