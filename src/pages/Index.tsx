@@ -29,6 +29,7 @@ const Index = () => {
   const [selectedProduct, setSelectedProduct] = useState<ProductItem | null>(null);
   const [productDetailOpen, setProductDetailOpen] = useState(false);
   const [activeAction, setActiveAction] = useState<QuickActionType>(null);
+  const [budgetOpen, setBudgetOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<ChatInputHandle>(null);
 
