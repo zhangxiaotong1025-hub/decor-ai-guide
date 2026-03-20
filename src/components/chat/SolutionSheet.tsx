@@ -26,7 +26,7 @@ const TABS = [
 
 type SceneMode = "morning" | "night";
 
-const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetProps) => {
+const SolutionSheet = ({ solution, isOpen, onClose, onModify, onSelectProduct }: SolutionSheetProps) => {
   const [activeTab, setActiveTab] = useState("immerse");
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [sceneMode, setSceneMode] = useState<SceneMode>("morning");
