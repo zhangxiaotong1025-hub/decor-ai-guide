@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { X, CheckCircle2 } from "lucide-react";
 import type { ProductItem } from "@/types/product";
 import StandardProductDetail from "@/components/product/StandardProductDetail";
 import CustomProductDetail from "@/components/product/CustomProductDetail";
@@ -8,11 +9,24 @@ interface ProductDetailCardProps {
   product: ProductItem | null;
   isOpen: boolean;
   onClose: () => void;
+  onReserve?: (product: ProductItem) => void;
 }
 
-const ProductDetailCard = ({ product, isOpen, onClose }: ProductDetailCardProps) => {
+const ProductDetailCard = ({ product, isOpen, onClose, onReserve }: ProductDetailCardProps) => {
+  const [reserved, setReserved] = useState(false);
+
   if (!product) return null;
   const isCustom = product.groupBuy.type === "custom";
+
+  const handleReserve = () => {
+    setReserved(true);
+    onReserve?.(product);
+    // Auto close after brief feedback
+    setTimeout(() => {
+      setReserved(false);
+      onClose();
+    }, 1200);
+  };
 
   return (
     <AnimatePresence>
@@ -53,15 +67,32 @@ const ProductDetailCard = ({ product, isOpen, onClose }: ProductDetailCardProps)
 
           {/* Bottom CTA */}
           <div className="flex-shrink-0 bg-background/90 backdrop-blur-md border-t border-border/30 px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-            <button className="w-full py-3.5 bg-foreground text-background text-sm font-medium rounded-xl">
-              {isCustom
-                ? "先按这个思路做一版我的"
-                : `这个价格先帮我留一下 · ¥${product.groupBuy.currentPrice.toLocaleString()}`}
+            <button
+              onClick={handleReserve}
+              disabled={reserved}
+              className={`w-full py-3.5 text-sm font-medium rounded-xl flex items-center justify-center gap-2 transition-all ${
+                reserved
+                  ? "bg-accent text-accent-foreground"
+                  : "bg-foreground text-background"
+              }`}
+            >
+              {reserved ? (
+                <>
+                  <CheckCircle2 className="w-4 h-4" />
+                  已帮你留住，正在帮你凑人
+                </>
+              ) : isCustom ? (
+                "先按这个思路做一版我的"
+              ) : (
+                `这个价格先帮我留一下 · ¥${product.groupBuy.currentPrice.toLocaleString()}`
+              )}
             </button>
             <p className="text-xs text-muted-foreground text-center mt-2">
-              {isCustom
-                ? "方案可以继续改，细节可以慢慢确认"
-                : "成团后再决定要不要买，不会直接扣钱"}
+              {reserved
+                ? "可以在「拼单助手」中查看进度"
+                : isCustom
+                  ? "方案可以继续改，细节可以慢慢确认"
+                  : "成团后再决定要不要买，不会直接扣钱"}
             </p>
           </div>
         </motion.div>

@@ -12,6 +12,7 @@ import ProductDetailCard from "@/components/chat/ProductDetailCard";
 import QuickActionBar, { type QuickActionType } from "@/components/chat/QuickActionBar";
 import AgentPanel from "@/components/chat/AgentPanel";
 import BudgetAgent from "@/components/chat/BudgetAgent";
+import GroupBuyPanel from "@/components/groupbuy/GroupBuyPanel";
 import { mockDesignSolution } from "@/data/mockDesignSolution";
 import type { ChatMessage } from "@/types/chat";
 import type { ProductItem } from "@/types/product";
@@ -30,6 +31,8 @@ const Index = () => {
   const [productDetailOpen, setProductDetailOpen] = useState(false);
   const [activeAction, setActiveAction] = useState<QuickActionType>(null);
   const [budgetOpen, setBudgetOpen] = useState(false);
+  const [groupBuyOpen, setGroupBuyOpen] = useState(false);
+  const [hasActiveGroupBuy, setHasActiveGroupBuy] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<ChatInputHandle>(null);
 
@@ -141,6 +144,10 @@ const Index = () => {
       setBudgetOpen(true);
       return;
     }
+    if (type === "groupbuy") {
+      setGroupBuyOpen(true);
+      return;
+    }
     setActiveAction(type);
   }, []);
 
@@ -150,7 +157,7 @@ const Index = () => {
   }, []);
 
   // Show quick actions when design solution has been shown and no panels are open
-  const showQuickActions = showDesignSolution && !sheetOpen && !productDetailOpen && !activeAction && !budgetOpen;
+  const showQuickActions = showDesignSolution && !sheetOpen && !productDetailOpen && !activeAction && !budgetOpen && !groupBuyOpen;
 
   return (
     <div className="h-dvh flex flex-col bg-background">
@@ -222,7 +229,7 @@ const Index = () => {
 
       {/* Quick action buttons */}
       {showQuickActions && (
-        <QuickActionBar onAction={handleQuickAction} activeAction={activeAction} />
+        <QuickActionBar onAction={handleQuickAction} activeAction={activeAction} hasActiveGroupBuy={hasActiveGroupBuy} />
       )}
 
       {/* Agent panel (design/budget/consult) */}
@@ -235,6 +242,9 @@ const Index = () => {
 
       {/* Budget Agent full-screen */}
       <BudgetAgent isOpen={budgetOpen} onClose={() => setBudgetOpen(false)} />
+
+      {/* Group Buy Panel */}
+      <GroupBuyPanel isOpen={groupBuyOpen} onClose={() => setGroupBuyOpen(false)} />
 
       {/* Solution detail sheet */}
       <SolutionSheet
@@ -250,6 +260,21 @@ const Index = () => {
         product={selectedProduct}
         isOpen={productDetailOpen}
         onClose={handleCloseProductDetail}
+        onReserve={(product) => {
+          setHasActiveGroupBuy(true);
+          // Add chat message about reservation
+          setTimeout(() => {
+            setMessages((prev) => [
+              ...prev,
+              {
+                id: crypto.randomUUID(),
+                role: "assistant",
+                content: `好，${product.name}的价格先帮你留住了 👍\n\n当前进度：**8 / 10 人**\n大概还差 2 人\n\n我这边会继续帮你凑人，有进展第一时间告诉你。你可以在「拼单助手」里随时查看。`,
+                timestamp: Date.now(),
+              },
+            ]);
+          }, 1500);
+        }}
       />
 
       <ChatInput ref={inputRef} onSend={handleSend} disabled={isTyping} />
