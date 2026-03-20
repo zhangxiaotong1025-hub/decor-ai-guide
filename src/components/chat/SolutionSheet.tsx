@@ -240,8 +240,8 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetPro
 
                 {/* 微观材质叙事 */}
                 <div className="px-6 mb-8">
-                  <h3 className="text-[13px] font-medium text-foreground mb-2">肉眼可见的质感</h3>
-                  <p className="text-[11px] text-muted-foreground leading-[1.9] font-light mb-4">
+                  <h3 className="text-sm font-medium text-foreground mb-2">肉眼可见的质感</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
                     不只是写"科技布"三个字——<br />看看水滴在面料上滚落，不留一点痕迹。
                   </p>
 
