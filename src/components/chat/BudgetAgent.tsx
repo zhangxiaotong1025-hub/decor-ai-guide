@@ -308,7 +308,7 @@ const BudgetAgent = ({ isOpen, onClose }: BudgetAgentProps) => {
           </motion.div>
 
           {/* ─── AI Summary ─── */}
-          <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.3 }} className="px-4 pb-6">
+          <motion.div {...fadeUpDelay(0.3)} className="px-4 pb-6">
             <div className="rounded-xl bg-secondary/40 border border-border p-4">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-5 h-5 rounded-md bg-primary/10 flex items-center justify-center">
