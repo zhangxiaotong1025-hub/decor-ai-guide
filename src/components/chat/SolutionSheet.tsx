@@ -15,6 +15,7 @@ interface SolutionSheetProps {
   onClose: () => void;
   onModify: () => void;
   onSelectProduct: (product: ProductItem) => void;
+  onOpen3DEditor?: () => void;
 }
 
 const TABS = [
