@@ -402,10 +402,10 @@ const ImmersiveProductCard = ({ item, index }: {
       {/* Header */}
       <div className="p-4 pb-3">
         <div className="flex items-center gap-1.5 mb-1">
-          <span className="text-[10px] text-muted-foreground/50 font-light">{index + 1}.</span>
-          <span className="text-[14px] font-medium text-foreground">{item.name}</span>
+          <span className="text-xs text-muted-foreground">{index + 1}.</span>
+          <span className="text-sm font-medium text-foreground">{item.name}</span>
         </div>
-        <p className="text-[11px] text-muted-foreground/70 font-light leading-relaxed mt-1">
+        <p className="text-sm text-muted-foreground leading-relaxed mt-1">
           {item.why.split("；")[0].split("。")[0]}。
         </p>
       </div>
