@@ -8,11 +8,12 @@ import CustomProductDetail from "@/components/product/CustomProductDetail";
 interface ProductDetailCardProps {
   product: ProductItem | null;
   isOpen: boolean;
+  bottomInset?: number;
   onClose: () => void;
   onReserve?: (product: ProductItem) => void;
 }
 
-const ProductDetailCard = ({ product, isOpen, onClose, onReserve }: ProductDetailCardProps) => {
+const ProductDetailCard = ({ product, isOpen, bottomInset = 0, onClose, onReserve }: ProductDetailCardProps) => {
   const [reserved, setReserved] = useState(false);
 
   const isCustom = product ? product.groupBuy.type === "custom" : false;
@@ -35,8 +36,9 @@ const ProductDetailCard = ({ product, isOpen, onClose, onReserve }: ProductDetai
           animate={{ y: 0 }}
           exit={{ y: "100%" }}
           transition={{ type: "spring", damping: 28, stiffness: 300 }}
-          className="fixed inset-x-0 top-0 bottom-0 z-[70] bg-background flex flex-col"
+          className="fixed inset-x-0 top-0 z-[70] bg-background flex flex-col"
           style={{
+            bottom: bottomInset,
             boxShadow: "0 -4px 40px rgba(0,0,0,0.12), 0 -1px 6px rgba(0,0,0,0.06)",
           }}
         >

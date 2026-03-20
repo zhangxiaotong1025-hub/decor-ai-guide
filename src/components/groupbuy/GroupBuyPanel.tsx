@@ -10,12 +10,13 @@ import { mockUserGroupBuys, mockFormedGroupBuy, mockCustomGroupBuyInfo } from "@
 
 interface GroupBuyPanelProps {
   isOpen: boolean;
+  bottomInset?: number;
   onClose: () => void;
 }
 
 type ViewState = "list" | "detail" | "confirm" | "order-success";
 
-const GroupBuyPanel = ({ isOpen, onClose }: GroupBuyPanelProps) => {
+const GroupBuyPanel = ({ isOpen, bottomInset = 0, onClose }: GroupBuyPanelProps) => {
   const [view, setView] = useState<ViewState>("list");
   const [selectedBuy, setSelectedBuy] = useState<UserGroupBuy | null>(null);
   const [demoFormed, setDemoFormed] = useState(false);
@@ -54,7 +55,8 @@ const GroupBuyPanel = ({ isOpen, onClose }: GroupBuyPanelProps) => {
         animate={{ y: 0 }}
         exit={{ y: "100%" }}
         transition={{ type: "spring", damping: 30, stiffness: 300 }}
-        className="fixed inset-x-0 top-0 bottom-0 z-[70] bg-background flex flex-col"
+        className="fixed inset-x-0 top-0 z-[70] bg-background flex flex-col"
+        style={{ bottom: bottomInset }}
       >
         {/* Header */}
         <div className="flex-shrink-0 border-b border-border">
