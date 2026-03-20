@@ -343,7 +343,7 @@ const BudgetAgent = ({ isOpen, onClose }: BudgetAgentProps) => {
           </motion.div>
 
           {/* ─── Trust Signals ─── */}
-          <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.35 }} className="px-4 pb-8">
+          <motion.div {...fadeUpDelay(0.35)} className="px-4 pb-8">
             <div className="flex items-center gap-4 justify-center">
               {[
                 { icon: Shield, text: "品质保障" },
