@@ -14,6 +14,7 @@ interface SolutionSheetProps {
   isOpen: boolean;
   onClose: () => void;
   onModify: () => void;
+  onSelectProduct: (product: ProductItem) => void;
 }
 
 const TABS = [
