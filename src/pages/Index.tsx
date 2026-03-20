@@ -20,6 +20,7 @@ import type { ProductItem } from "@/types/product";
 const ThreeDEditor = lazy(() => import("@/components/3d/ThreeDEditor"));
 
 const MOCK_DELAY = 800;
+const DEFAULT_CHAT_INPUT_HEIGHT = 92;
 
 const Index = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -36,8 +37,10 @@ const Index = () => {
   const [groupBuyOpen, setGroupBuyOpen] = useState(false);
   const [hasActiveGroupBuy, setHasActiveGroupBuy] = useState(false);
   const [threeDEditorOpen, setThreeDEditorOpen] = useState(false);
+  const [chatInputHeight, setChatInputHeight] = useState(DEFAULT_CHAT_INPUT_HEIGHT);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<ChatInputHandle>(null);
+  const inputContainerRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = useCallback(() => {
     setTimeout(() => {
@@ -48,6 +51,23 @@ const Index = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages, isTyping, showAnalysis, analysisComplete, showDesignSolution, scrollToBottom]);
+
+  useEffect(() => {
+    const node = inputContainerRef.current;
+    if (!node) return;
+
+    const updateHeight = () => {
+      const nextHeight = Math.ceil(node.getBoundingClientRect().height);
+      if (nextHeight > 0) setChatInputHeight(nextHeight);
+    };
+
+    updateHeight();
+
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(node);
+
+    return () => observer.disconnect();
+  }, []);
 
   const addAssistantMessage = useCallback(
     (msg: Omit<ChatMessage, "id" | "role" | "timestamp">) => {
@@ -159,9 +179,7 @@ const Index = () => {
     setSheetOpen(true);
   }, []);
 
-  // Show quick actions when design solution has been shown and no panels are open
   const showQuickActions = showDesignSolution && !sheetOpen && !productDetailOpen && !activeAction && !budgetOpen && !groupBuyOpen && !threeDEditorOpen;
-  const hideChatInput = sheetOpen || productDetailOpen || budgetOpen || groupBuyOpen || threeDEditorOpen;
 
   const handleOpen3DEditor = useCallback(() => {
     setSheetOpen(false);
@@ -172,7 +190,6 @@ const Index = () => {
     <div className="h-dvh flex flex-col bg-background">
       <ChatHeader />
 
-      {/* Messages area */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
         <div className="max-w-2xl mx-auto px-4 py-4 pb-2">
           <AnimatePresence mode="popLayout">
@@ -236,48 +253,43 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Quick action buttons */}
       {showQuickActions && (
         <QuickActionBar onAction={handleQuickAction} activeAction={activeAction} hasActiveGroupBuy={hasActiveGroupBuy} />
       )}
 
-      {/* Agent panel (design/budget/consult) */}
       <AgentPanel
         activeAction={activeAction}
+        bottomInset={chatInputHeight}
         onClose={() => setActiveAction(null)}
         onOpenSolution={handleOpenSolutionFromAgent}
         onOpenBudget={() => { setActiveAction(null); setBudgetOpen(true); }}
       />
 
-      {/* Budget Agent full-screen */}
-      <BudgetAgent isOpen={budgetOpen} onClose={() => setBudgetOpen(false)} />
+      <BudgetAgent isOpen={budgetOpen} bottomInset={chatInputHeight} onClose={() => setBudgetOpen(false)} />
 
-      {/* Group Buy Panel */}
-      <GroupBuyPanel isOpen={groupBuyOpen} onClose={() => setGroupBuyOpen(false)} />
+      <GroupBuyPanel isOpen={groupBuyOpen} bottomInset={chatInputHeight} onClose={() => setGroupBuyOpen(false)} />
 
-      {/* Solution detail sheet */}
       <SolutionSheet
         solution={mockDesignSolution}
         isOpen={sheetOpen}
+        bottomInset={chatInputHeight}
         onClose={() => setSheetOpen(false)}
         onModify={handleModify}
         onSelectProduct={handleSelectProduct}
         onOpen3DEditor={handleOpen3DEditor}
       />
 
-      {/* 3D Editor full-screen */}
       <Suspense fallback={null}>
         <ThreeDEditor isOpen={threeDEditorOpen} onClose={() => setThreeDEditorOpen(false)} />
       </Suspense>
 
-      {/* Product detail full-screen card */}
       <ProductDetailCard
         product={selectedProduct}
         isOpen={productDetailOpen}
+        bottomInset={chatInputHeight}
         onClose={handleCloseProductDetail}
         onReserve={(product) => {
           setHasActiveGroupBuy(true);
-          // Add chat message about reservation
           setTimeout(() => {
             setMessages((prev) => [
               ...prev,
@@ -292,7 +304,9 @@ const Index = () => {
         }}
       />
 
-      {!hideChatInput && <ChatInput ref={inputRef} onSend={handleSend} disabled={isTyping} />}
+      <div ref={inputContainerRef} className="relative z-[60]">
+        <ChatInput ref={inputRef} onSend={handleSend} disabled={isTyping} />
+      </div>
     </div>
   );
 };

@@ -16,12 +16,13 @@ import {
 
 interface BudgetAgentProps {
   isOpen: boolean;
+  bottomInset?: number;
   onClose: () => void;
 }
 
 type ViewState = "overview" | "section-detail" | "category-detail";
 
-const BudgetAgent = ({ isOpen, onClose }: BudgetAgentProps) => {
+const BudgetAgent = ({ isOpen, bottomInset = 0, onClose }: BudgetAgentProps) => {
   const [data] = useState<BudgetIntelligence>(() => generateBudgetIntelligence(mockDesignSolution));
   const [view, setView] = useState<ViewState>("overview");
   const [selectedCategory, setSelectedCategory] = useState<BudgetCategory | null>(null);
@@ -45,7 +46,8 @@ const BudgetAgent = ({ isOpen, onClose }: BudgetAgentProps) => {
         animate={{ y: 0 }}
         exit={{ y: "100%" }}
         transition={{ type: "spring", damping: 30, stiffness: 300 }}
-        className="fixed inset-x-0 top-0 bottom-0 z-[70] bg-background flex flex-col"
+        className="fixed inset-x-0 top-0 z-[70] bg-background flex flex-col"
+        style={{ bottom: bottomInset }}
       >
         {/* Header */}
         <div className="flex-shrink-0 border-b border-border">
