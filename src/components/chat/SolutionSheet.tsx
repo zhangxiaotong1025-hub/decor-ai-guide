@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect, useCallback, lazy, Suspense } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Maximize2, Minimize2, ChevronRight, Shield, Factory, Award, Truck, Users, Zap, Box, Image } from "lucide-react";
+import { X, Maximize2, Minimize2, ChevronRight, Shield, Factory, Award, Truck, Users, Zap, Box } from "lucide-react";
 import type { DesignSolution } from "@/types/chat";
 import { mockProducts } from "@/data/mockProducts";
 import type { ProductItem } from "@/types/product";
@@ -9,14 +9,13 @@ import sceneNight from "@/assets/scene-night.jpg";
 import fabricMacro from "@/assets/fabric-macro.jpg";
 import floorplanImg from "@/assets/floorplan-layout.png";
 
-const RoomViewer = lazy(() => import("@/components/3d/RoomViewer"));
-
 interface SolutionSheetProps {
   solution: DesignSolution;
   isOpen: boolean;
   onClose: () => void;
   onModify: () => void;
   onSelectProduct: (product: ProductItem) => void;
+  onOpen3DEditor?: () => void;
 }
 
 const TABS = [
@@ -27,13 +26,12 @@ const TABS = [
 ];
 
 type SceneMode = "morning" | "night";
-type ViewMode = "2d" | "3d";
 
-const SolutionSheet = ({ solution, isOpen, onClose, onModify, onSelectProduct }: SolutionSheetProps) => {
+
+const SolutionSheet = ({ solution, isOpen, onClose, onModify, onSelectProduct, onOpen3DEditor }: SolutionSheetProps) => {
   const [activeTab, setActiveTab] = useState("immerse");
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [sceneMode, setSceneMode] = useState<SceneMode>("morning");
-  const [viewMode, setViewMode] = useState<ViewMode>("2d");
   const scrollRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
@@ -133,95 +131,49 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify, onSelectProduct }:
                   💥 第一层：情感暴击 — 沉浸式场景 + 专属设计信
                   ═══════════════════════════════════════════════════ */}
               <div ref={ref("immerse")}>
-                {/* 2D / 3D Toggle */}
+                {/* Scene hero with 3D entry */}
                 <div className="relative overflow-hidden">
-                  {/* View mode toggle - top right */}
-                  <div className="absolute top-3 right-3 z-20 flex rounded-lg overflow-hidden backdrop-blur-md border border-foreground/10">
-                    <button
-                      onClick={() => setViewMode("2d")}
-                      className={`flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-medium transition-all ${
-                        viewMode === "2d"
-                          ? "bg-foreground/80 text-background"
-                          : "bg-background/40 text-foreground/70 hover:bg-background/60"
-                      }`}
-                    >
-                      <Image className="w-3 h-3" /> 效果图
-                    </button>
-                    <button
-                      onClick={() => setViewMode("3d")}
-                      className={`flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-medium transition-all ${
-                        viewMode === "3d"
-                          ? "bg-foreground/80 text-background"
-                          : "bg-background/40 text-foreground/70 hover:bg-background/60"
-                      }`}
-                    >
-                      <Box className="w-3 h-3" /> 3D 漫游
-                    </button>
-                  </div>
+                  {/* 3D Editor entry button - top right */}
+                  <button
+                    onClick={onOpen3DEditor}
+                    className="absolute top-3 right-3 z-20 flex items-center gap-1.5 px-3 py-2 rounded-lg backdrop-blur-md bg-foreground/70 text-background text-[10px] font-medium border border-foreground/10 hover:bg-foreground/90 transition-all"
+                  >
+                    <Box className="w-3.5 h-3.5" />
+                    进入 3D 编辑
+                  </button>
 
-                  <AnimatePresence mode="wait">
-                    {viewMode === "2d" ? (
-                      <motion.div key="2d" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                        <motion.img
-                          key={sceneMode}
-                          initial={{ opacity: 0, scale: 1.05 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ duration: 1.2, ease: "easeOut" }}
-                          src={sceneImages[sceneMode]}
-                          alt="你未来的家"
-                          className={`w-full object-cover ${isFullScreen ? "h-80" : "h-56"}`}
-                        />
-                        {/* Gradient overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+                  <motion.img
+                    key={sceneMode}
+                    initial={{ opacity: 0, scale: 1.05 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 1.2, ease: "easeOut" }}
+                    src={sceneImages[sceneMode]}
+                    alt="你未来的家"
+                    className={`w-full object-cover ${isFullScreen ? "h-80" : "h-56"}`}
+                  />
+                  {/* Gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
 
-                        {/* Scene mode switches */}
-                        <div className="absolute bottom-16 left-5 flex gap-2">
-                          {([
-                            { key: "morning" as SceneMode, icon: "☀️", label: "晨光" },
-                            { key: "night" as SceneMode, icon: "🌙", label: "夜读" },
-                          ]).map((s) => (
-                            <button
-                              key={s.key}
-                              onClick={() => setSceneMode(s.key)}
-                              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] backdrop-blur-md transition-all ${
-                                sceneMode === s.key
-                                  ? "bg-foreground/80 text-background font-medium"
-                                  : "bg-background/30 text-foreground/80 font-light"
-                              }`}
-                            >
-                              <span>{s.icon}</span>
-                              <span>{s.label}</span>
-                            </button>
-                          ))}
-                        </div>
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key="3d"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className={isFullScreen ? "h-96" : "h-72"}
+                  {/* Scene mode switches */}
+                  <div className="absolute bottom-16 left-5 flex gap-2">
+                    {([
+                      { key: "morning" as SceneMode, icon: "☀️", label: "晨光" },
+                      { key: "night" as SceneMode, icon: "🌙", label: "夜读" },
+                    ]).map((s) => (
+                      <button
+                        key={s.key}
+                        onClick={() => setSceneMode(s.key)}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] backdrop-blur-md transition-all ${
+                          sceneMode === s.key
+                            ? "bg-foreground/80 text-background font-medium"
+                            : "bg-background/30 text-foreground/80 font-light"
+                        }`}
                       >
-                        <Suspense fallback={
-                          <div className="w-full h-full flex items-center justify-center bg-secondary/30">
-                            <div className="text-center">
-                              <motion.div
-                                animate={{ rotateY: 360 }}
-                                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                                className="text-3xl mb-2"
-                              >
-                                🏠
-                              </motion.div>
-                              <p className="text-xs text-muted-foreground">正在加载 3D 场景...</p>
-                            </div>
-                          </div>
-                        }>
-                          <RoomViewer className="w-full h-full" />
-                        </Suspense>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                        <span>{s.icon}</span>
+                        <span>{s.label}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 {/* ── 专属设计信 ── */}

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ChatHeader from "@/components/chat/ChatHeader";
 import ChatInput, { type ChatInputHandle } from "@/components/chat/ChatInput";
@@ -17,6 +17,8 @@ import { mockDesignSolution } from "@/data/mockDesignSolution";
 import type { ChatMessage } from "@/types/chat";
 import type { ProductItem } from "@/types/product";
 
+const ThreeDEditor = lazy(() => import("@/components/3d/ThreeDEditor"));
+
 const MOCK_DELAY = 800;
 
 const Index = () => {
@@ -33,6 +35,7 @@ const Index = () => {
   const [budgetOpen, setBudgetOpen] = useState(false);
   const [groupBuyOpen, setGroupBuyOpen] = useState(false);
   const [hasActiveGroupBuy, setHasActiveGroupBuy] = useState(false);
+  const [threeDEditorOpen, setThreeDEditorOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<ChatInputHandle>(null);
 
@@ -157,7 +160,12 @@ const Index = () => {
   }, []);
 
   // Show quick actions when design solution has been shown and no panels are open
-  const showQuickActions = showDesignSolution && !sheetOpen && !productDetailOpen && !activeAction && !budgetOpen && !groupBuyOpen;
+  const showQuickActions = showDesignSolution && !sheetOpen && !productDetailOpen && !activeAction && !budgetOpen && !groupBuyOpen && !threeDEditorOpen;
+
+  const handleOpen3DEditor = useCallback(() => {
+    setSheetOpen(false);
+    setTimeout(() => setThreeDEditorOpen(true), 300);
+  }, []);
 
   return (
     <div className="h-dvh flex flex-col bg-background">
@@ -253,7 +261,13 @@ const Index = () => {
         onClose={() => setSheetOpen(false)}
         onModify={handleModify}
         onSelectProduct={handleSelectProduct}
+        onOpen3DEditor={handleOpen3DEditor}
       />
+
+      {/* 3D Editor full-screen */}
+      <Suspense fallback={null}>
+        <ThreeDEditor isOpen={threeDEditorOpen} onClose={() => setThreeDEditorOpen(false)} />
+      </Suspense>
 
       {/* Product detail full-screen card */}
       <ProductDetailCard
