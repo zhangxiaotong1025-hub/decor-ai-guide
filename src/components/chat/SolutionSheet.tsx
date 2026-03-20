@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { X, Maximize2, Minimize2, ChevronRight, Shield, Factory, Award, Truck, Users, Zap } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import type { DesignSolution } from "@/types/chat";
 import { mockProducts } from "@/data/mockProducts";
 import type { ProductItem } from "@/types/product";
@@ -15,6 +14,7 @@ interface SolutionSheetProps {
   isOpen: boolean;
   onClose: () => void;
   onModify: () => void;
+  onSelectProduct: (product: ProductItem) => void;
 }
 
 const TABS = [
@@ -26,7 +26,7 @@ const TABS = [
 
 type SceneMode = "morning" | "night";
 
-const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetProps) => {
+const SolutionSheet = ({ solution, isOpen, onClose, onModify, onSelectProduct }: SolutionSheetProps) => {
   const [activeTab, setActiveTab] = useState("immerse");
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [sceneMode, setSceneMode] = useState<SceneMode>("morning");
@@ -266,7 +266,7 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetPro
 
                 <div className="px-6 space-y-4">
                   {mockProducts.map((product, i) => (
-                    <GroupBuyProductCard key={product.id} product={product} index={i} />
+                    <GroupBuyProductCard key={product.id} product={product} index={i} onSelect={onSelectProduct} />
                   ))}
                 </div>
 
@@ -383,8 +383,7 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
   </div>
 );
 
-const GroupBuyProductCard = ({ product, index }: { product: ProductItem; index: number }) => {
-  const navigate = useNavigate();
+const GroupBuyProductCard = ({ product, index, onSelect }: { product: ProductItem; index: number; onSelect: (product: ProductItem) => void }) => {
   const isCustom = product.groupBuy.type === "custom";
   const progress = (product.groupBuy.current / product.groupBuy.target) * 100;
 
@@ -473,7 +472,7 @@ const GroupBuyProductCard = ({ product, index }: { product: ProductItem; index: 
 
       {/* CTA: go to detail */}
       <button
-        onClick={() => navigate(`/product/${product.id}`)}
+        onClick={() => onSelect(product)}
         className="w-full px-4 py-3 border-t border-border/10 flex items-center justify-between hover:bg-secondary/20 transition-colors"
       >
         <span className="text-xs text-primary">查看详情与拼团</span>

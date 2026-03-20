@@ -8,8 +8,12 @@ import AnalysisResult from "@/components/chat/AnalysisResult";
 import DesignSolutionCard from "@/components/chat/DesignSolutionCard";
 import SolutionSheet from "@/components/chat/SolutionSheet";
 import WelcomeScreen from "@/components/chat/WelcomeScreen";
+import ProductDetailCard from "@/components/chat/ProductDetailCard";
+import QuickActionBar, { type QuickActionType } from "@/components/chat/QuickActionBar";
+import AgentPanel from "@/components/chat/AgentPanel";
 import { mockDesignSolution } from "@/data/mockDesignSolution";
 import type { ChatMessage } from "@/types/chat";
+import type { ProductItem } from "@/types/product";
 
 const MOCK_DELAY = 800;
 
@@ -21,6 +25,9 @@ const Index = () => {
   const [analysisComplete, setAnalysisComplete] = useState(false);
   const [showDesignSolution, setShowDesignSolution] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<ProductItem | null>(null);
+  const [productDetailOpen, setProductDetailOpen] = useState(false);
+  const [activeAction, setActiveAction] = useState<QuickActionType>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<ChatInputHandle>(null);
 
@@ -109,7 +116,6 @@ const Index = () => {
   }, []);
 
   const handleModify = useCallback(() => {
-    // Close sheet (or keep half-open) and focus input
     setSheetOpen(false);
     setTimeout(() => {
       inputRef.current?.focus();
@@ -118,6 +124,27 @@ const Index = () => {
       });
     }, 300);
   }, [addAssistantMessage]);
+
+  const handleSelectProduct = useCallback((product: ProductItem) => {
+    setSelectedProduct(product);
+    setProductDetailOpen(true);
+  }, []);
+
+  const handleCloseProductDetail = useCallback(() => {
+    setProductDetailOpen(false);
+  }, []);
+
+  const handleQuickAction = useCallback((type: QuickActionType) => {
+    setActiveAction(type);
+  }, []);
+
+  const handleOpenSolutionFromAgent = useCallback(() => {
+    setActiveAction(null);
+    setSheetOpen(true);
+  }, []);
+
+  // Show quick actions when design solution has been shown and no panels are open
+  const showQuickActions = showDesignSolution && !sheetOpen && !productDetailOpen && !activeAction;
 
   return (
     <div className="h-dvh flex flex-col bg-background">
@@ -187,12 +214,32 @@ const Index = () => {
         </div>
       </div>
 
+      {/* Quick action buttons */}
+      {showQuickActions && (
+        <QuickActionBar onAction={handleQuickAction} activeAction={activeAction} />
+      )}
+
+      {/* Agent panel (design/budget/consult) */}
+      <AgentPanel
+        activeAction={activeAction}
+        onClose={() => setActiveAction(null)}
+        onOpenSolution={handleOpenSolutionFromAgent}
+      />
+
       {/* Solution detail sheet */}
       <SolutionSheet
         solution={mockDesignSolution}
         isOpen={sheetOpen}
         onClose={() => setSheetOpen(false)}
         onModify={handleModify}
+        onSelectProduct={handleSelectProduct}
+      />
+
+      {/* Product detail full-screen card */}
+      <ProductDetailCard
+        product={selectedProduct}
+        isOpen={productDetailOpen}
+        onClose={handleCloseProductDetail}
       />
 
       <ChatInput ref={inputRef} onSend={handleSend} disabled={isTyping} />
