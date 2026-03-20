@@ -458,15 +458,15 @@ const ImmersiveProductCard = ({ item, index }: {
                     <span className="text-xs text-muted-foreground font-mono line-through">¥{brandPrice.toLocaleString()}</span>
                   </div>
                   {/* Breakdown bar */}
-                  <div className="flex h-5 rounded-lg overflow-hidden gap-[1px] my-2">
+                  <div className="flex h-6 rounded-lg overflow-hidden gap-[1px] my-2">
                     <div className="flex-[40] bg-destructive/20 flex items-center justify-center">
-                      <span className="text-[7px] text-destructive/60">品牌溢价 ¥{(brandMarkup / 1000).toFixed(1)}k</span>
+                      <span className="text-[9px] text-destructive">溢价 ¥{(brandMarkup / 1000).toFixed(1)}k</span>
                     </div>
                     <div className="flex-[33] bg-destructive/10 flex items-center justify-center">
-                      <span className="text-[7px] text-destructive/40">经销商 ¥{(dealerMarkup / 1000).toFixed(1)}k</span>
+                      <span className="text-[9px] text-destructive/70">经销 ¥{(dealerMarkup / 1000).toFixed(1)}k</span>
                     </div>
                     <div className="flex-[27] bg-accent/15 flex items-center justify-center">
-                      <span className="text-[7px] text-accent/70">出厂 ¥{(factoryCost / 1000).toFixed(1)}k</span>
+                      <span className="text-[9px] text-accent">出厂 ¥{(factoryCost / 1000).toFixed(1)}k</span>
                     </div>
                   </div>
                   <div className="flex items-center justify-between pt-1">
