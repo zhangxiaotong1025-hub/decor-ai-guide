@@ -27,11 +27,13 @@ const TABS = [
 ];
 
 type SceneMode = "morning" | "night";
+type ViewMode = "2d" | "3d";
 
 const SolutionSheet = ({ solution, isOpen, onClose, onModify, onSelectProduct }: SolutionSheetProps) => {
   const [activeTab, setActiveTab] = useState("immerse");
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [sceneMode, setSceneMode] = useState<SceneMode>("morning");
+  const [viewMode, setViewMode] = useState<ViewMode>("2d");
   const scrollRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
