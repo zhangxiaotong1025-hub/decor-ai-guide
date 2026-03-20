@@ -158,7 +158,7 @@ const Index = () => {
 
       {/* Messages area */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
-        <div className="max-w-2xl mx-auto px-4 py-4">
+        <div className="max-w-2xl mx-auto px-4 py-4 pb-2">
           <AnimatePresence mode="popLayout">
             {phase === "welcome" && messages.length === 0 && (
               <WelcomeScreen onQuickStart={handleSend} />
