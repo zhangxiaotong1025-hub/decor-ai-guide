@@ -11,6 +11,7 @@ import WelcomeScreen from "@/components/chat/WelcomeScreen";
 import ProductDetailCard from "@/components/chat/ProductDetailCard";
 import QuickActionBar, { type QuickActionType } from "@/components/chat/QuickActionBar";
 import AgentPanel from "@/components/chat/AgentPanel";
+import BudgetAgent from "@/components/chat/BudgetAgent";
 import { mockDesignSolution } from "@/data/mockDesignSolution";
 import type { ChatMessage } from "@/types/chat";
 import type { ProductItem } from "@/types/product";
@@ -28,6 +29,7 @@ const Index = () => {
   const [selectedProduct, setSelectedProduct] = useState<ProductItem | null>(null);
   const [productDetailOpen, setProductDetailOpen] = useState(false);
   const [activeAction, setActiveAction] = useState<QuickActionType>(null);
+  const [budgetOpen, setBudgetOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<ChatInputHandle>(null);
 
@@ -224,7 +226,11 @@ const Index = () => {
         activeAction={activeAction}
         onClose={() => setActiveAction(null)}
         onOpenSolution={handleOpenSolutionFromAgent}
+        onOpenBudget={() => { setActiveAction(null); setBudgetOpen(true); }}
       />
+
+      {/* Budget Agent full-screen */}
+      <BudgetAgent isOpen={budgetOpen} onClose={() => setBudgetOpen(false)} />
 
       {/* Solution detail sheet */}
       <SolutionSheet
