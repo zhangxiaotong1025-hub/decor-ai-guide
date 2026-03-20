@@ -383,8 +383,7 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
   </div>
 );
 
-const GroupBuyProductCard = ({ product, index }: { product: ProductItem; index: number }) => {
-  const navigate = useNavigate();
+const GroupBuyProductCard = ({ product, index, onSelect }: { product: ProductItem; index: number; onSelect: (product: ProductItem) => void }) => {
   const isCustom = product.groupBuy.type === "custom";
   const progress = (product.groupBuy.current / product.groupBuy.target) * 100;
 
