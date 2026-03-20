@@ -291,7 +291,7 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetPro
               <div ref={ref("trust")} className="px-6 pb-8">
                 <SectionLabel>让你安心的生活保障</SectionLabel>
 
-                <p className="text-[11px] text-muted-foreground leading-[1.9] font-light mb-5">
+                <p className="text-sm text-muted-foreground leading-relaxed mb-5">
                   我们不造家具，<br />我们只是世界级工厂与你之间的桥梁。
                 </p>
 
