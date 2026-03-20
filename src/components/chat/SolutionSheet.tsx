@@ -270,12 +270,12 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetPro
                 {/* Total + group buy hint */}
                 <div className="px-6 mt-8 mb-4">
                   <div className="bg-secondary/20 rounded-2xl p-5 text-center">
-                    <span className="text-[10px] text-muted-foreground/60 block mb-1">全套直供价</span>
-                    <span className="font-mono text-3xl font-light text-foreground">
+                    <span className="text-xs text-muted-foreground block mb-1">全套直供价</span>
+                    <span className="font-mono text-3xl text-foreground">
                       ¥{totalPrice.toLocaleString()}
                     </span>
                     <div className="mt-3 pt-3 border-t border-border/20">
-                      <p className="text-[10px] text-muted-foreground/50 font-light leading-relaxed">
+                      <p className="text-xs text-muted-foreground leading-relaxed">
                         <span className="inline-block w-1.5 h-1.5 rounded-full bg-accent/60 mr-1 animate-pulse" />
                         系统正在为你寻找第 3 位热爱这种风格的同路人...
                         <br />凑满 10 人可再省 ¥1,300
