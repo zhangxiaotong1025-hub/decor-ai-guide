@@ -226,7 +226,11 @@ const Index = () => {
         activeAction={activeAction}
         onClose={() => setActiveAction(null)}
         onOpenSolution={handleOpenSolutionFromAgent}
+        onOpenBudget={() => { setActiveAction(null); setBudgetOpen(true); }}
       />
+
+      {/* Budget Agent full-screen */}
+      <BudgetAgent isOpen={budgetOpen} onClose={() => setBudgetOpen(false)} />
 
       {/* Solution detail sheet */}
       <SolutionSheet
