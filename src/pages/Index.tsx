@@ -292,7 +292,7 @@ const Index = () => {
         }}
       />
 
-      <ChatInput ref={inputRef} onSend={handleSend} disabled={isTyping} />
+      {!hideChatInput && <ChatInput ref={inputRef} onSend={handleSend} disabled={isTyping} />}
     </div>
   );
 };

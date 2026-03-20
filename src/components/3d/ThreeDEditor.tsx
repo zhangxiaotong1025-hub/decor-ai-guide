@@ -307,15 +307,9 @@ const ThreeDEditor = ({ isOpen, onClose }: ThreeDEditorProps) => {
 
         {/* ═══ 3D CANVAS ═══ */}
         <div className="flex-1 relative overflow-hidden">
-          <Suspense
-            fallback={
-              <div className="w-full h-full flex items-center justify-center bg-black/50">
-                <motion.div animate={{ rotateY: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} className="text-3xl">🏠</motion.div>
-              </div>
-            }
-          >
+          <div className="w-full h-full">
             <RoomViewer3D className="w-full h-full" sceneState={sceneState} onSceneStateChange={setSceneState} />
-          </Suspense>
+          </div>
 
           {/* ── Edit panel (slide from bottom-left) ── */}
           <AnimatePresence>
