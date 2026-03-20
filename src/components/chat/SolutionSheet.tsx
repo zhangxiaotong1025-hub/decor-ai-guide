@@ -1,7 +1,10 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { X, Maximize2, Minimize2, ChevronRight, Shield, Factory, Award, Truck } from "lucide-react";
+import { X, Maximize2, Minimize2, ChevronRight, Shield, Factory, Award, Truck, Users, Zap } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import type { DesignSolution } from "@/types/chat";
+import { mockProducts } from "@/data/mockProducts";
+import type { ProductItem } from "@/types/product";
 import sceneMorning from "@/assets/scene-morning.jpg";
 import sceneNight from "@/assets/scene-night.jpg";
 import fabricMacro from "@/assets/fabric-macro.jpg";
