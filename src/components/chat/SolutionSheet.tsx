@@ -266,7 +266,7 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify, onSelectProduct }:
 
                 <div className="px-6 space-y-4">
                   {mockProducts.map((product, i) => (
-                    <GroupBuyProductCard key={product.id} product={product} index={i} />
+                    <GroupBuyProductCard key={product.id} product={product} index={i} onSelect={onSelectProduct} />
                   ))}
                 </div>
 
