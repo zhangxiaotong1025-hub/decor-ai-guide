@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, lazy, Suspense } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Maximize2, Minimize2, ChevronRight, Shield, Factory, Award, Truck, Users, Zap, Box, Image } from "lucide-react";
 import type { DesignSolution } from "@/types/chat";
@@ -8,8 +8,6 @@ import sceneMorning from "@/assets/scene-morning.jpg";
 import sceneNight from "@/assets/scene-night.jpg";
 import fabricMacro from "@/assets/fabric-macro.jpg";
 import floorplanImg from "@/assets/floorplan-layout.png";
-
-const RoomViewer = lazy(() => import("@/components/3d/RoomViewer"));
 
 interface SolutionSheetProps {
   solution: DesignSolution;
