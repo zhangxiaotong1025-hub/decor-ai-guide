@@ -22,7 +22,7 @@ const ProductDetailCard = ({ product, isOpen, onClose }: ProductDetailCardProps)
           animate={{ y: 0 }}
           exit={{ y: "100%" }}
           transition={{ type: "spring", damping: 28, stiffness: 300 }}
-          className="fixed inset-x-0 top-0 bottom-[56px] z-[70] bg-background flex flex-col rounded-t-[20px]"
+          className="fixed inset-x-0 top-0 bottom-[56px] z-[50] bg-background flex flex-col rounded-t-[20px]"
           style={{
             boxShadow: "0 -4px 40px rgba(0,0,0,0.12), 0 -1px 6px rgba(0,0,0,0.06)",
           }}
