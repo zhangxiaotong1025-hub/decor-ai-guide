@@ -453,9 +453,9 @@ const ImmersiveProductCard = ({ item, index }: {
               <div className="bg-background/50 rounded-xl p-3">
                 <span className="text-xs text-muted-foreground block mb-2">价格解构</span>
                 <div className="space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] text-muted-foreground/50 font-light line-through">品牌门店价</span>
-                    <span className="text-[10px] text-muted-foreground/40 font-mono line-through">¥{brandPrice.toLocaleString()}</span>
+                   <div className="flex items-center justify-between">
+                    <span className="text-xs text-muted-foreground line-through">品牌门店价</span>
+                    <span className="text-xs text-muted-foreground font-mono line-through">¥{brandPrice.toLocaleString()}</span>
                   </div>
                   {/* Breakdown bar */}
                   <div className="flex h-5 rounded-lg overflow-hidden gap-[1px] my-2">
