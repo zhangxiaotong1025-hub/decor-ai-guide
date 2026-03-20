@@ -165,15 +165,15 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify }: SolutionSheetPro
                 {/* ── 专属设计信 ── */}
                 <div className="px-6 -mt-4 relative z-10">
                   <div className="mb-8">
-                    <p className="font-serif text-[15px] text-foreground/40 italic mb-3 tracking-wide">致 渴望呼吸感的你：</p>
-                    <p className="text-[13px] text-foreground leading-[2.2] font-light">
-                      你说<span className="underline decoration-primary/30 underline-offset-4 font-normal">每天下班回家感到疲惫</span>，预算 2 万，想要一个能
-                      <span className="underline decoration-primary/30 underline-offset-4 font-normal">彻底放松</span>的角落。
+                    <p className="font-serif text-sm text-muted-foreground italic mb-3 tracking-wide">致 渴望呼吸感的你：</p>
+                    <p className="text-sm text-foreground leading-relaxed">
+                      你说<span className="underline decoration-primary/40 underline-offset-4 font-medium">每天下班回家感到疲惫</span>，预算 2 万，想要一个能
+                      <span className="underline decoration-primary/40 underline-offset-4 font-medium">彻底放松</span>的角落。
                     </p>
-                    <p className="text-[13px] text-foreground leading-[2.2] font-light mt-3">
+                    <p className="text-sm text-foreground leading-relaxed mt-3">
                       我为你去掉了多余的繁杂，用大面积的燕麦色和低矮重心的设计，在 25㎡ 的物理空间里，为你延展出无限的心理余地。
                     </p>
-                    <p className="text-[11px] text-muted-foreground/50 font-light mt-5 tracking-wide">
+                    <p className="text-xs text-muted-foreground mt-5 tracking-wide">
                       —— 你的专属 AI 生活设计师
                     </p>
                   </div>
