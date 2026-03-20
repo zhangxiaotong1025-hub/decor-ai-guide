@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Maximize2, Minimize2, ChevronRight, Shield, Factory, Award, Truck, Users, Zap, Box } from "lucide-react";
+import { X, ChevronRight, Shield, Factory, Award, Truck, Users, Zap, Box } from "lucide-react";
 import type { DesignSolution } from "@/types/chat";
 import { mockProducts } from "@/data/mockProducts";
 import type { ProductItem } from "@/types/product";
@@ -30,7 +30,7 @@ type SceneMode = "morning" | "night";
 
 const SolutionSheet = ({ solution, isOpen, onClose, onModify, onSelectProduct, onOpen3DEditor }: SolutionSheetProps) => {
   const [activeTab, setActiveTab] = useState("immerse");
-  const [isFullScreen, setIsFullScreen] = useState(false);
+  const isFullScreen = true;
   const [sceneMode, setSceneMode] = useState<SceneMode>("morning");
   const scrollRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -69,24 +69,17 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify, onSelectProduct, o
     <AnimatePresence>
       {isOpen && (
         <>
-          {isFullScreen && (
-            <motion.div
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-foreground/20 z-40"
-              onClick={() => setIsFullScreen(false)}
-            />
-          )}
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-foreground/20 z-40"
+            onClick={onClose}
+          />
 
           <motion.div
             initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 28, stiffness: 300 }}
-            className={`fixed left-0 right-0 z-50 bg-background flex flex-col ${
-              isFullScreen
-                ? "top-[env(safe-area-inset-top,0px)] bottom-[56px] rounded-t-[20px]"
-                : "bottom-[56px] rounded-t-[20px]"
-            }`}
+            className="fixed left-0 right-0 z-50 bg-background flex flex-col top-[env(safe-area-inset-top,0px)] bottom-0 rounded-t-[20px]"
             style={{
-              maxHeight: isFullScreen ? undefined : "65dvh",
               boxShadow: "0 -4px 40px rgba(0,0,0,0.08), 0 -1px 6px rgba(0,0,0,0.04)",
             }}
           >
@@ -99,9 +92,6 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify, onSelectProduct, o
                 <div className="flex-1">
                   <span className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground/60 font-light">专属生活提案</span>
                 </div>
-                <button onClick={() => setIsFullScreen(!isFullScreen)} className="p-1.5 hover:bg-secondary rounded-full transition-colors">
-                  {isFullScreen ? <Minimize2 className="w-3.5 h-3.5 text-muted-foreground" /> : <Maximize2 className="w-3.5 h-3.5 text-muted-foreground" />}
-                </button>
                 <button onClick={onClose} className="p-1.5 hover:bg-secondary rounded-full transition-colors ml-0.5">
                   <X className="w-3.5 h-3.5 text-muted-foreground" />
                 </button>
@@ -365,7 +355,7 @@ const SolutionSheet = ({ solution, isOpen, onClose, onModify, onSelectProduct, o
                   <button onClick={onClose} className="flex-1 py-3.5 bg-foreground text-background text-sm font-medium rounded-xl tracking-wide">
                     ⚡ 一键拿下这套生活
                   </button>
-                  <button onClick={() => { setIsFullScreen(false); onModify(); }} className="flex-[0.6] py-3.5 border border-border text-foreground text-sm rounded-xl tracking-wide">
+                  <button onClick={() => { onModify(); }} className="flex-[0.6] py-3.5 border border-border text-foreground text-sm rounded-xl tracking-wide">
                     💬 微调一下
                   </button>
                 </div>
