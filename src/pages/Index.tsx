@@ -170,6 +170,11 @@ const Index = () => {
     setProductDetailOpen(false);
   }, []);
 
+  const handleSelectStory = useCallback((story: SceneStory) => {
+    setSelectedStory(story);
+    setStorySheetOpen(true);
+  }, []);
+
   const handleQuickAction = useCallback((type: QuickActionType) => {
     if (type === "budget") {
       setBudgetOpen(true);
