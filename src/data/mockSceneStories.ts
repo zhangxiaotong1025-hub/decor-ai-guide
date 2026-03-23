@@ -100,7 +100,7 @@ export const mockSceneStories: SceneStory[] = [
       { name: "水晶吊灯组合", category: "灯具", ourPrice: 4800, brandPrice: 15000 },
       { name: "丝绒窗帘套装", category: "软装", ourPrice: 3200, brandPrice: 8000 },
     ],
-    chatPrompt: "我们刚结婚，客厅加餐厅大概35平，想要法式奶油风的感觉，预算4万左右",
+    chatPrompt: "刚结婚想布置婚房，客厅加餐厅35平，想要那种朋友来了会夸好看的感觉，两个人攒了4万预算",
     socialProof: "632 对新人选了这套方案",
     category: "living",
   },
