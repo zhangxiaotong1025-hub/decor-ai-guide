@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, Zap, Sparkles, TrendingDown, Gift } from "lucide-react";
+import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
+import { X, Zap, Sparkles, Gift } from "lucide-react";
 import type { SceneStory } from "@/data/mockSceneStories";
 import DetailGallery from "./story/DetailGallery";
 import BeforeAfterSlider from "./story/BeforeAfterSlider";
 import LifeSceneBoard from "./story/LifeSceneBoard";
 import ProductList from "./story/ProductList";
+import AnimatedPrice from "./story/AnimatedPrice";
 
 interface SceneStorySheetProps {
   story: SceneStory | null;
@@ -19,17 +20,25 @@ interface SceneStorySheetProps {
 const SceneStorySheet = ({ story, isOpen, bottomInset = 0, onClose, onStartChat, onFillPrompt }: SceneStorySheetProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
+  const scrollY = useMotionValue(0);
+  const heroScale = useTransform(scrollY, [0, 400], [1.08, 1.25]);
+  const heroOpacity = useTransform(scrollY, [0, 300], [1, 0.3]);
 
   useEffect(() => {
     if (isOpen) {
       scrollRef.current?.scrollTo({ top: 0 });
       setScrolled(false);
+      scrollY.set(0);
     }
-  }, [isOpen, story?.id]);
+  }, [isOpen, story?.id, scrollY]);
 
   const handleScroll = useCallback(() => {
-    if (scrollRef.current) setScrolled(scrollRef.current.scrollTop > 120);
-  }, []);
+    if (scrollRef.current) {
+      const top = scrollRef.current.scrollTop;
+      setScrolled(top > 120);
+      scrollY.set(top);
+    }
+  }, [scrollY]);
 
   const handleCustomize = useCallback((prompt: string) => {
     onClose();
@@ -87,39 +96,136 @@ const SceneStorySheet = ({ story, isOpen, bottomInset = 0, onClose, onStartChat,
               </div>
             </div>
 
-            {/* Scrollable content */}
             <div ref={scrollRef} onScroll={handleScroll} className="flex-1 overflow-y-auto overscroll-contain">
 
-              {/* ═══ 1. CINEMATIC HERO ═══ */}
-              <div className="relative h-[80vh] min-h-[480px] max-h-[660px]">
-                <img src={story.heroImage} alt={story.hook} className="absolute inset-0 w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/15 to-foreground/10" />
+              {/* ═══ 1. CINEMATIC HERO with Ken Burns ═══ */}
+              <div className="relative h-[80vh] min-h-[480px] max-h-[660px] overflow-hidden">
+                <motion.img
+                  src={story.heroImage}
+                  alt={story.hook}
+                  className="absolute inset-0 w-full h-full object-cover will-change-transform"
+                  style={{ scale: heroScale, opacity: heroOpacity }}
+                  initial={{ scale: 1.0 }}
+                  animate={{ scale: 1.08 }}
+                  transition={{ duration: 12, ease: "linear", repeat: Infinity, repeatType: "reverse" }}
+                />
+                {/* Cinematic gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/10 to-foreground/5" />
 
+                {/* Floating bokeh particles */}
+                <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                  {[...Array(6)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      className="absolute rounded-full bg-primary-foreground/10"
+                      style={{
+                        width: 4 + Math.random() * 8,
+                        height: 4 + Math.random() * 8,
+                        left: `${10 + Math.random() * 80}%`,
+                        top: `${20 + Math.random() * 60}%`,
+                      }}
+                      animate={{
+                        y: [0, -30 - Math.random() * 20, 0],
+                        opacity: [0.2, 0.6, 0.2],
+                      }}
+                      transition={{
+                        duration: 4 + Math.random() * 3,
+                        repeat: Infinity,
+                        delay: Math.random() * 3,
+                        ease: "easeInOut",
+                      }}
+                    />
+                  ))}
+                </div>
+
+                {/* Hero content */}
                 <div className="absolute bottom-0 left-0 right-0 px-5 pb-7">
                   <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex items-center gap-2 mb-3">
                     <span className="text-[10px] px-2.5 py-1 rounded-full bg-primary-foreground/90 text-foreground font-medium">{story.persona}</span>
                     <span className="text-[10px] px-2.5 py-1 rounded-full bg-foreground/30 text-primary-foreground backdrop-blur-sm">{story.area} · {story.roomType}</span>
                   </motion.div>
-                  <motion.h2 initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="font-serif text-[22px] leading-[1.3] font-medium text-foreground tracking-display mb-4">
+
+                  <motion.h2
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 0.8 }}
+                    className="font-serif text-[24px] leading-[1.25] font-medium text-foreground tracking-display mb-4"
+                  >
                     {story.hook}
                   </motion.h2>
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }} className="flex items-baseline gap-3">
-                    <span className="font-mono-data text-3xl font-bold text-foreground">¥{story.ourTotal.toLocaleString()}</span>
-                    <span className="text-sm text-muted-foreground line-through font-mono-data">¥{story.brandTotal.toLocaleString()}</span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-saving text-saving-foreground">省 {savedPct}%</span>
+
+                  {/* Animated price */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6 }}
+                    className="flex items-baseline gap-3"
+                  >
+                    <AnimatedPrice value={story.ourTotal} delay={0.8} className="font-mono-data text-3xl font-bold text-foreground" />
+                    <motion.span
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 1.4 }}
+                      className="text-sm text-muted-foreground line-through font-mono-data"
+                    >
+                      ¥{story.brandTotal.toLocaleString()}
+                    </motion.span>
+                    <motion.span
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 1.6, type: "spring", stiffness: 400 }}
+                      className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-saving text-saving-foreground"
+                    >
+                      省 {savedPct}%
+                    </motion.span>
                   </motion.div>
                 </div>
+
+                {/* Scroll hint */}
+                <motion.div
+                  className="absolute bottom-2 left-1/2 -translate-x-1/2"
+                  animate={{ y: [0, 6, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <div className="w-5 h-8 rounded-full border-2 border-primary-foreground/30 flex justify-center pt-1.5">
+                    <motion.div
+                      className="w-1 h-1.5 rounded-full bg-primary-foreground/60"
+                      animate={{ y: [0, 8, 0], opacity: [1, 0.3, 1] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                  </div>
+                </motion.div>
               </div>
 
-              {/* ═══ 2. STORY QUOTE ═══ */}
-              <div className="px-6 py-8">
-                <motion.blockquote initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="relative">
-                  <span className="absolute -top-4 -left-1 text-4xl text-muted-foreground/20 font-serif select-none">"</span>
-                  <p className="text-base text-foreground leading-relaxed font-light pl-3 italic">{story.backstory}</p>
+              {/* ═══ 2. STORY — cinematic quote ═══ */}
+              <div className="px-6 py-10">
+                <motion.blockquote
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8 }}
+                  className="relative"
+                >
+                  <span className="absolute -top-5 -left-1 text-5xl text-muted-foreground/15 font-serif select-none">"</span>
+                  <p className="text-[15px] text-foreground leading-[1.8] font-light pl-4 italic">{story.backstory}</p>
                 </motion.blockquote>
-                <motion.div initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="mt-5 flex items-start gap-3 pl-3">
-                  <div className="w-[3px] min-h-[28px] bg-shock/60 rounded-full flex-shrink-0 self-stretch" />
-                  <p className="text-sm text-shock/90 leading-relaxed">{story.painPoint}</p>
+
+                <motion.div
+                  initial={{ opacity: 0, x: -20, width: 0 }}
+                  whileInView={{ opacity: 1, x: 0, width: "auto" }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="mt-6 flex items-start gap-3 pl-4"
+                >
+                  <motion.div
+                    className="w-[3px] min-h-[28px] bg-shock/60 rounded-full flex-shrink-0 self-stretch"
+                    initial={{ scaleY: 0 }}
+                    whileInView={{ scaleY: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.3 }}
+                    style={{ originY: 0 }}
+                  />
+                  <p className="text-sm text-shock/90 leading-relaxed font-medium">{story.painPoint}</p>
                 </motion.div>
               </div>
 
@@ -138,21 +244,33 @@ const SceneStorySheet = ({ story, isOpen, bottomInset = 0, onClose, onStartChat,
                 <LifeSceneBoard scenes={story.lifeScenes} />
               )}
 
-              {/* ═══ 6. PRODUCTS WITH IMAGES ═══ */}
+              {/* ═══ 6. PRODUCTS ═══ */}
               <ProductList products={story.products} totalSaved={saved} brandTotal={story.brandTotal} />
 
-              {/* ═══ 7. SOCIAL PROOF ═══ */}
+              {/* ═══ 7. SOCIAL PROOF — animated ═══ */}
               <div className="px-6 pb-10">
-                <div className="flex items-center gap-3 py-3">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="flex items-center gap-3 py-3"
+                >
                   <div className="flex -space-x-2">
-                    {[0, 1, 2].map(i => (
-                      <div key={i} className="w-7 h-7 rounded-full bg-secondary border-2 border-background flex items-center justify-center">
-                        <span className="text-[9px] text-muted-foreground">{["🏠", "✨", "🛋️"][i]}</span>
-                      </div>
+                    {[0, 1, 2, 3].map(i => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, scale: 0 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.1, type: "spring" }}
+                        className="w-7 h-7 rounded-full bg-secondary border-2 border-background flex items-center justify-center"
+                      >
+                        <span className="text-[9px]">{["🏠", "✨", "🛋️", "❤️"][i]}</span>
+                      </motion.div>
                     ))}
                   </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">{story.socialProof}</p>
-                </div>
+                </motion.div>
                 <p className="text-center text-[10px] text-muted-foreground/60 mt-4">AI 会根据你的面积和预算，生成你的专属方案</p>
               </div>
             </div>
@@ -176,11 +294,19 @@ const SceneStorySheet = ({ story, isOpen, bottomInset = 0, onClose, onStartChat,
                   <Sparkles className="w-3.5 h-3.5" />专属定制
                 </button>
                 <motion.button
-                  whileTap={{ scale: 0.98 }}
+                  whileTap={{ scale: 0.96 }}
+                  whileHover={{ scale: 1.02 }}
                   onClick={() => handleCustomize(story.chatPrompt)}
-                  className="flex-[1.5] flex items-center justify-center gap-1.5 py-3 bg-foreground text-background text-xs font-semibold rounded-xl shadow-elevated"
+                  className="flex-[1.5] relative flex items-center justify-center gap-1.5 py-3 bg-foreground text-background text-xs font-semibold rounded-xl shadow-elevated overflow-hidden"
                 >
-                  <Zap className="w-3.5 h-3.5" />加入拼团 · 省 {savedPct}%
+                  {/* Shimmer effect */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-primary-foreground/10 to-transparent"
+                    animate={{ x: ["-100%", "100%"] }}
+                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 3, ease: "easeInOut" }}
+                  />
+                  <Zap className="w-3.5 h-3.5 relative z-10" />
+                  <span className="relative z-10">加入拼团 · 省 {savedPct}%</span>
                 </motion.button>
               </div>
             </div>
