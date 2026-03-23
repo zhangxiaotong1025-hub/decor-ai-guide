@@ -267,7 +267,7 @@ const Index = () => {
                     <motion.div key={i} className="w-1.5 h-1.5 rounded-full bg-muted-foreground/40" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }} />
                   ))}
                 </div>
-                <span className="text-xs text-muted-foreground ml-1">正在设计方案...</span>
+                <span className="text-xs text-muted-foreground ml-1">正在帮你出方案，马上好...</span>
               </motion.div>
             )}
           </AnimatePresence>
