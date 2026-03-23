@@ -1,4 +1,4 @@
-import { useState, useRef, useImperativeHandle, forwardRef, useCallback, type KeyboardEvent } from "react";
+import { useState, useRef, useImperativeHandle, forwardRef, useCallback, useEffect, type KeyboardEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Send, Plus, X, Image, FileText, Mic, MicOff, Home, ShoppingBag,
