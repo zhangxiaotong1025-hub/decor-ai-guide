@@ -303,6 +303,7 @@ const Index = () => {
         }}
       />
 
+      <Suspense fallback={null}>
         <ThreeDEditor isOpen={threeDEditorOpen} onClose={() => setThreeDEditorOpen(false)} />
       </Suspense>
 
