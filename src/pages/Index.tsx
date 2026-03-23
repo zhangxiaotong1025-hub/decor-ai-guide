@@ -17,6 +17,7 @@ import GroupBuyPanel from "@/components/groupbuy/GroupBuyPanel";
 import { mockDesignSolution } from "@/data/mockDesignSolution";
 import type { ChatMessage } from "@/types/chat";
 import type { ProductItem } from "@/types/product";
+import type { SceneStory } from "@/data/mockSceneStories";
 
 const ThreeDEditor = lazy(() =>
   import("@/components/3d/ThreeDEditor").catch(() => ({
