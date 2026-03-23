@@ -353,7 +353,7 @@ export const mockSceneStories: SceneStory[] = [
       { name: "收纳挂袋组合", category: "收纳", ourPrice: 150, brandPrice: 500 },
       { name: "记忆棉薄床垫", category: "床垫", ourPrice: 280, brandPrice: 900 },
     ],
-    chatPrompt: "大学宿舍想改造一下床位，预算几百块，要实用好看",
+    chatPrompt: "考研党一枚，宿舍床位想弄舒服点，每天学到很晚回来能好好休息，几百块预算",
     socialProof: "5,432 位同学改造了宿舍",
     category: "whole",
   },
