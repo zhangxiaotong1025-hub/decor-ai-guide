@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, CheckCircle2 } from "lucide-react";
+import { X, CheckCircle2, Clock, Users, Zap } from "lucide-react";
 import type { ProductItem } from "@/types/product";
 import StandardProductDetail from "@/components/product/StandardProductDetail";
 import CustomProductDetail from "@/components/product/CustomProductDetail";
@@ -17,11 +17,11 @@ const ProductDetailCard = ({ product, isOpen, bottomInset = 0, onClose, onReserv
   const [reserved, setReserved] = useState(false);
 
   const isCustom = product ? product.groupBuy.type === "custom" : false;
+  const remaining = product ? product.groupBuy.target - product.groupBuy.current : 0;
 
   const handleReserve = () => {
     setReserved(true);
-    onReserve?.(product);
-    // Auto close after brief feedback
+    onReserve?.(product!);
     setTimeout(() => {
       setReserved(false);
       onClose();
@@ -63,38 +63,72 @@ const ProductDetailCard = ({ product, isOpen, bottomInset = 0, onClose, onReserv
             ) : (
               <StandardProductDetail product={product} />
             )}
-            <div className="h-32" />
+            <div className="h-36" />
           </div>
 
-          {/* Bottom CTA */}
-          <div className="flex-shrink-0 bg-background/90 backdrop-blur-md border-t border-border/30 px-5 py-3">
-            <button
-              onClick={handleReserve}
-              disabled={reserved}
-              className={`w-full py-3.5 text-sm font-medium rounded-xl flex items-center justify-center gap-2 transition-all ${
-                reserved
-                  ? "bg-accent text-accent-foreground"
-                  : "bg-foreground text-background"
-              }`}
-            >
-              {reserved ? (
-                <>
-                  <CheckCircle2 className="w-4 h-4" />
-                  已帮你留住，正在帮你凑人
-                </>
-              ) : isCustom ? (
-                "先按这个思路做一版我的"
-              ) : (
-                `这个价格先帮我留一下 · ¥${product.groupBuy.currentPrice.toLocaleString()}`
+          {/* Bottom CTA — conversion-optimized */}
+          <div className="flex-shrink-0 bg-background/95 backdrop-blur-md border-t border-border/30">
+            {/* Urgency micro-bar */}
+            {!reserved && (
+              <div className="flex items-center justify-center gap-2 py-1.5 bg-destructive/[0.06]">
+                {isCustom ? (
+                  <Zap className="w-3 h-3 text-primary" />
+                ) : (
+                  <Clock className="w-3 h-3 text-destructive" />
+                )}
+                <span className="text-[10px] text-foreground font-medium">
+                  {isCustom
+                    ? `还差 ${remaining}${product.unit} 开机 · 拼板价 ¥${product.groupBuy.targetPrice}/${product.unit}`
+                    : `还差 ${remaining} 人成团 · 底价 ¥${product.groupBuy.targetPrice.toLocaleString()}`
+                  }
+                </span>
+              </div>
+            )}
+
+            <div className="px-5 py-3">
+              {/* Price summary */}
+              {!reserved && (
+                <div className="flex items-baseline justify-between mb-2.5">
+                  <div className="flex items-baseline gap-2">
+                    <span className="font-mono text-xl font-bold text-foreground">
+                      ¥{product.groupBuy.currentPrice.toLocaleString()}{isCustom ? `/${product.unit}` : ""}
+                    </span>
+                    <span className="text-xs text-muted-foreground line-through">
+                      ¥{(isCustom ? product.brandUnitPrice : product.brandPrice)?.toLocaleString()}
+                    </span>
+                  </div>
+                  <span className="text-[10px] px-2 py-0.5 rounded-md bg-destructive/10 text-destructive font-bold">
+                    省 {Math.round((((isCustom ? (product.brandUnitPrice || 0) : product.brandPrice) - product.groupBuy.currentPrice) / (isCustom ? (product.brandUnitPrice || 1) : product.brandPrice)) * 100)}%
+                  </span>
+                </div>
               )}
-            </button>
-            <p className="text-xs text-muted-foreground text-center mt-2">
-              {reserved
-                ? "可以在「拼单助手」中查看进度"
-                : isCustom
-                  ? "方案可以继续改，细节可以慢慢确认"
-                  : "成团后再决定要不要买，不会直接扣钱"}
-            </p>
+
+              <button
+                onClick={handleReserve}
+                disabled={reserved}
+                className={`w-full py-3.5 text-sm font-medium rounded-xl flex items-center justify-center gap-2 transition-all ${
+                  reserved
+                    ? "bg-accent text-accent-foreground"
+                    : "bg-foreground text-background active:scale-[0.98]"
+                }`}
+              >
+                {reserved ? (
+                  <>
+                    <CheckCircle2 className="w-4 h-4" />
+                    已帮你锁住最低价，正在凑人
+                  </>
+                ) : isCustom ? (
+                  "⚡ 先按这个思路做一版我的"
+                ) : (
+                  "⚡ 这个价格先帮我留住"
+                )}
+              </button>
+              <p className="text-[10px] text-muted-foreground text-center mt-1.5">
+                {reserved
+                  ? "可以在「拼单助手」中查看进度"
+                  : "0 成本占位 · 成团后再决定 · 不满意随时退出"}
+              </p>
+            </div>
           </div>
         </motion.div>
       )}
