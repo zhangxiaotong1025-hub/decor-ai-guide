@@ -75,7 +75,7 @@ export const mockSceneStories: SceneStory[] = [
       { name: "三层照明套装", category: "灯具", ourPrice: 2300, brandPrice: 5500 },
       { name: "软装搭配套装", category: "软装", ourPrice: 3500, brandPrice: 7000 },
     ],
-    chatPrompt: "我想装修客厅，25平左右，养了一只猫，喜欢温馨一点的感觉，预算2万多",
+    chatPrompt: "我养了只猫，客厅25平，想回家能窝在沙发上撸猫看剧，沙发别太怕猫挠，预算2万出头就行",
     socialProof: "847 人照着这个方案装了家",
     category: "living",
   },
