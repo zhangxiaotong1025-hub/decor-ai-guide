@@ -1,17 +1,34 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Sparkles, MessageCircle } from "lucide-react";
 import SceneStoryCard from "./SceneStoryCard";
-import { mockSceneStories, type SceneStory } from "@/data/mockSceneStories";
+import { mockSceneStories, storyCategories, type SceneStory } from "@/data/mockSceneStories";
 
 interface DiscoveryFeedProps {
   onStartChat: (text: string) => void;
   onSelectStory: (story: SceneStory) => void;
+  /** 限制首页精选数量，不传则显示全部 */
+  limit?: number;
+  /** 是否显示分类筛选 */
+  showCategories?: boolean;
+  /** 查看更多回调 */
+  onViewAll?: () => void;
 }
 
-const DiscoveryFeed = ({ onStartChat, onSelectStory }: DiscoveryFeedProps) => {
-  const handleStoryTap = (story: SceneStory) => {
-    onSelectStory(story);
-  };
+const DiscoveryFeed = ({
+  onStartChat,
+  onSelectStory,
+  limit,
+  showCategories = false,
+  onViewAll,
+}: DiscoveryFeedProps) => {
+  const [activeCategory, setActiveCategory] = useState("all");
+
+  const filtered = activeCategory === "all"
+    ? mockSceneStories
+    : mockSceneStories.filter((s) => s.category === activeCategory);
+
+  const displayStories = limit ? filtered.slice(0, limit) : filtered;
 
   return (
     <motion.div
@@ -54,17 +71,50 @@ const DiscoveryFeed = ({ onStartChat, onSelectStory }: DiscoveryFeedProps) => {
         </motion.div>
       </div>
 
+      {/* Category tabs */}
+      {showCategories && (
+        <div className="px-4 mb-4 overflow-x-auto scrollbar-hide">
+          <div className="flex gap-2">
+            {storyCategories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`flex-shrink-0 text-xs px-3 py-1.5 rounded-full transition-colors ${
+                  activeCategory === cat.id
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Scene Story Cards */}
       <div className="px-4 space-y-4">
-        {mockSceneStories.map((story, i) => (
-          <SceneStoryCard
-            key={story.id}
-            story={story}
-            index={i}
-            onTap={handleStoryTap}
-          />
+        {displayStories.map((story, i) => (
+          <SceneStoryCard key={story.id} story={story} index={i} onTap={onSelectStory} />
         ))}
       </div>
+
+      {/* View all button */}
+      {limit && filtered.length > limit && onViewAll && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="px-4 mt-4"
+        >
+          <button
+            onClick={onViewAll}
+            className="w-full py-2.5 rounded-xl border border-border text-xs text-muted-foreground hover:bg-secondary transition-colors"
+          >
+            查看全部 {mockSceneStories.length} 个方案 →
+          </button>
+        </motion.div>
+      )}
 
       {/* Bottom CTA */}
       <motion.div

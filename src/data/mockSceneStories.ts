@@ -2,6 +2,14 @@ import sceneNordic from "@/assets/scene-nordic-living.jpg";
 import sceneJapanese from "@/assets/scene-japanese-studio.jpg";
 import sceneIndustrial from "@/assets/scene-industrial-loft.jpg";
 import sceneFrench from "@/assets/scene-french-cream.jpg";
+import sceneKids from "@/assets/scene-kids-room.jpg";
+import sceneOffice from "@/assets/scene-home-office.jpg";
+import sceneChinese from "@/assets/scene-newchinese-bedroom.jpg";
+import sceneBalcony from "@/assets/scene-balcony-garden.jpg";
+import sceneKitchen from "@/assets/scene-kitchen-dining.jpg";
+import sceneRetro from "@/assets/scene-retro-vintage.jpg";
+import sceneBath from "@/assets/scene-modern-bath.jpg";
+import sceneDorm from "@/assets/scene-student-dorm.jpg";
 
 export interface StoryProduct {
   name: string;
@@ -22,19 +30,27 @@ export interface SceneStory {
   ourTotal: number;
   joinedCount: number;
   itemCount: number;
-  /** 人设背景故事 */
   backstory: string;
-  /** 痛点 */
   painPoint: string;
-  /** 设计亮点 */
   highlights: string[];
-  /** 方案里的商品清单（简化版） */
   products: StoryProduct[];
-  /** 对话入口 prompt */
   chatPrompt: string;
-  /** 社交证明文案 */
   socialProof: string;
+  /** 分类标签 */
+  category: string;
 }
+
+export const storyCategories = [
+  { id: "all", label: "全部" },
+  { id: "living", label: "客厅" },
+  { id: "bedroom", label: "卧室" },
+  { id: "kitchen", label: "厨房" },
+  { id: "office", label: "书房" },
+  { id: "bathroom", label: "卫浴" },
+  { id: "balcony", label: "阳台" },
+  { id: "kids", label: "儿童房" },
+  { id: "whole", label: "全屋" },
+];
 
 export const mockSceneStories: SceneStory[] = [
   {
@@ -51,11 +67,7 @@ export const mockSceneStories: SceneStory[] = [
     itemCount: 5,
     backstory: "在杭州做运营的小鹿，月薪 8K，养了一只英短。搬进新租的房子，客厅空荡荡，网上看了一圈品牌店，沙发动辄一两万，还不防猫抓。",
     painPoint: "品牌店一套客厅要 8 万多，月薪 8K 根本不敢想",
-    highlights: [
-      "纳米防猫抓科技布沙发，猫随便挠",
-      "不规则茶几留出瑜伽空间",
-      "三层照明，下班一键切换放松模式",
-    ],
+    highlights: ["纳米防猫抓科技布沙发，猫随便挠", "不规则茶几留出瑜伽空间", "三层照明，下班一键切换放松模式"],
     products: [
       { name: "悬浮云朵沙发", category: "沙发", ourPrice: 8999, brandPrice: 15000 },
       { name: "岩板不规则茶几", category: "茶几", ourPrice: 1680, brandPrice: 4200 },
@@ -65,6 +77,7 @@ export const mockSceneStories: SceneStory[] = [
     ],
     chatPrompt: "我想装修客厅，25平左右，养了一只猫，喜欢温馨一点的感觉，预算2万多",
     socialProof: "847 人照着这个方案装了家",
+    category: "living",
   },
   {
     id: "story-french",
@@ -80,11 +93,7 @@ export const mockSceneStories: SceneStory[] = [
     itemCount: 8,
     backstory: "小宇和阿暖刚领证，在成都买了套两居室。婚房想要法式奶油风，去家居城逛了一圈，一套沙发标价 3 万起，两个人的预算加一起也撑不住。",
     painPoint: "婚房想要高级感，品牌店一套客厅 15 万，两个人月供已经很紧",
-    highlights: [
-      "进口丝绒质感沙发，触感媲美大牌",
-      "法式弧形餐桌，仪式感满分",
-      "水晶吊灯 + 壁灯组合，ins 风氛围拉满",
-    ],
+    highlights: ["进口丝绒质感沙发，触感媲美大牌", "法式弧形餐桌，仪式感满分", "水晶吊灯 + 壁灯组合，ins 风氛围拉满"],
     products: [
       { name: "法式弧形沙发", category: "沙发", ourPrice: 12800, brandPrice: 35000 },
       { name: "大理石餐桌", category: "餐桌", ourPrice: 5600, brandPrice: 18000 },
@@ -93,6 +102,7 @@ export const mockSceneStories: SceneStory[] = [
     ],
     chatPrompt: "我们刚结婚，客厅加餐厅大概35平，想要法式奶油风的感觉，预算4万左右",
     socialProof: "632 对新人选了这套方案",
+    category: "living",
   },
   {
     id: "story-japanese",
@@ -108,11 +118,7 @@ export const mockSceneStories: SceneStory[] = [
     itemCount: 4,
     backstory: "阿泽在深圳做后端开发，996 是常态。18㎡ 的出租屋里只有房东留的旧床和破桌子，每天回家感觉不像家，像是个临时睡觉的地方。",
     painPoint: "出租屋不想花太多钱，但又不想每天在毫无生活感的房间里待着",
-    highlights: [
-      "榻榻米升降桌，工作/吃饭/休息三合一",
-      "暖光纸灯笼，一盏灯改变整个氛围",
-      "收纳系统让 18㎡ 住出 30㎡ 的感觉",
-    ],
+    highlights: ["榻榻米升降桌，工作/吃饭/休息三合一", "暖光纸灯笼，一盏灯改变整个氛围", "收纳系统让 18㎡ 住出 30㎡ 的感觉"],
     products: [
       { name: "榻榻米升降桌", category: "桌几", ourPrice: 3200, brandPrice: 9000 },
       { name: "日式纸灯组合", category: "灯具", ourPrice: 1800, brandPrice: 5500 },
@@ -121,6 +127,7 @@ export const mockSceneStories: SceneStory[] = [
     ],
     chatPrompt: "出租屋18平想改造一下，喜欢日式简约风，预算控制在1.5万以内",
     socialProof: "1,203 个打工人改造了出租屋",
+    category: "whole",
   },
   {
     id: "story-industrial",
@@ -136,11 +143,7 @@ export const mockSceneStories: SceneStory[] = [
     itemCount: 6,
     backstory: "老陈是个自由摄影师，工作室就是家，家就是工作室。想要一个既能拍照当背景、又能窝着看片的空间，但设计公司报价 10 万起步。",
     painPoint: "设计公司报价 10 万，自己又不懂搭配，担心工业风做出来像毛坯房",
-    highlights: [
-      "真皮沙发 + 做旧铁艺书架，拍照自带滤镜",
-      "轨道射灯系统，拍摄打光一步到位",
-      "水泥质感地毯，踩上去却很柔软",
-    ],
+    highlights: ["真皮沙发 + 做旧铁艺书架，拍照自带滤镜", "轨道射灯系统，拍摄打光一步到位", "水泥质感地毯，踩上去却很柔软"],
     products: [
       { name: "复古真皮沙发", category: "沙发", ourPrice: 9800, brandPrice: 28000 },
       { name: "铁艺置物架", category: "收纳", ourPrice: 3600, brandPrice: 12000 },
@@ -149,5 +152,209 @@ export const mockSceneStories: SceneStory[] = [
     ],
     chatPrompt: "我是自由职业，想把30平的空间改成工作室兼客厅，喜欢工业风，3万预算",
     socialProof: "456 位创意人选了这套方案",
+    category: "living",
+  },
+  {
+    id: "story-kids",
+    heroImage: sceneKids,
+    persona: "二胎宝妈",
+    hook: "两个娃共用一间房，1.6 万搞定安全又好看",
+    roomType: "儿童房",
+    area: "12㎡",
+    styleTags: ["北欧童趣", "安全环保", "上下铺"],
+    brandTotal: 58000,
+    ourTotal: 16500,
+    joinedCount: 923,
+    itemCount: 5,
+    backstory: "小雨是两个孩子的妈妈，大宝 6 岁小宝 3 岁，家里只有一间房给两个孩子用。品牌儿童家具动辄几万，还担心甲醛问题。",
+    painPoint: "品牌儿童房全套要 5 万多，还不一定环保达标",
+    highlights: ["E0 级环保板材，零甲醛添加", "圆角设计全屋无尖角，防磕碰", "超大收纳空间，玩具绘本都有家"],
+    products: [
+      { name: "实木高低床", category: "床", ourPrice: 5800, brandPrice: 18000 },
+      { name: "圆角学习桌椅", category: "桌椅", ourPrice: 3200, brandPrice: 9500 },
+      { name: "玩具收纳柜", category: "收纳", ourPrice: 2800, brandPrice: 8000 },
+      { name: "防摔软包墙板", category: "墙面", ourPrice: 2200, brandPrice: 6500 },
+      { name: "星空主题灯组", category: "灯具", ourPrice: 1500, brandPrice: 4000 },
+    ],
+    chatPrompt: "家里两个小朋友，想装一间12平的儿童房，要安全环保，预算1.5万左右",
+    socialProof: "923 位家长选了这套方案",
+    category: "kids",
+  },
+  {
+    id: "story-office",
+    heroImage: sceneOffice,
+    persona: "远程办公设计师",
+    hook: "在家也要专业工位，1.2 万打造灵感书房",
+    roomType: "书房",
+    area: "8㎡",
+    styleTags: ["中古原木", "高效办公", "小空间"],
+    brandTotal: 42000,
+    ourTotal: 12000,
+    joinedCount: 1567,
+    itemCount: 4,
+    backstory: "阿琳是一名 UI 设计师，全职远程办公。之前在餐桌上办公，腰酸背痛效率低。想要一个独立书房，但 8 平米的次卧怎么塞下？",
+    painPoint: "品牌人体工学桌椅一套就要 2 万，书柜显示器支架又是一笔",
+    highlights: ["1.4 米升降桌 + 双屏支架，站坐自如", "整墙书架系统，收纳力拉满", "植物角 + 暖光灯，上班也有好心情"],
+    products: [
+      { name: "电动升降桌", category: "桌", ourPrice: 3800, brandPrice: 12000 },
+      { name: "人体工学椅", category: "椅", ourPrice: 2600, brandPrice: 8000 },
+      { name: "模块化书架", category: "收纳", ourPrice: 3200, brandPrice: 10000 },
+      { name: "护眼台灯套装", category: "灯具", ourPrice: 1800, brandPrice: 5500 },
+    ],
+    chatPrompt: "在家办公需要一个好用的书房，8平左右，要能放升降桌和书架，预算1万多",
+    socialProof: "1,567 位远程打工人的选择",
+    category: "office",
+  },
+  {
+    id: "story-chinese",
+    heroImage: sceneChinese,
+    persona: "退休教师夫妇",
+    hook: "新中式卧室，3.2 万睡出五星酒店感",
+    roomType: "主卧",
+    area: "20㎡",
+    styleTags: ["新中式", "实木质感", "静谧"],
+    brandTotal: 120000,
+    ourTotal: 32000,
+    joinedCount: 389,
+    itemCount: 5,
+    backstory: "王老师退休了，想把住了 20 年的主卧重新装修。喜欢中式韵味但不要太老气，去红木家具城看了一圈，随便一张床就要三五万。",
+    painPoint: "传统中式家具价格虚高，新中式品牌一间卧室 12 万",
+    highlights: ["黑胡桃木纹床架，质感媲美实木", "灯带 + 壁灯营造禅意氛围", "记忆棉床垫，护腰又舒适"],
+    products: [
+      { name: "新中式双人床", category: "床", ourPrice: 9800, brandPrice: 35000 },
+      { name: "实木床头柜×2", category: "柜", ourPrice: 4600, brandPrice: 16000 },
+      { name: "记忆棉床垫", category: "床垫", ourPrice: 6800, brandPrice: 22000 },
+      { name: "禅意灯组套装", category: "灯具", ourPrice: 3800, brandPrice: 12000 },
+      { name: "真丝床品四件套", category: "床品", ourPrice: 4200, brandPrice: 15000 },
+    ],
+    chatPrompt: "主卧20平，想要新中式风格，有质感但不要太贵，预算3万左右",
+    socialProof: "389 位长辈选了这套方案",
+    category: "bedroom",
+  },
+  {
+    id: "story-balcony",
+    heroImage: sceneBalcony,
+    persona: "都市种花党",
+    hook: "4㎡阳台变花园，3800 元治愈每一天",
+    roomType: "阳台",
+    area: "4㎡",
+    styleTags: ["花园阳台", "绿植系", "治愈"],
+    brandTotal: 15000,
+    ourTotal: 3800,
+    joinedCount: 2156,
+    itemCount: 4,
+    backstory: "小可在上海做会计，每天对着数字心累。阳台堆满了杂物，某天刷到别人家的花园阳台，决定也要有自己的小花园。",
+    painPoint: "网上搜阳台改造动辄上万，自己又不知道该买什么",
+    highlights: ["防腐木拼接地板，脚感温暖", "三层花架 + 自动浇水器，懒人也能养花", "藤编座椅配串灯，下班一杯茶的小确幸"],
+    products: [
+      { name: "防腐木地板", category: "地板", ourPrice: 980, brandPrice: 3500 },
+      { name: "三层花架", category: "花架", ourPrice: 680, brandPrice: 2500 },
+      { name: "藤编休闲椅", category: "椅", ourPrice: 1200, brandPrice: 4000 },
+      { name: "太阳能串灯", category: "灯具", ourPrice: 280, brandPrice: 800 },
+    ],
+    chatPrompt: "想把4平米阳台改造成小花园，预算四千以内，要好打理",
+    socialProof: "2,156 人拥有了自己的小花园",
+    category: "balcony",
+  },
+  {
+    id: "story-kitchen",
+    heroImage: sceneKitchen,
+    persona: "美食博主",
+    hook: "开放式厨房 + 中岛，4.5 万圆了烘焙梦",
+    roomType: "厨房 + 餐厅",
+    area: "18㎡",
+    styleTags: ["开放厨房", "中岛台", "原木暖调"],
+    brandTotal: 180000,
+    ourTotal: 45000,
+    joinedCount: 534,
+    itemCount: 6,
+    backstory: "阿梅是小红书美食博主，租了个带大厨房的房子想做直播。品牌橱柜报价 18 万，一个中岛台就要 3 万，预算完全 hold 不住。",
+    painPoint: "品牌整体厨房 18 万起步，中岛台单独定制也要几万",
+    highlights: ["石英石中岛台，耐高温好清洁", "嵌入式收纳系统，锅碗瓢盆全隐藏", "吊灯 + 射灯双系统，直播打光自带美颜"],
+    products: [
+      { name: "整体橱柜系统", category: "橱柜", ourPrice: 18000, brandPrice: 65000 },
+      { name: "石英石中岛台", category: "台面", ourPrice: 8800, brandPrice: 30000 },
+      { name: "嵌入式收纳组", category: "收纳", ourPrice: 5600, brandPrice: 18000 },
+      { name: "餐厅吊灯组合", category: "灯具", ourPrice: 3800, brandPrice: 12000 },
+    ],
+    chatPrompt: "想做开放式厨房加中岛，大概18平，预算4-5万，要能拍视频好看的",
+    socialProof: "534 位美食爱好者的选择",
+    category: "kitchen",
+  },
+  {
+    id: "story-retro",
+    heroImage: sceneRetro,
+    persona: "古着收藏家",
+    hook: "复古客厅，2.1 万回到黄金年代",
+    roomType: "客厅",
+    area: "22㎡",
+    styleTags: ["复古中古", "丝绒质感", "波西米亚"],
+    brandTotal: 78000,
+    ourTotal: 21000,
+    joinedCount: 378,
+    itemCount: 5,
+    backstory: "阿哲玩古着也玩黑胶，想要一个配得上自己收藏的客厅。中古家具店一张沙发要价两三万，还不一定找得到心仪的款式。",
+    painPoint: "中古家具溢价严重，一套客厅下来快 8 万",
+    highlights: ["丝绒沙发复刻经典款型，质感在线", "黄铜落地灯，ins 复古氛围感拉满", "波斯风地毯，踩上去就穿越了"],
+    products: [
+      { name: "丝绒复古沙发", category: "沙发", ourPrice: 7800, brandPrice: 25000 },
+      { name: "黄铜落地灯", category: "灯具", ourPrice: 2800, brandPrice: 9000 },
+      { name: "中古风边柜", category: "柜", ourPrice: 3600, brandPrice: 12000 },
+      { name: "波斯风地毯", category: "软装", ourPrice: 2200, brandPrice: 8000 },
+      { name: "黑胶唱片架", category: "收纳", ourPrice: 1800, brandPrice: 6000 },
+    ],
+    chatPrompt: "喜欢复古中古风，客厅22平，想要那种70年代的感觉，预算2万左右",
+    socialProof: "378 位复古爱好者的选择",
+    category: "living",
+  },
+  {
+    id: "story-bath",
+    heroImage: sceneBath,
+    persona: "精致打工人",
+    hook: "卫生间变 SPA，1.8 万在家泡澡不是梦",
+    roomType: "卫生间",
+    area: "6㎡",
+    styleTags: ["酒店感", "极简白", "独立浴缸"],
+    brandTotal: 65000,
+    ourTotal: 18000,
+    joinedCount: 712,
+    itemCount: 4,
+    backstory: "小苏每天加班到九十点，最大的愿望就是回家泡个澡。去建材市场一问，一个独立浴缸就要大几千，加上瓷砖五金花洒……算了算快 7 万。",
+    painPoint: "品牌卫浴全套 6.5 万，光一个浴缸就要上万",
+    highlights: ["亚克力独立浴缸，保温又轻便", "雨淋花洒系统，酒店同款体验", "智能镜柜，早起化妆效率翻倍"],
+    products: [
+      { name: "独立浴缸", category: "浴缸", ourPrice: 5800, brandPrice: 20000 },
+      { name: "恒温雨淋花洒", category: "花洒", ourPrice: 3200, brandPrice: 12000 },
+      { name: "智能镜柜", category: "镜柜", ourPrice: 4800, brandPrice: 15000 },
+      { name: "浴室五金套装", category: "五金", ourPrice: 2200, brandPrice: 8000 },
+    ],
+    chatPrompt: "想改造6平米卫生间，想要酒店那种SPA感觉，能放浴缸，预算2万以内",
+    socialProof: "712 人在家实现了泡澡自由",
+    category: "bathroom",
+  },
+  {
+    id: "story-dorm",
+    heroImage: sceneDorm,
+    persona: "考研大学生",
+    hook: "宿舍床位改造，800 块拥有独立小天地",
+    roomType: "宿舍",
+    area: "3㎡",
+    styleTags: ["学生党", "极致收纳", "温馨小窝"],
+    brandTotal: 3500,
+    ourTotal: 800,
+    joinedCount: 5432,
+    itemCount: 4,
+    backstory: "小林大三准备考研，每天在图书馆泡到十点才回宿舍。想要一个舒服的床位环境，但学生党预算真的有限。",
+    painPoint: "宿舍改造看着简单，零零散散加起来也要好几千",
+    highlights: ["床帘 + LED 灯带，秒变独立空间", "床上桌 + 收纳挂袋，考研资料不再乱", "记忆棉床垫，睡好才能学好"],
+    products: [
+      { name: "遮光床帘套装", category: "床帘", ourPrice: 120, brandPrice: 400 },
+      { name: "折叠床上桌", category: "桌", ourPrice: 180, brandPrice: 600 },
+      { name: "收纳挂袋组合", category: "收纳", ourPrice: 150, brandPrice: 500 },
+      { name: "记忆棉薄床垫", category: "床垫", ourPrice: 280, brandPrice: 900 },
+    ],
+    chatPrompt: "大学宿舍想改造一下床位，预算几百块，要实用好看",
+    socialProof: "5,432 位同学改造了宿舍",
+    category: "whole",
   },
 ];
