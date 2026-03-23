@@ -106,7 +106,7 @@ const Index = () => {
           {
             id: crypto.randomUUID(),
             role: "assistant",
-            content: "需求分析完成！我已为您生成了一套专业设计方案，以专家设计师的视角为您量身打造：",
+            content: "方案出来了！👇 和你情况相似的 847 人已经照着装好了，看看适不适合你——",
             timestamp: Date.now(),
           },
         ]);
@@ -157,7 +157,7 @@ const Index = () => {
             {
               id: crypto.randomUUID(),
               role: "assistant",
-              content: "好的，我来分析一下您的需求。请稍等片刻...",
+              content: "收到！这个需求太多人问了 🔥 让我马上帮你规划一下——",
               timestamp: Date.now(),
             },
           ]);
@@ -165,7 +165,7 @@ const Index = () => {
         }, MOCK_DELAY);
       } else {
         addAssistantMessage({
-          content: "好的，我已记录您的反馈。如果需要调整方案或有其他问题，随时告诉我。",
+          content: "收到，我马上调整！改完给你看效果——",
         });
       }
     },
@@ -179,7 +179,7 @@ const Index = () => {
     setTimeout(() => {
       inputRef.current?.focus();
       addAssistantMessage({
-        content: "请告诉我您想调整方案的哪些方面？比如：\n• 更换沙发材质或颜色\n• 调整预算分配\n• 修改风格方向\n• 增减某件商品\n我会实时更新方案。",
+        content: "想改哪里？随便说！比如：\n\n• 「沙发换个颜色」\n• 「预算再压一压」\n• 「风格再温馨一点」\n\n改多少次都行，直到你满意为止 😊",
       });
     }, 300);
   }, [addAssistantMessage]);
@@ -210,7 +210,7 @@ const Index = () => {
     resetChat();
     setPhase("chat");
     setProjectTitle(id === "proj-1" ? "北欧风客厅方案" : id === "proj-2" ? "日式卧室改造" : "工业风Loft");
-    addAssistantMessage({ content: "欢迎回来！上次我们讨论到了这个方案，还需要什么调整吗？" });
+    addAssistantMessage({ content: "欢迎回来！上次聊到这儿了，要不要继续调？还是有新想法？" });
   }, [resetChat, addAssistantMessage]);
 
   const handleDiscoverStartChat = useCallback((prompt: string) => {
@@ -267,7 +267,7 @@ const Index = () => {
                     <motion.div key={i} className="w-1.5 h-1.5 rounded-full bg-muted-foreground/40" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }} />
                   ))}
                 </div>
-                <span className="text-xs text-muted-foreground ml-1">正在设计方案...</span>
+                <span className="text-xs text-muted-foreground ml-1">正在帮你出方案，马上好...</span>
               </motion.div>
             )}
           </AnimatePresence>
