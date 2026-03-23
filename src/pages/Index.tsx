@@ -179,7 +179,7 @@ const Index = () => {
     setTimeout(() => {
       inputRef.current?.focus();
       addAssistantMessage({
-        content: "请告诉我您想调整方案的哪些方面？比如：\n• 更换沙发材质或颜色\n• 调整预算分配\n• 修改风格方向\n• 增减某件商品\n我会实时更新方案。",
+        content: "想改哪里？随便说！比如：\n\n• 「沙发换个颜色」\n• 「预算再压一压」\n• 「风格再温馨一点」\n\n改多少次都行，直到你满意为止 😊",
       });
     }, 300);
   }, [addAssistantMessage]);
