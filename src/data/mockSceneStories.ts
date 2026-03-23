@@ -328,7 +328,7 @@ export const mockSceneStories: SceneStory[] = [
       { name: "智能镜柜", category: "镜柜", ourPrice: 4800, brandPrice: 15000 },
       { name: "浴室五金套装", category: "五金", ourPrice: 2200, brandPrice: 8000 },
     ],
-    chatPrompt: "想改造6平米卫生间，想要酒店那种SPA感觉，能放浴缸，预算2万以内",
+    chatPrompt: "每天加班到很晚，回家就想泡个澡放松一下，卫生间6平能放浴缸吗，预算2万以内",
     socialProof: "712 人在家实现了泡澡自由",
     category: "bathroom",
   },
