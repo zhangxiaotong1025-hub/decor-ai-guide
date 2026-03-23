@@ -52,11 +52,21 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(
     const fileInputRef = useRef<HTMLInputElement>(null);
     const imageInputRef = useRef<HTMLInputElement>(null);
 
+    const autoResize = useCallback(() => {
+      const el = inputRef.current;
+      if (!el) return;
+      el.style.height = "auto";
+      el.style.height = `${el.scrollHeight}px`;
+    }, []);
+
     useImperativeHandle(ref, () => ({
       focus: () => inputRef.current?.focus(),
       fillText: (value: string) => {
         setText(value);
-        setTimeout(() => inputRef.current?.focus(), 50);
+        setTimeout(() => {
+          autoResize();
+          inputRef.current?.focus();
+        }, 50);
       },
     }));
 
@@ -299,7 +309,10 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(
             <textarea
               ref={inputRef}
               value={text}
-              onChange={(e) => setText(e.target.value)}
+              onChange={(e) => {
+                setText(e.target.value);
+                autoResize();
+              }}
               onKeyDown={handleKeyDown}
               placeholder={placeholder || "描述您的装修需求..."}
               disabled={disabled}
