@@ -106,7 +106,7 @@ const Index = () => {
           {
             id: crypto.randomUUID(),
             role: "assistant",
-            content: "需求分析完成！我已为您生成了一套专业设计方案，以专家设计师的视角为您量身打造：",
+            content: "方案出来了！👇 和你情况相似的 847 人已经照着装好了，看看适不适合你——",
             timestamp: Date.now(),
           },
         ]);
