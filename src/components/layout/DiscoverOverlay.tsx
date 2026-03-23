@@ -10,6 +10,7 @@ interface DiscoverOverlayProps {
   isOpen: boolean;
   onClose: () => void;
   onStartChat: (prompt: string) => void;
+  onFillPrompt?: (prompt: string) => void;
 }
 
 const DiscoverOverlay = ({ isOpen, onClose, onStartChat }: DiscoverOverlayProps) => {
