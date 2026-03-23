@@ -329,6 +329,7 @@ const Index = () => {
         isOpen={discoverOpen}
         onClose={() => setDiscoverOpen(false)}
         onStartChat={handleDiscoverStartChat}
+        onFillPrompt={handleDiscoverFillPrompt}
       />
     </div>
   );
