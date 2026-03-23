@@ -113,6 +113,9 @@ export const mockSceneStories: SceneStory[] = [
     chatPrompt: "我养了只猫，客厅25平，想回家能窝在沙发上撸猫看剧，沙发别太怕猫挠，预算2万出头就行",
     socialProof: "847 人照着这个方案装了家",
     category: "living",
+    imagineScene: "周五晚上十点，你踢掉鞋子推开门。玄关灯自动亮起暖光，英短从沙发上抬头看你一眼，又把头埋回靠垫里。你倒了杯水，按下遥控器切到「放松模式」——落地灯变成琥珀色，整个客厅像被裹进一团棉花糖。你窝进沙发，猫跳上你的腿，电视里放着什么你根本没注意，因为你已经睡着了。",
+    costReframe: "每天不到 22 块，比点一杯奶茶还便宜。分 12 期的话，月供不到一顿火锅钱。",
+    userReview: { name: "小鹿", text: "住进去第一天猫就霸占了沙发，科技布真的挠不坏，两个月了一点痕迹都没有！朋友来了都以为花了好几万。" },
     detailImages: [
       { src: nordicDetail1, caption: "纳米科技布，猫爪无痕" },
       { src: nordicDetail2, caption: "三层照明，一键切换放松模式" },
