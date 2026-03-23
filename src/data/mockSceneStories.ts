@@ -150,6 +150,9 @@ export const mockSceneStories: SceneStory[] = [
     chatPrompt: "刚结婚想布置婚房，客厅加餐厅35平，想要那种朋友来了会夸好看的感觉，两个人攒了4万预算",
     socialProof: "632 对新人选了这套方案",
     category: "living",
+    imagineScene: "闺蜜来家里，推开门愣了两秒：「这是你家？？」你故作淡定端出刚煮的咖啡，放在大理石餐桌上，水晶吊灯的光洒下来，杯子折射出一圈金色。她拍了张照发朋友圈，配文「在有钱人朋友家蹭饭」。你没说这一切加起来还不到 4 万。",
+    costReframe: "两个人 AA，每人每月不到 1600，比合租一间次卧还便宜，但住出来的感觉完全不一样。",
+    userReview: { name: "阿暖", text: "婆婆来看房的时候说「你们俩可真舍得花钱」，我说全部加起来不到4万她不信，哈哈哈。" },
     detailImages: [
       { src: frenchDetail1, caption: "进口丝绒触感，媲美大牌品质" },
       { src: frenchDetail2, caption: "法式弧形餐桌，每餐都是仪式感" },
