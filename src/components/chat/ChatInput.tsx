@@ -257,108 +257,116 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(
         </AnimatePresence>
 
         {/* ── Main input area ── */}
-        <div className={`max-w-2xl mx-auto ${compact ? "px-3 py-2" : "px-4 py-3"}`}>
-          {/* Attachment previews */}
-          <AnimatePresence>
-            {attachments.length > 0 && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                className="flex gap-2 overflow-x-auto pb-2 scrollbar-none"
-              >
-                {attachments.map((att) => (
-                  <motion.div
-                    key={att.id}
-                    initial={{ scale: 0.8, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0.8, opacity: 0 }}
-                    className="flex-shrink-0 relative group"
-                  >
-                    <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-secondary/50 rounded-lg border border-border/30">
-                      {att.type === "image" && att.preview ? (
-                        <img src={att.preview} alt="" className="w-6 h-6 rounded object-cover" />
-                      ) : (
-                        <span className="text-sm">{att.preview || (att.type === "file" ? "📎" : "📦")}</span>
-                      )}
-                      <span className="text-[10px] text-foreground/80 max-w-[80px] truncate">{att.name}</span>
-                      <button
-                        onClick={() => removeAttachment(att.id)}
-                        className="ml-0.5 p-0.5 rounded-full hover:bg-foreground/10 transition-colors"
+        <div className={`max-w-2xl mx-auto ${compact ? "px-3 py-2" : "px-3 py-2.5"}`}>
+          <div className="bg-secondary/40 rounded-2xl overflow-hidden">
+            {/* ── Top: Attachment previews ── */}
+            <AnimatePresence>
+              {attachments.length > 0 && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="px-3 pt-2.5 pb-1"
+                >
+                  <div className="flex gap-2 overflow-x-auto scrollbar-none">
+                    {attachments.map((att) => (
+                      <motion.div
+                        key={att.id}
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.8, opacity: 0 }}
+                        className="flex-shrink-0 relative"
                       >
-                        <X className="w-2.5 h-2.5 text-muted-foreground" />
-                      </button>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Input row */}
-          <div className="flex items-end gap-1.5 bg-secondary/40 rounded-2xl p-1.5">
-            {/* Plus button */}
-            <button
-              onClick={() => togglePanel(activePanel ? null : "menu")}
-              className={`flex-shrink-0 p-2 rounded-xl transition-all ${
-                activePanel
-                  ? "bg-foreground/10 text-foreground rotate-45"
-                  : "text-muted-foreground hover:text-foreground hover:bg-foreground/5"
-              }`}
-              aria-label="添加附件"
-            >
-              <Plus className="w-[18px] h-[18px] transition-transform" />
-            </button>
-
-            {/* Text area */}
-            <textarea
-              ref={inputRef}
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder={placeholder || "描述您的装修需求..."}
-              disabled={disabled}
-              rows={1}
-              className="flex-1 bg-transparent text-sm resize-none outline-none placeholder:text-muted-foreground/40 py-1.5 px-1 leading-relaxed overflow-y-auto"
-              style={{ maxHeight: "6.5rem" }}
-            />
-
-            {/* Voice button */}
-            <button
-              onClick={toggleRecording}
-              className={`flex-shrink-0 p-2 rounded-xl transition-all ${
-                isRecording
-                  ? "bg-red-500/15 text-red-500"
-                  : "text-muted-foreground hover:text-foreground hover:bg-foreground/5"
-              }`}
-              aria-label={isRecording ? "停止录音" : "语音输入"}
-            >
-              {isRecording ? (
-                <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1, repeat: Infinity }}>
-                  <MicOff className="w-[18px] h-[18px]" />
+                        <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-background/60 rounded-lg border border-border/30">
+                          {att.type === "image" && att.preview ? (
+                            <img src={att.preview} alt="" className="w-6 h-6 rounded object-cover" />
+                          ) : (
+                            <span className="text-sm">{att.preview || (att.type === "file" ? "📎" : "📦")}</span>
+                          )}
+                          <span className="text-[10px] text-foreground/80 max-w-[80px] truncate">{att.name}</span>
+                          <button
+                            onClick={() => removeAttachment(att.id)}
+                            className="ml-0.5 p-0.5 rounded-full hover:bg-foreground/10 transition-colors"
+                          >
+                            <X className="w-2.5 h-2.5 text-muted-foreground" />
+                          </button>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
                 </motion.div>
-              ) : (
-                <Mic className="w-[18px] h-[18px]" />
               )}
-            </button>
+            </AnimatePresence>
 
-            {/* Send button */}
-            <button
-              onClick={handleSend}
-              disabled={disabled || !hasContent}
-              className={`flex-shrink-0 p-2 rounded-xl transition-all ${
-                hasContent && !disabled
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-primary/20 text-primary-foreground/30"
-              }`}
-              aria-label="发送"
-            >
-              <Send className="w-[16px] h-[16px]" />
-            </button>
+            {/* ── Middle: Text area ── */}
+            <div className="px-3 py-2">
+              <textarea
+                ref={inputRef}
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder={placeholder || "描述你的装修需求..."}
+                disabled={disabled}
+                rows={1}
+                className="w-full bg-transparent text-sm resize-none outline-none placeholder:text-muted-foreground/40 leading-relaxed overflow-y-auto"
+                style={{ maxHeight: "6.5rem" }}
+              />
+            </div>
+
+            {/* ── Bottom: Action buttons row ── */}
+            <div className="flex items-center justify-between px-2 pb-2">
+              {/* Left actions: add attachment */}
+              <div className="flex items-center gap-0.5">
+                <button
+                  onClick={() => togglePanel(activePanel ? null : "menu")}
+                  className={`p-2 rounded-xl transition-all ${
+                    activePanel
+                      ? "bg-foreground/10 text-foreground rotate-45"
+                      : "text-muted-foreground hover:text-foreground hover:bg-foreground/5"
+                  }`}
+                  aria-label="添加附件"
+                >
+                  <Plus className="w-[18px] h-[18px] transition-transform" />
+                </button>
+              </div>
+
+              {/* Right actions: voice + send */}
+              <div className="flex items-center gap-0.5">
+                <button
+                  onClick={toggleRecording}
+                  className={`p-2 rounded-xl transition-all ${
+                    isRecording
+                      ? "bg-destructive/15 text-destructive"
+                      : "text-muted-foreground hover:text-foreground hover:bg-foreground/5"
+                  }`}
+                  aria-label={isRecording ? "停止录音" : "语音输入"}
+                >
+                  {isRecording ? (
+                    <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1, repeat: Infinity }}>
+                      <MicOff className="w-[18px] h-[18px]" />
+                    </motion.div>
+                  ) : (
+                    <Mic className="w-[18px] h-[18px]" />
+                  )}
+                </button>
+                <button
+                  onClick={handleSend}
+                  disabled={disabled || !hasContent}
+                  className={`p-2 rounded-xl transition-all ${
+                    hasContent && !disabled
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-primary/20 text-primary-foreground/30"
+                  }`}
+                  aria-label="发送"
+                >
+                  <Send className="w-[16px] h-[16px]" />
+                </button>
+              </div>
+            </div>
           </div>
 
           {!compact && (
-            <p className="text-[10px] text-muted-foreground/40 text-center mt-2">
+            <p className="text-[10px] text-muted-foreground/40 text-center mt-1.5">
               支持图片、户型图、语音 · AI 建议仅供参考
             </p>
           )}
