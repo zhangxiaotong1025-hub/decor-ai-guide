@@ -1,14 +1,15 @@
 import { useState, useRef, useEffect, useCallback, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import ChatHeader from "@/components/chat/ChatHeader";
+import ChatTopBar from "@/components/layout/ChatTopBar";
+import SidebarDrawer from "@/components/layout/SidebarDrawer";
+import DiscoverOverlay from "@/components/layout/DiscoverOverlay";
 import ChatInput, { type ChatInputHandle } from "@/components/chat/ChatInput";
 import MessageBubble from "@/components/chat/MessageBubble";
+import WelcomeScreen from "@/components/chat/WelcomeScreen";
 import AnalysisProcess from "@/components/chat/AnalysisProcess";
 import AnalysisResult from "@/components/chat/AnalysisResult";
 import DesignSolutionCard from "@/components/chat/DesignSolutionCard";
 import SolutionSheet from "@/components/chat/SolutionSheet";
-import DiscoveryFeed from "@/components/discovery/DiscoveryFeed";
-import SceneStorySheet from "@/components/discovery/SceneStorySheet";
 import ProductDetailCard from "@/components/chat/ProductDetailCard";
 import QuickActionBar, { type QuickActionType } from "@/components/chat/QuickActionBar";
 import AgentPanel from "@/components/chat/AgentPanel";
@@ -17,11 +18,14 @@ import GroupBuyPanel from "@/components/groupbuy/GroupBuyPanel";
 import { mockDesignSolution } from "@/data/mockDesignSolution";
 import type { ChatMessage } from "@/types/chat";
 import type { ProductItem } from "@/types/product";
-import type { SceneStory } from "@/data/mockSceneStories";
 
 const ThreeDEditor = lazy(() =>
   import("@/components/3d/ThreeDEditor").catch(() => ({
-    default: () => <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80"><p className="text-muted-foreground">3D 编辑器加载失败，请刷新重试</p></div>,
+    default: () => (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80">
+        <p className="text-muted-foreground">3D 编辑器加载失败，请刷新重试</p>
+      </div>
+    ),
   }))
 );
 
@@ -43,9 +47,13 @@ const Index = () => {
   const [groupBuyOpen, setGroupBuyOpen] = useState(false);
   const [hasActiveGroupBuy, setHasActiveGroupBuy] = useState(false);
   const [threeDEditorOpen, setThreeDEditorOpen] = useState(false);
-  const [selectedStory, setSelectedStory] = useState<SceneStory | null>(null);
-  const [storySheetOpen, setStorySheetOpen] = useState(false);
   const [chatInputHeight, setChatInputHeight] = useState(DEFAULT_CHAT_INPUT_HEIGHT);
+
+  // Layout state
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [discoverOpen, setDiscoverOpen] = useState(false);
+  const [projectTitle, setProjectTitle] = useState<string | undefined>();
+
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<ChatInputHandle>(null);
   const inputContainerRef = useRef<HTMLDivElement>(null);
@@ -63,17 +71,13 @@ const Index = () => {
   useEffect(() => {
     const node = inputContainerRef.current;
     if (!node) return;
-
     const updateHeight = () => {
       const nextHeight = Math.ceil(node.getBoundingClientRect().height);
       if (nextHeight > 0) setChatInputHeight(nextHeight);
     };
-
     updateHeight();
-
     const observer = new ResizeObserver(updateHeight);
     observer.observe(node);
-
     return () => observer.disconnect();
   }, []);
 
@@ -111,6 +115,24 @@ const Index = () => {
     }, 800);
   }, []);
 
+  const resetChat = useCallback(() => {
+    setMessages([]);
+    setPhase("welcome");
+    setIsTyping(false);
+    setShowAnalysis(false);
+    setAnalysisComplete(false);
+    setShowDesignSolution(false);
+    setSheetOpen(false);
+    setSelectedProduct(null);
+    setProductDetailOpen(false);
+    setActiveAction(null);
+    setBudgetOpen(false);
+    setGroupBuyOpen(false);
+    setHasActiveGroupBuy(false);
+    setThreeDEditorOpen(false);
+    setProjectTitle(undefined);
+  }, []);
+
   const handleSend = useCallback(
     (text: string) => {
       const userMsg: ChatMessage = {
@@ -121,7 +143,10 @@ const Index = () => {
       };
       setMessages((prev) => [...prev, userMsg]);
 
-      if (phase === "welcome") setPhase("chat");
+      if (phase === "welcome") {
+        setPhase("chat");
+        setProjectTitle("新设计方案");
+      }
 
       if (messages.length === 0) {
         setIsTyping(true);
@@ -147,9 +172,7 @@ const Index = () => {
     [messages, phase, addAssistantMessage]
   );
 
-  const handleViewDetail = useCallback(() => {
-    setSheetOpen(true);
-  }, []);
+  const handleViewDetail = useCallback(() => setSheetOpen(true), []);
 
   const handleModify = useCallback(() => {
     setSheetOpen(false);
@@ -166,24 +189,9 @@ const Index = () => {
     setProductDetailOpen(true);
   }, []);
 
-  const handleCloseProductDetail = useCallback(() => {
-    setProductDetailOpen(false);
-  }, []);
-
-  const handleSelectStory = useCallback((story: SceneStory) => {
-    setSelectedStory(story);
-    setStorySheetOpen(true);
-  }, []);
-
   const handleQuickAction = useCallback((type: QuickActionType) => {
-    if (type === "budget") {
-      setBudgetOpen(true);
-      return;
-    }
-    if (type === "groupbuy") {
-      setGroupBuyOpen(true);
-      return;
-    }
+    if (type === "budget") { setBudgetOpen(true); return; }
+    if (type === "groupbuy") { setGroupBuyOpen(true); return; }
     setActiveAction(type);
   }, []);
 
@@ -192,22 +200,41 @@ const Index = () => {
     setSheetOpen(true);
   }, []);
 
-  const showQuickActions = showDesignSolution && !sheetOpen && !productDetailOpen && !activeAction && !budgetOpen && !groupBuyOpen && !threeDEditorOpen;
-
   const handleOpen3DEditor = useCallback(() => {
     setSheetOpen(false);
     setTimeout(() => setThreeDEditorOpen(true), 300);
   }, []);
 
+  const handleSelectProject = useCallback((id: string) => {
+    // For now just show mock — later load real project data
+    resetChat();
+    setPhase("chat");
+    setProjectTitle(id === "proj-1" ? "北欧风客厅方案" : id === "proj-2" ? "日式卧室改造" : "工业风Loft");
+    addAssistantMessage({ content: "欢迎回来！上次我们讨论到了这个方案，还需要什么调整吗？" });
+  }, [resetChat, addAssistantMessage]);
+
+  const handleDiscoverStartChat = useCallback((prompt: string) => {
+    resetChat();
+    setDiscoverOpen(false);
+    setTimeout(() => handleSend(prompt), 200);
+  }, [resetChat, handleSend]);
+
+  const showQuickActions = showDesignSolution && !sheetOpen && !productDetailOpen && !activeAction && !budgetOpen && !groupBuyOpen && !threeDEditorOpen;
+
   return (
     <div className="h-dvh flex flex-col bg-background">
-      <ChatHeader />
+      <ChatTopBar
+        onMenuOpen={() => setSidebarOpen(true)}
+        onNewProject={resetChat}
+        onOpenDiscover={() => setDiscoverOpen(true)}
+        projectTitle={phase === "chat" ? projectTitle : undefined}
+      />
 
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
         <div className="max-w-2xl mx-auto px-4 py-4 pb-2">
           <AnimatePresence mode="popLayout">
             {phase === "welcome" && messages.length === 0 && (
-              <DiscoveryFeed onStartChat={handleSend} onSelectStory={handleSelectStory} />
+              <WelcomeScreen onStartChat={handleSend} onOpenDiscover={() => setDiscoverOpen(true)} />
             )}
 
             {messages.map((msg) => (
@@ -215,48 +242,23 @@ const Index = () => {
             ))}
 
             {showAnalysis && (
-              <motion.div
-                key="analysis"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mb-4"
-              >
+              <motion.div key="analysis" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mb-4">
                 <AnalysisProcess onComplete={handleAnalysisComplete} />
                 {analysisComplete && <AnalysisResult />}
               </motion.div>
             )}
 
             {showDesignSolution && (
-              <motion.div
-                key="design-solution"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mb-4"
-              >
-                <DesignSolutionCard
-                  solution={mockDesignSolution}
-                  onViewDetail={handleViewDetail}
-                  onModify={handleModify}
-                />
+              <motion.div key="design-solution" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mb-4">
+                <DesignSolutionCard solution={mockDesignSolution} onViewDetail={handleViewDetail} onModify={handleModify} />
               </motion.div>
             )}
 
             {isTyping && (
-              <motion.div
-                key="typing"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="flex items-center gap-1.5 px-4 py-3 mb-4"
-              >
+              <motion.div key="typing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-1.5 px-4 py-3 mb-4">
                 <div className="flex gap-1">
                   {[0, 1, 2].map((i) => (
-                    <motion.div
-                      key={i}
-                      className="w-1.5 h-1.5 rounded-full bg-muted-foreground/40"
-                      animate={{ opacity: [0.3, 1, 0.3] }}
-                      transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
-                    />
+                    <motion.div key={i} className="w-1.5 h-1.5 rounded-full bg-muted-foreground/40" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }} />
                   ))}
                 </div>
                 <span className="text-xs text-muted-foreground ml-1">正在设计方案...</span>
@@ -270,38 +272,11 @@ const Index = () => {
         <QuickActionBar onAction={handleQuickAction} activeAction={activeAction} hasActiveGroupBuy={hasActiveGroupBuy} />
       )}
 
-      <AgentPanel
-        activeAction={activeAction}
-        bottomInset={chatInputHeight}
-        onClose={() => setActiveAction(null)}
-        onOpenSolution={handleOpenSolutionFromAgent}
-        onOpenBudget={() => { setActiveAction(null); setBudgetOpen(true); }}
-      />
-
+      <AgentPanel activeAction={activeAction} bottomInset={chatInputHeight} onClose={() => setActiveAction(null)} onOpenSolution={handleOpenSolutionFromAgent} onOpenBudget={() => { setActiveAction(null); setBudgetOpen(true); }} />
       <BudgetAgent isOpen={budgetOpen} bottomInset={chatInputHeight} onClose={() => setBudgetOpen(false)} />
-
       <GroupBuyPanel isOpen={groupBuyOpen} bottomInset={chatInputHeight} onClose={() => setGroupBuyOpen(false)} />
 
-      <SolutionSheet
-        solution={mockDesignSolution}
-        isOpen={sheetOpen}
-        bottomInset={chatInputHeight}
-        onClose={() => setSheetOpen(false)}
-        onModify={handleModify}
-        onSelectProduct={handleSelectProduct}
-        onOpen3DEditor={handleOpen3DEditor}
-      />
-
-      <SceneStorySheet
-        story={selectedStory}
-        isOpen={storySheetOpen}
-        bottomInset={chatInputHeight}
-        onClose={() => setStorySheetOpen(false)}
-        onStartChat={(prompt) => {
-          setStorySheetOpen(false);
-          setTimeout(() => handleSend(prompt), 300);
-        }}
-      />
+      <SolutionSheet solution={mockDesignSolution} isOpen={sheetOpen} bottomInset={chatInputHeight} onClose={() => setSheetOpen(false)} onModify={handleModify} onSelectProduct={handleSelectProduct} onOpen3DEditor={handleOpen3DEditor} />
 
       <Suspense fallback={null}>
         <ThreeDEditor isOpen={threeDEditorOpen} onClose={() => setThreeDEditorOpen(false)} />
@@ -311,7 +286,7 @@ const Index = () => {
         product={selectedProduct}
         isOpen={productDetailOpen}
         bottomInset={chatInputHeight}
-        onClose={handleCloseProductDetail}
+        onClose={() => setProductDetailOpen(false)}
         onReserve={(product) => {
           setHasActiveGroupBuy(true);
           setTimeout(() => {
@@ -320,7 +295,7 @@ const Index = () => {
               {
                 id: crypto.randomUUID(),
                 role: "assistant",
-                content: `好，${product.name}的价格先帮你留住了 👍\n\n当前进度：**8 / 10 人**\n大概还差 2 人\n\n我这边会继续帮你凑人，有进展第一时间告诉你。你可以在「拼单助手」里随时查看。`,
+                content: `好，${product.name}的价格先帮你留住了 👍\n\n当前进度：**8 / 10 人**\n大概还差 2 人\n\n我这边会继续帮你凑人，有进展第一时间告诉你。你可以在「拼团助手」里随时查看。`,
                 timestamp: Date.now(),
               },
             ]);
@@ -331,6 +306,24 @@ const Index = () => {
       <div ref={inputContainerRef} className="relative z-[60]">
         <ChatInput ref={inputRef} onSend={handleSend} disabled={isTyping} />
       </div>
+
+      {/* Sidebar drawer */}
+      <SidebarDrawer
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        onNewProject={resetChat}
+        onSelectProject={handleSelectProject}
+        onOpenDiscover={() => setDiscoverOpen(true)}
+        onOpenGroupBuy={() => { setSidebarOpen(false); setGroupBuyOpen(true); }}
+        activeProjectId={undefined}
+      />
+
+      {/* Discover overlay */}
+      <DiscoverOverlay
+        isOpen={discoverOpen}
+        onClose={() => setDiscoverOpen(false)}
+        onStartChat={handleDiscoverStartChat}
+      />
     </div>
   );
 };
