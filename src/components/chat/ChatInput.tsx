@@ -1,4 +1,4 @@
-import { useState, useRef, useImperativeHandle, forwardRef, useCallback, type KeyboardEvent } from "react";
+import { useState, useRef, useImperativeHandle, forwardRef, useCallback, useEffect, type KeyboardEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Send, Plus, X, Image, FileText, Mic, MicOff, Home, ShoppingBag,
@@ -56,8 +56,13 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(
       const el = inputRef.current;
       if (!el) return;
       el.style.height = "auto";
-      el.style.height = `${el.scrollHeight}px`;
+      el.style.height = `${Math.min(el.scrollHeight, el.offsetWidth ? 999 : 999)}px`;
     }, []);
+
+    // Auto-resize textarea whenever text changes
+    useEffect(() => {
+      autoResize();
+    }, [text, autoResize]);
 
     useImperativeHandle(ref, () => ({
       focus: () => inputRef.current?.focus(),
@@ -309,15 +314,13 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(
             <textarea
               ref={inputRef}
               value={text}
-              onChange={(e) => {
-                setText(e.target.value);
-                autoResize();
-              }}
+              onChange={(e) => setText(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder={placeholder || "描述您的装修需求..."}
               disabled={disabled}
               rows={1}
-              className="flex-1 bg-transparent text-sm resize-none outline-none placeholder:text-muted-foreground/40 max-h-32 py-1.5 px-1 leading-relaxed"
+              className="flex-1 bg-transparent text-sm resize-none outline-none placeholder:text-muted-foreground/40 py-1.5 px-1 leading-relaxed overflow-y-auto"
+              style={{ maxHeight: "6.5rem" }}
             />
 
             {/* Voice button */}
