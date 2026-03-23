@@ -23,7 +23,7 @@ const AnalysisResult = ({ collapsed = false }: AnalysisResultProps) => {
   if (collapsed && !expanded) {
     return (
       <motion.div
-        layout
+        layout="position"
         onClick={() => setExpanded(true)}
         className="bg-card shadow-layered rounded-outer px-4 py-3 mb-3 cursor-pointer active:scale-[0.98] transition-transform"
       >
