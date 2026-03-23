@@ -30,6 +30,14 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
+    /* New: desire-driven tokens */
+    --saving: 142 71% 45%;
+    --saving-foreground: 0 0% 100%;
+    --shock: 0 84% 60%;
+    --shock-foreground: 0 0% 100%;
+    --gold: 45 93% 47%;
+    --gold-foreground: 0 0% 10%;
+
     --border: 214 32% 91%;
     --input: 214 32% 91%;
     --ring: 217 91% 60%;
@@ -40,6 +48,7 @@
     --shadow-layered: 0 0 0 1px rgba(0,0,0,.04), 0 2px 4px rgba(0,0,0,.02), 0 8px 16px rgba(0,0,0,.04);
     --shadow-elevated: 0 0 0 1px rgba(0,0,0,.04), 0 4px 8px rgba(0,0,0,.04), 0 16px 32px rgba(0,0,0,.06);
     --shadow-float: 0 0 0 1px rgba(0,0,0,.04), 0 8px 16px rgba(0,0,0,.06), 0 24px 48px rgba(0,0,0,.08);
+    --shadow-price: 0 4px 20px -4px hsl(142 71% 45% / 0.25);
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -68,9 +77,16 @@
     --accent-foreground: 0 0% 100%;
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
+    --saving: 142 71% 45%;
+    --saving-foreground: 0 0% 100%;
+    --shock: 0 72% 51%;
+    --shock-foreground: 0 0% 100%;
+    --gold: 45 93% 47%;
+    --gold-foreground: 0 0% 10%;
     --border: 217 33% 17%;
     --input: 217 33% 17%;
     --ring: 213 27% 84%;
+    --shadow-price: 0 4px 20px -4px hsl(142 71% 45% / 0.15);
   }
 }
 
@@ -97,10 +113,23 @@
   .shadow-float {
     box-shadow: var(--shadow-float);
   }
+  .shadow-price {
+    box-shadow: var(--shadow-price);
+  }
   .text-label {
     @apply text-[10px] uppercase tracking-widest font-bold;
   }
   .leading-pretty {
     line-height: 1.7;
+  }
+}
+
+@layer components {
+  .price-slash {
+    @apply relative inline-block text-muted-foreground;
+  }
+  .price-slash::after {
+    content: '';
+    @apply absolute left-0 top-1/2 w-full h-[2px] bg-shock -rotate-6;
   }
 }
