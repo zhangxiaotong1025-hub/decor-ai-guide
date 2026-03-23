@@ -252,7 +252,7 @@ export const mockSceneStories: SceneStory[] = [
       { name: "藤编休闲椅", category: "椅", ourPrice: 1200, brandPrice: 4000 },
       { name: "太阳能串灯", category: "灯具", ourPrice: 280, brandPrice: 800 },
     ],
-    chatPrompt: "想把4平米阳台改造成小花园，预算四千以内，要好打理",
+    chatPrompt: "阳台4平米堆满了杂物，想改成能喝茶种花的小角落，最好不用太操心打理，四千以内",
     socialProof: "2,156 人拥有了自己的小花园",
     category: "balcony",
   },
