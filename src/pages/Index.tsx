@@ -198,7 +198,7 @@ const Index = () => {
         <div className="max-w-2xl mx-auto px-4 py-4 pb-2">
           <AnimatePresence mode="popLayout">
             {phase === "welcome" && messages.length === 0 && (
-              <WelcomeScreen onQuickStart={handleSend} />
+              <DiscoveryFeed onStartChat={handleSend} onSelectProduct={handleSelectProduct} />
             )}
 
             {messages.map((msg) => (
