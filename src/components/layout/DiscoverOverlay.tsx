@@ -13,7 +13,7 @@ interface DiscoverOverlayProps {
   onFillPrompt?: (prompt: string) => void;
 }
 
-const DiscoverOverlay = ({ isOpen, onClose, onStartChat }: DiscoverOverlayProps) => {
+const DiscoverOverlay = ({ isOpen, onClose, onStartChat, onFillPrompt }: DiscoverOverlayProps) => {
   const [selectedStory, setSelectedStory] = useState<SceneStory | null>(null);
   const [storySheetOpen, setStorySheetOpen] = useState(false);
   const [showFullList, setShowFullList] = useState(false);
