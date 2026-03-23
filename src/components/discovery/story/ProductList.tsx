@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { TrendingDown } from "lucide-react";
 import type { StoryProduct } from "@/data/mockSceneStories";
 
@@ -9,45 +8,30 @@ interface ProductListProps {
 }
 
 const ProductList = ({ products, totalSaved, brandTotal }: ProductListProps) => (
-  <div className="px-6 pb-8">
-    <h3 className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-semibold mb-4">
+  <div className="px-5 pb-8">
+    <h3 className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-semibold mb-3">
       方案清单 · {products.length} 件
     </h3>
 
-    <div className="space-y-2">
+    <div className="space-y-1.5">
       {products.map((p, i) => {
         const itemSaved = p.brandPrice - p.ourPrice;
         return (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, x: -12 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.08, duration: 0.4 }}
-            className="flex items-center gap-3 py-3 px-3 rounded-xl hover:bg-secondary/30 transition-colors"
-          >
-            {/* Product thumbnail with hover effect */}
+          <div key={i} className="flex items-center gap-3 py-2.5 px-2 rounded-xl">
             {p.image ? (
-              <motion.div
-                whileHover={{ scale: 1.08 }}
-                className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 shadow-layered"
-              >
-                <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
-              </motion.div>
+              <img src={p.image} alt={p.name} className="w-14 h-14 rounded-xl object-cover flex-shrink-0" />
             ) : (
-              <div className="w-16 h-16 rounded-xl bg-secondary/50 flex items-center justify-center flex-shrink-0">
-                <span className="text-xl">{getCategoryEmoji(p.category)}</span>
+              <div className="w-14 h-14 rounded-xl bg-secondary/50 flex items-center justify-center flex-shrink-0">
+                <span className="text-lg">{getCategoryEmoji(p.category)}</span>
               </div>
             )}
 
-            {/* Info */}
             <div className="flex-1 min-w-0">
               <span className="text-[10px] text-muted-foreground">{p.category}</span>
               <p className="text-sm text-foreground font-medium truncate">{p.name}</p>
               <span className="text-[10px] text-saving font-medium">省 ¥{itemSaved.toLocaleString()}</span>
             </div>
 
-            {/* Price */}
             <div className="text-right flex-shrink-0">
               <span className="font-mono-data text-sm font-bold text-foreground block">
                 ¥{p.ourPrice.toLocaleString()}
@@ -56,41 +40,25 @@ const ProductList = ({ products, totalSaved, brandTotal }: ProductListProps) => 
                 {p.brandPrice.toLocaleString()}
               </span>
             </div>
-          </motion.div>
+          </div>
         );
       })}
     </div>
 
-    {/* Total savings — dramatic */}
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ type: "spring", stiffness: 300 }}
-      className="mt-4 relative overflow-hidden py-5 px-5 bg-saving/8 border border-saving/15 rounded-2xl"
-    >
-      {/* Subtle shimmer */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-transparent via-saving/5 to-transparent"
-        animate={{ x: ["-100%", "200%"] }}
-        transition={{ duration: 3, repeat: Infinity, repeatDelay: 4, ease: "easeInOut" }}
-      />
-
-      <div className="relative flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-full bg-saving/15 flex items-center justify-center">
-            <TrendingDown className="w-4.5 h-4.5 text-saving" />
-          </div>
-          <div>
-            <span className="text-sm font-semibold text-foreground">总共省下</span>
-            <p className="text-[10px] text-muted-foreground">品牌店要 ¥{brandTotal.toLocaleString()}</p>
-          </div>
+    <div className="mt-4 flex items-center justify-between py-4 px-4 bg-saving/5 border border-saving/10 rounded-2xl">
+      <div className="flex items-center gap-2.5">
+        <div className="w-8 h-8 rounded-full bg-saving/10 flex items-center justify-center">
+          <TrendingDown className="w-4 h-4 text-saving" />
         </div>
-        <span className="font-mono-data text-2xl font-bold text-saving">
-          ¥{totalSaved.toLocaleString()}
-        </span>
+        <div>
+          <span className="text-sm font-semibold text-foreground">总共省下</span>
+          <p className="text-[10px] text-muted-foreground">品牌店要 ¥{brandTotal.toLocaleString()}</p>
+        </div>
       </div>
-    </motion.div>
+      <span className="font-mono-data text-xl font-bold text-saving">
+        ¥{totalSaved.toLocaleString()}
+      </span>
+    </div>
   </div>
 );
 

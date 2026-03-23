@@ -64,12 +64,15 @@ export interface SceneStory {
   chatPrompt: string;
   socialProof: string;
   category: string;
-  /** Detail gallery images */
   detailImages?: DetailImage[];
-  /** Before image for comparison */
   beforeImage?: string;
-  /** Life scene storyboard */
   lifeScenes?: LifeScene[];
+  /** Immersive "imagine yourself" narrative */
+  imagineScene?: string;
+  /** Relatable cost reframing */
+  costReframe?: string;
+  /** Mini user review */
+  userReview?: { name: string; text: string; avatar?: string };
 }
 
 export const storyCategories = [
@@ -110,6 +113,9 @@ export const mockSceneStories: SceneStory[] = [
     chatPrompt: "我养了只猫，客厅25平，想回家能窝在沙发上撸猫看剧，沙发别太怕猫挠，预算2万出头就行",
     socialProof: "847 人照着这个方案装了家",
     category: "living",
+    imagineScene: "周五晚上十点，你踢掉鞋子推开门。玄关灯自动亮起暖光，英短从沙发上抬头看你一眼，又把头埋回靠垫里。你倒了杯水，按下遥控器切到「放松模式」——落地灯变成琥珀色，整个客厅像被裹进一团棉花糖。你窝进沙发，猫跳上你的腿，电视里放着什么你根本没注意，因为你已经睡着了。",
+    costReframe: "每天不到 22 块，比点一杯奶茶还便宜。分 12 期的话，月供不到一顿火锅钱。",
+    userReview: { name: "小鹿", text: "住进去第一天猫就霸占了沙发，科技布真的挠不坏，两个月了一点痕迹都没有！朋友来了都以为花了好几万。" },
     detailImages: [
       { src: nordicDetail1, caption: "纳米科技布，猫爪无痕" },
       { src: nordicDetail2, caption: "三层照明，一键切换放松模式" },
@@ -144,6 +150,9 @@ export const mockSceneStories: SceneStory[] = [
     chatPrompt: "刚结婚想布置婚房，客厅加餐厅35平，想要那种朋友来了会夸好看的感觉，两个人攒了4万预算",
     socialProof: "632 对新人选了这套方案",
     category: "living",
+    imagineScene: "闺蜜来家里，推开门愣了两秒：「这是你家？？」你故作淡定端出刚煮的咖啡，放在大理石餐桌上，水晶吊灯的光洒下来，杯子折射出一圈金色。她拍了张照发朋友圈，配文「在有钱人朋友家蹭饭」。你没说这一切加起来还不到 4 万。",
+    costReframe: "两个人 AA，每人每月不到 1600，比合租一间次卧还便宜，但住出来的感觉完全不一样。",
+    userReview: { name: "阿暖", text: "婆婆来看房的时候说「你们俩可真舍得花钱」，我说全部加起来不到4万她不信，哈哈哈。" },
     detailImages: [
       { src: frenchDetail1, caption: "进口丝绒触感，媲美大牌品质" },
       { src: frenchDetail2, caption: "法式弧形餐桌，每餐都是仪式感" },
