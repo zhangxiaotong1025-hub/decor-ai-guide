@@ -210,7 +210,7 @@ const Index = () => {
     resetChat();
     setPhase("chat");
     setProjectTitle(id === "proj-1" ? "北欧风客厅方案" : id === "proj-2" ? "日式卧室改造" : "工业风Loft");
-    addAssistantMessage({ content: "欢迎回来！上次我们讨论到了这个方案，还需要什么调整吗？" });
+    addAssistantMessage({ content: "欢迎回来！上次聊到这儿了，要不要继续调？还是有新想法？" });
   }, [resetChat, addAssistantMessage]);
 
   const handleDiscoverStartChat = useCallback((prompt: string) => {
