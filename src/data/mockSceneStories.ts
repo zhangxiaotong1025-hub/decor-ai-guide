@@ -150,7 +150,7 @@ export const mockSceneStories: SceneStory[] = [
       { name: "轨道射灯系统", category: "灯具", ourPrice: 4200, brandPrice: 15000 },
       { name: "水泥纹地毯", category: "软装", ourPrice: 2800, brandPrice: 8000 },
     ],
-    chatPrompt: "我是自由职业，想把30平的空间改成工作室兼客厅，喜欢工业风，3万预算",
+    chatPrompt: "我在家办公也拍照，30平的空间要能当工作室也能窝着休息，喜欢有点酷的感觉，3万能搞定吗",
     socialProof: "456 位创意人选了这套方案",
     category: "living",
   },
