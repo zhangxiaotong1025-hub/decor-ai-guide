@@ -219,6 +219,12 @@ const Index = () => {
     setTimeout(() => handleSend(prompt), 200);
   }, [resetChat, handleSend]);
 
+  const handleDiscoverFillPrompt = useCallback((prompt: string) => {
+    resetChat();
+    setDiscoverOpen(false);
+    setTimeout(() => inputRef.current?.fillText(prompt), 200);
+  }, [resetChat]);
+
   const showQuickActions = showDesignSolution && !sheetOpen && !productDetailOpen && !activeAction && !budgetOpen && !groupBuyOpen && !threeDEditorOpen;
 
   return (
@@ -323,6 +329,7 @@ const Index = () => {
         isOpen={discoverOpen}
         onClose={() => setDiscoverOpen(false)}
         onStartChat={handleDiscoverStartChat}
+        onFillPrompt={handleDiscoverFillPrompt}
       />
     </div>
   );

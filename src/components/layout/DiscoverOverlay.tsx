@@ -10,9 +10,10 @@ interface DiscoverOverlayProps {
   isOpen: boolean;
   onClose: () => void;
   onStartChat: (prompt: string) => void;
+  onFillPrompt?: (prompt: string) => void;
 }
 
-const DiscoverOverlay = ({ isOpen, onClose, onStartChat }: DiscoverOverlayProps) => {
+const DiscoverOverlay = ({ isOpen, onClose, onStartChat, onFillPrompt }: DiscoverOverlayProps) => {
   const [selectedStory, setSelectedStory] = useState<SceneStory | null>(null);
   const [storySheetOpen, setStorySheetOpen] = useState(false);
   const [showFullList, setShowFullList] = useState(false);
@@ -182,6 +183,13 @@ const DiscoverOverlay = ({ isOpen, onClose, onStartChat }: DiscoverOverlayProps)
             bottomInset={0}
             onClose={() => setStorySheetOpen(false)}
             onStartChat={handleStartChat}
+            onFillPrompt={(prompt) => {
+              setStorySheetOpen(false);
+              setTimeout(() => {
+                onClose();
+                onFillPrompt?.(prompt);
+              }, 200);
+            }}
           />
         </motion.div>
       )}
