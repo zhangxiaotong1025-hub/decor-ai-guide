@@ -41,7 +41,7 @@ const AnalysisProcess = ({ onComplete, collapsed = false }: AnalysisProcessProps
   if (collapsed && !expanded) {
     return (
       <motion.div
-        layout
+        layout="position"
         onClick={() => setExpanded(true)}
         className="bg-card shadow-layered rounded-outer px-4 py-3 mb-3 cursor-pointer active:scale-[0.98] transition-transform"
       >
@@ -64,7 +64,7 @@ const AnalysisProcess = ({ onComplete, collapsed = false }: AnalysisProcessProps
 
   // Full view (running or expanded from collapsed)
   return (
-    <motion.div layout className="bg-card shadow-layered rounded-outer p-4 mb-3">
+    <motion.div layout="position" className="bg-card shadow-layered rounded-outer p-4 mb-3">
       <div className="flex items-center gap-2 mb-3">
         <span className="text-label text-primary font-mono">ANALYSIS</span>
         {!done && (
