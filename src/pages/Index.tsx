@@ -249,8 +249,8 @@ const Index = () => {
 
             {showAnalysis && (
               <motion.div key="analysis" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mb-4">
-                <AnalysisProcess onComplete={handleAnalysisComplete} />
-                {analysisComplete && <AnalysisResult />}
+                <AnalysisProcess onComplete={handleAnalysisComplete} collapsed={showDesignSolution} />
+                {analysisComplete && <AnalysisResult collapsed={showDesignSolution} />}
               </motion.div>
             )}
 
