@@ -227,7 +227,7 @@ export const mockSceneStories: SceneStory[] = [
       { name: "禅意灯组套装", category: "灯具", ourPrice: 3800, brandPrice: 12000 },
       { name: "真丝床品四件套", category: "床品", ourPrice: 4200, brandPrice: 15000 },
     ],
-    chatPrompt: "主卧20平，想要新中式风格，有质感但不要太贵，预算3万左右",
+    chatPrompt: "退休了想把卧室重新弄弄，20平，喜欢有点中式韵味但别太老气，睡眠要好，预算3万",
     socialProof: "389 位长辈选了这套方案",
     category: "bedroom",
   },
