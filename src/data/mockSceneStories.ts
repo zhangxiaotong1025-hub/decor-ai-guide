@@ -63,8 +63,13 @@ export interface SceneStory {
   products: StoryProduct[];
   chatPrompt: string;
   socialProof: string;
-  /** 分类标签 */
   category: string;
+  /** Detail gallery images */
+  detailImages?: DetailImage[];
+  /** Before image for comparison */
+  beforeImage?: string;
+  /** Life scene storyboard */
+  lifeScenes?: LifeScene[];
 }
 
 export const storyCategories = [
