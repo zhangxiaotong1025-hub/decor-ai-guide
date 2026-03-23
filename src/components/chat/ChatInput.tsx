@@ -14,6 +14,7 @@ export interface ChatInputProps {
 
 export interface ChatInputHandle {
   focus: () => void;
+  fillText: (text: string) => void;
 }
 
 export interface Attachment {
