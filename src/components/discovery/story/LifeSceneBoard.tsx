@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { useRef } from "react";
 import type { LifeScene } from "@/data/mockSceneStories";
 
 interface LifeSceneBoardProps {
@@ -24,62 +23,54 @@ const LifeSceneBoard = ({ scenes }: LifeSceneBoardProps) => (
     </h3>
 
     <div className="space-y-4 px-4">
-      {scenes.map((scene, i) => (
-        <ParallaxScene key={i} scene={scene} index={i} />
-      ))}
+      {scenes.map((scene, i) => {
+        const gradient = timeGradients[scene.time] || "from-foreground/20 via-transparent to-transparent";
+        return (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ delay: i * 0.2, duration: 0.7 }}
+            className="relative rounded-2xl overflow-hidden h-[280px]"
+          >
+            {/* Image with subtle scale on scroll into view */}
+            <motion.img
+              src={scene.src}
+              alt={scene.caption}
+              className="absolute inset-[-5%] w-[110%] h-[110%] object-cover"
+              initial={{ scale: 1.1 }}
+              whileInView={{ scale: 1.0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
+            />
+
+            {/* Time-of-day tint */}
+            <div className={`absolute inset-0 bg-gradient-to-b ${gradient}`} />
+            {/* Bottom gradient for text */}
+            <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/10 to-transparent" />
+
+            {/* Content */}
+            <div className="absolute bottom-0 left-0 right-0 px-5 pb-5">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.2 + 0.3 }}
+              >
+                <span className="inline-block text-[10px] text-primary-foreground/80 font-medium uppercase tracking-[0.2em] mb-1 px-2 py-0.5 bg-primary-foreground/10 backdrop-blur-sm rounded-full">
+                  {scene.time}
+                </span>
+                <p className="text-[15px] text-primary-foreground font-medium leading-relaxed drop-shadow-md">
+                  {scene.caption}
+                </p>
+              </motion.div>
+            </div>
+          </motion.div>
+        );
+      })}
     </div>
   </div>
 );
-
-const ParallaxScene = ({ scene, index }: { scene: LifeScene; index: number }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const imageY = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
-  const gradient = timeGradients[scene.time] || "from-foreground/20 via-transparent to-transparent";
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.2, duration: 0.7 }}
-      className="relative rounded-2xl overflow-hidden h-[280px]"
-    >
-      {/* Parallax image */}
-      <motion.img
-        src={scene.src}
-        alt={scene.caption}
-        className="absolute inset-[-10%] w-[120%] h-[120%] object-cover will-change-transform"
-        style={{ y: imageY }}
-      />
-
-      {/* Time-of-day tint */}
-      <div className={`absolute inset-0 bg-gradient-to-b ${gradient}`} />
-      {/* Bottom gradient for text */}
-      <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/10 to-transparent" />
-
-      {/* Content */}
-      <div className="absolute bottom-0 left-0 right-0 px-5 pb-5">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: index * 0.2 + 0.3 }}
-        >
-          <span className="inline-block text-[10px] text-primary-foreground/80 font-medium uppercase tracking-[0.2em] mb-1 px-2 py-0.5 bg-primary-foreground/10 backdrop-blur-sm rounded-full">
-            {scene.time}
-          </span>
-          <p className="text-[15px] text-primary-foreground font-medium leading-relaxed drop-shadow-md">
-            {scene.caption}
-          </p>
-        </motion.div>
-      </div>
-    </motion.div>
-  );
-};
 
 export default LifeSceneBoard;
