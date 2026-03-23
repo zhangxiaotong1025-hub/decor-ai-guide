@@ -367,7 +367,7 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(
 
           {!compact && (
             <p className="text-[10px] text-muted-foreground/40 text-center mt-1.5">
-              支持图片、户型图、语音 · AI 建议仅供参考
+              支持图片、户型图、语音 · 3 分钟出方案
             </p>
           )}
         </div>
