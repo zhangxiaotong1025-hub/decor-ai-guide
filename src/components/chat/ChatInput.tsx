@@ -56,8 +56,13 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(
       const el = inputRef.current;
       if (!el) return;
       el.style.height = "auto";
-      el.style.height = `${el.scrollHeight}px`;
+      el.style.height = `${Math.min(el.scrollHeight, el.offsetWidth ? 999 : 999)}px`;
     }, []);
+
+    // Auto-resize textarea whenever text changes
+    useEffect(() => {
+      autoResize();
+    }, [text, autoResize]);
 
     useImperativeHandle(ref, () => ({
       focus: () => inputRef.current?.focus(),
