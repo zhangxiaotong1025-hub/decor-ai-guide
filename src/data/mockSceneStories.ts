@@ -125,7 +125,7 @@ export const mockSceneStories: SceneStory[] = [
       { name: "收纳柜系统", category: "收纳", ourPrice: 4600, brandPrice: 12000 },
       { name: "棉麻软装套装", category: "软装", ourPrice: 2400, brandPrice: 6500 },
     ],
-    chatPrompt: "出租屋18平想改造一下，喜欢日式简约风，预算控制在1.5万以内",
+    chatPrompt: "出租屋18平，每天加班回来就想有个能好好休息的地方，不用太贵，1.5万以内能搞定就行",
     socialProof: "1,203 个打工人改造了出租屋",
     category: "whole",
   },
