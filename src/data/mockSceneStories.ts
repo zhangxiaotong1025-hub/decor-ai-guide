@@ -303,7 +303,7 @@ export const mockSceneStories: SceneStory[] = [
       { name: "波斯风地毯", category: "软装", ourPrice: 2200, brandPrice: 8000 },
       { name: "黑胶唱片架", category: "收纳", ourPrice: 1800, brandPrice: 6000 },
     ],
-    chatPrompt: "喜欢复古中古风，客厅22平，想要那种70年代的感觉，预算2万左右",
+    chatPrompt: "客厅22平，收了不少黑胶和古着，想要那种70年代的氛围感，预算2万左右能搞定吗",
     socialProof: "378 位复古爱好者的选择",
     category: "living",
   },
