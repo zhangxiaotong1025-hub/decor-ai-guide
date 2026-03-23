@@ -11,11 +11,38 @@ import sceneRetro from "@/assets/scene-retro-vintage.jpg";
 import sceneBath from "@/assets/scene-modern-bath.jpg";
 import sceneDorm from "@/assets/scene-student-dorm.jpg";
 
+// Nordic story detail images
+import nordicDetail1 from "@/assets/story-nordic-detail1.jpg";
+import nordicDetail2 from "@/assets/story-nordic-detail2.jpg";
+import nordicLife1 from "@/assets/story-nordic-life1.jpg";
+import nordicLife2 from "@/assets/story-nordic-life2.jpg";
+import nordicBefore from "@/assets/story-nordic-before.jpg";
+
+// French story detail images
+import frenchDetail1 from "@/assets/story-french-detail1.jpg";
+import frenchDetail2 from "@/assets/story-french-detail2.jpg";
+import frenchLife1 from "@/assets/story-french-life1.jpg";
+
 export interface StoryProduct {
   name: string;
   category: string;
   ourPrice: number;
   brandPrice: number;
+  /** Product scene image */
+  image?: string;
+}
+
+/** Detail gallery image with caption overlay */
+export interface DetailImage {
+  src: string;
+  caption: string;
+}
+
+/** Life scene for storyboard */
+export interface LifeScene {
+  src: string;
+  time: string;
+  caption: string;
 }
 
 export interface SceneStory {
@@ -36,8 +63,13 @@ export interface SceneStory {
   products: StoryProduct[];
   chatPrompt: string;
   socialProof: string;
-  /** 分类标签 */
   category: string;
+  /** Detail gallery images */
+  detailImages?: DetailImage[];
+  /** Before image for comparison */
+  beforeImage?: string;
+  /** Life scene storyboard */
+  lifeScenes?: LifeScene[];
 }
 
 export const storyCategories = [
@@ -69,15 +101,24 @@ export const mockSceneStories: SceneStory[] = [
     painPoint: "品牌店一套客厅要 8 万多，月薪 8K 根本不敢想",
     highlights: ["纳米防猫抓科技布沙发，猫随便挠", "不规则茶几留出瑜伽空间", "三层照明，下班一键切换放松模式"],
     products: [
-      { name: "悬浮云朵沙发", category: "沙发", ourPrice: 8999, brandPrice: 15000 },
+      { name: "悬浮云朵沙发", category: "沙发", ourPrice: 8999, brandPrice: 15000, image: nordicDetail1 },
       { name: "岩板不规则茶几", category: "茶几", ourPrice: 1680, brandPrice: 4200 },
       { name: "悬浮电视柜", category: "电视柜", ourPrice: 2560, brandPrice: 6000 },
-      { name: "三层照明套装", category: "灯具", ourPrice: 2300, brandPrice: 5500 },
+      { name: "三层照明套装", category: "灯具", ourPrice: 2300, brandPrice: 5500, image: nordicDetail2 },
       { name: "软装搭配套装", category: "软装", ourPrice: 3500, brandPrice: 7000 },
     ],
     chatPrompt: "我养了只猫，客厅25平，想回家能窝在沙发上撸猫看剧，沙发别太怕猫挠，预算2万出头就行",
     socialProof: "847 人照着这个方案装了家",
     category: "living",
+    detailImages: [
+      { src: nordicDetail1, caption: "纳米科技布，猫爪无痕" },
+      { src: nordicDetail2, caption: "三层照明，一键切换放松模式" },
+    ],
+    beforeImage: nordicBefore,
+    lifeScenes: [
+      { src: nordicLife1, time: "清晨", caption: "阳光洒进来，茶几旁做个晨间瑜伽" },
+      { src: nordicLife2, time: "下班后", caption: "窝在沙发上撸猫看剧，忘掉 996" },
+    ],
   },
   {
     id: "story-french",
@@ -95,14 +136,21 @@ export const mockSceneStories: SceneStory[] = [
     painPoint: "婚房想要高级感，品牌店一套客厅 15 万，两个人月供已经很紧",
     highlights: ["进口丝绒质感沙发，触感媲美大牌", "法式弧形餐桌，仪式感满分", "水晶吊灯 + 壁灯组合，ins 风氛围拉满"],
     products: [
-      { name: "法式弧形沙发", category: "沙发", ourPrice: 12800, brandPrice: 35000 },
-      { name: "大理石餐桌", category: "餐桌", ourPrice: 5600, brandPrice: 18000 },
+      { name: "法式弧形沙发", category: "沙发", ourPrice: 12800, brandPrice: 35000, image: frenchDetail1 },
+      { name: "大理石餐桌", category: "餐桌", ourPrice: 5600, brandPrice: 18000, image: frenchDetail2 },
       { name: "水晶吊灯组合", category: "灯具", ourPrice: 4800, brandPrice: 15000 },
       { name: "丝绒窗帘套装", category: "软装", ourPrice: 3200, brandPrice: 8000 },
     ],
     chatPrompt: "刚结婚想布置婚房，客厅加餐厅35平，想要那种朋友来了会夸好看的感觉，两个人攒了4万预算",
     socialProof: "632 对新人选了这套方案",
     category: "living",
+    detailImages: [
+      { src: frenchDetail1, caption: "进口丝绒触感，媲美大牌品质" },
+      { src: frenchDetail2, caption: "法式弧形餐桌，每餐都是仪式感" },
+    ],
+    lifeScenes: [
+      { src: frenchLife1, time: "周末早晨", caption: "在大理石餐桌前，两个人的早餐时光" },
+    ],
   },
   {
     id: "story-japanese",
