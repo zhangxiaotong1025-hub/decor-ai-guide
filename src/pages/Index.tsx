@@ -165,7 +165,7 @@ const Index = () => {
         }, MOCK_DELAY);
       } else {
         addAssistantMessage({
-          content: "好的，我已记录您的反馈。如果需要调整方案或有其他问题，随时告诉我。",
+          content: "收到，我马上调整！改完给你看效果——",
         });
       }
     },
