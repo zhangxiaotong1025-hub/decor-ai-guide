@@ -8,6 +8,7 @@ import AnalysisResult from "@/components/chat/AnalysisResult";
 import DesignSolutionCard from "@/components/chat/DesignSolutionCard";
 import SolutionSheet from "@/components/chat/SolutionSheet";
 import DiscoveryFeed from "@/components/discovery/DiscoveryFeed";
+import SceneStorySheet from "@/components/discovery/SceneStorySheet";
 import ProductDetailCard from "@/components/chat/ProductDetailCard";
 import QuickActionBar, { type QuickActionType } from "@/components/chat/QuickActionBar";
 import AgentPanel from "@/components/chat/AgentPanel";
@@ -16,6 +17,7 @@ import GroupBuyPanel from "@/components/groupbuy/GroupBuyPanel";
 import { mockDesignSolution } from "@/data/mockDesignSolution";
 import type { ChatMessage } from "@/types/chat";
 import type { ProductItem } from "@/types/product";
+import type { SceneStory } from "@/data/mockSceneStories";
 
 const ThreeDEditor = lazy(() =>
   import("@/components/3d/ThreeDEditor").catch(() => ({
@@ -41,6 +43,8 @@ const Index = () => {
   const [groupBuyOpen, setGroupBuyOpen] = useState(false);
   const [hasActiveGroupBuy, setHasActiveGroupBuy] = useState(false);
   const [threeDEditorOpen, setThreeDEditorOpen] = useState(false);
+  const [selectedStory, setSelectedStory] = useState<SceneStory | null>(null);
+  const [storySheetOpen, setStorySheetOpen] = useState(false);
   const [chatInputHeight, setChatInputHeight] = useState(DEFAULT_CHAT_INPUT_HEIGHT);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<ChatInputHandle>(null);
@@ -166,6 +170,11 @@ const Index = () => {
     setProductDetailOpen(false);
   }, []);
 
+  const handleSelectStory = useCallback((story: SceneStory) => {
+    setSelectedStory(story);
+    setStorySheetOpen(true);
+  }, []);
+
   const handleQuickAction = useCallback((type: QuickActionType) => {
     if (type === "budget") {
       setBudgetOpen(true);
@@ -198,7 +207,7 @@ const Index = () => {
         <div className="max-w-2xl mx-auto px-4 py-4 pb-2">
           <AnimatePresence mode="popLayout">
             {phase === "welcome" && messages.length === 0 && (
-              <DiscoveryFeed onStartChat={handleSend} onSelectProduct={handleSelectProduct} />
+              <DiscoveryFeed onStartChat={handleSend} onSelectStory={handleSelectStory} />
             )}
 
             {messages.map((msg) => (
@@ -281,6 +290,17 @@ const Index = () => {
         onModify={handleModify}
         onSelectProduct={handleSelectProduct}
         onOpen3DEditor={handleOpen3DEditor}
+      />
+
+      <SceneStorySheet
+        story={selectedStory}
+        isOpen={storySheetOpen}
+        bottomInset={chatInputHeight}
+        onClose={() => setStorySheetOpen(false)}
+        onStartChat={(prompt) => {
+          setStorySheetOpen(false);
+          setTimeout(() => handleSend(prompt), 300);
+        }}
       />
 
       <Suspense fallback={null}>

@@ -2,23 +2,15 @@ import { motion } from "framer-motion";
 import { Sparkles, MessageCircle } from "lucide-react";
 import SceneStoryCard from "./SceneStoryCard";
 import { mockSceneStories, type SceneStory } from "@/data/mockSceneStories";
-import type { ProductItem } from "@/types/product";
 
 interface DiscoveryFeedProps {
   onStartChat: (text: string) => void;
-  onSelectProduct: (product: ProductItem) => void;
+  onSelectStory: (story: SceneStory) => void;
 }
 
-const DiscoveryFeed = ({ onStartChat }: DiscoveryFeedProps) => {
+const DiscoveryFeed = ({ onStartChat, onSelectStory }: DiscoveryFeedProps) => {
   const handleStoryTap = (story: SceneStory) => {
-    // 点击故事卡 → 用故事的人设直接开启对话
-    const prompts: Record<string, string> = {
-      "story-nordic": "我想装修客厅，25平左右，养了一只猫，喜欢温馨一点的感觉，预算2万多",
-      "story-french": "我们刚结婚，客厅加餐厅大概35平，想要法式奶油风的感觉，预算4万左右",
-      "story-japanese": "出租屋18平想改造一下，喜欢日式简约风，预算控制在1.5万以内",
-      "story-industrial": "我是自由职业，想把30平的空间改成工作室兼客厅，喜欢工业风，3万预算",
-    };
-    onStartChat(prompts[story.id] || "我想看看这个方案的详情");
+    onSelectStory(story);
   };
 
   return (
