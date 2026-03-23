@@ -264,22 +264,36 @@ const SceneStorySheet = ({ story, isOpen, bottomInset = 0, onClose, onStartChat,
             </div>
 
             {/* ═══ 底部固定 CTA ═══ */}
-            <div className="flex-shrink-0 px-5 py-3 border-t border-border bg-background/95 backdrop-blur-sm">
-              <div className="flex gap-2.5">
+            <div className="flex-shrink-0 border-t border-border bg-background/95 backdrop-blur-sm">
+              {/* 氛围引导条 */}
+              <div className="px-5 pt-2.5 pb-1">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-shock/6 rounded-lg">
+                  <Gift className="w-3.5 h-3.5 text-shock flex-shrink-0" />
+                  <p className="text-[10px] text-shock leading-tight">
+                    <span className="font-semibold">首次参团享折上折</span>
+                    <span className="text-shock/70 ml-1">· 已有 {story.joinedCount} 人参与此方案拼团</span>
+                  </p>
+                </div>
+              </div>
+
+              <div className="px-5 pt-2 pb-3 flex gap-2.5">
                 <button
-                  onClick={() => handleCustomize(`我喜欢${story.persona}这套方案的风格，但我的情况不太一样，帮我调整一下`)}
+                  onClick={() => {
+                    onClose();
+                    setTimeout(() => onStartChat("我想从零开始，帮我设计一套专属方案"), 300);
+                  }}
                   className="flex-1 flex items-center justify-center gap-1 py-3 border border-border text-foreground text-xs font-medium rounded-xl hover:bg-secondary transition-colors"
                 >
-                  改改再用
-                  <ChevronRight className="w-3 h-3" />
+                  <Sparkles className="w-3.5 h-3.5" />
+                  专属定制
                 </button>
                 <motion.button
                   whileTap={{ scale: 0.98 }}
                   onClick={() => handleCustomize(story.chatPrompt)}
                   className="flex-[1.5] flex items-center justify-center gap-1.5 py-3 bg-foreground text-background text-xs font-semibold rounded-xl shadow-elevated"
                 >
-                  <Sparkles className="w-3.5 h-3.5" />
-                  开始定制我的方案
+                  <Zap className="w-3.5 h-3.5" />
+                  加入拼团 · 省 {savedPct}%
                 </motion.button>
               </div>
             </div>
