@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Users, ChevronRight, Sparkles, Factory, TrendingDown } from "lucide-react";
+import { X, Users, Sparkles, Factory, TrendingDown, Zap, Gift } from "lucide-react";
 import type { SceneStory } from "@/data/mockSceneStories";
 
 interface SceneStorySheetProps {
