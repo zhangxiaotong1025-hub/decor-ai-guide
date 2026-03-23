@@ -9,7 +9,7 @@ interface DiscoveryFeedProps {
   onSelectStory: (story: SceneStory) => void;
   /** 限制首页精选数量，不传则显示全部 */
   limit?: number;
-  /** 是否显示分类筛选 */
+  /** 是否显示分类筛选（全部列表模式） */
   showCategories?: boolean;
   /** 查看更多回调 */
   onViewAll?: () => void;
@@ -30,6 +30,67 @@ const DiscoveryFeed = ({
 
   const displayStories = limit ? filtered.slice(0, limit) : filtered;
 
+  // 全列表模式：顶部筛选 + AI入口常驻，卡片纯列表
+  if (showCategories) {
+    return (
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pb-6">
+        {/* AI 快捷入口 - 常驻顶部 */}
+        <div className="px-4 pt-4 pb-3">
+          <div className="flex gap-2">
+            <motion.button
+              whileTap={{ scale: 0.97 }}
+              onClick={() => onStartChat("我想装修，帮我出个方案")}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs font-semibold shadow-elevated"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              AI 出方案
+            </motion.button>
+            <button
+              onClick={() => onStartChat("我随便看看，还没想好要什么风格")}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-border text-xs text-muted-foreground hover:bg-secondary transition-colors"
+            >
+              <MessageCircle className="w-3.5 h-3.5" />
+              先聊聊
+            </button>
+          </div>
+        </div>
+
+        {/* 分类筛选条 */}
+        <div className="px-4 mb-4 overflow-x-auto scrollbar-hide">
+          <div className="flex gap-2">
+            {storyCategories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`flex-shrink-0 text-xs px-3 py-1.5 rounded-full transition-colors ${
+                  activeCategory === cat.id
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 卡片列表 */}
+        <div className="px-4 space-y-4">
+          {displayStories.map((story, i) => (
+            <SceneStoryCard key={story.id} story={story} index={i} onTap={onSelectStory} />
+          ))}
+        </div>
+
+        {displayStories.length === 0 && (
+          <div className="px-4 py-12 text-center">
+            <p className="text-sm text-muted-foreground">该分类暂无方案，换一个看看？</p>
+          </div>
+        )}
+      </motion.div>
+    );
+  }
+
+  // 精选模式：首页引导页
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -71,36 +132,15 @@ const DiscoveryFeed = ({
         </motion.div>
       </div>
 
-      {/* Category tabs */}
-      {showCategories && (
-        <div className="px-4 mb-4 overflow-x-auto scrollbar-hide">
-          <div className="flex gap-2">
-            {storyCategories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`flex-shrink-0 text-xs px-3 py-1.5 rounded-full transition-colors ${
-                  activeCategory === cat.id
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Scene Story Cards */}
+      {/* Scene Story Cards - 精选 */}
       <div className="px-4 space-y-4">
         {displayStories.map((story, i) => (
           <SceneStoryCard key={story.id} story={story} index={i} onTap={onSelectStory} />
         ))}
       </div>
 
-      {/* View all button */}
-      {limit && filtered.length > limit && onViewAll && (
+      {/* 发现更多灵感 */}
+      {limit && onViewAll && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -111,7 +151,7 @@ const DiscoveryFeed = ({
             onClick={onViewAll}
             className="w-full py-2.5 rounded-xl border border-border text-xs text-muted-foreground hover:bg-secondary transition-colors"
           >
-            查看全部 {mockSceneStories.length} 个方案 →
+            发现更多灵感 →
           </button>
         </motion.div>
       )}
@@ -138,7 +178,6 @@ const DiscoveryFeed = ({
           </p>
         </div>
 
-        {/* OR divider + quick chat */}
         <div className="flex items-center gap-3 my-4">
           <div className="flex-1 h-px bg-border" />
           <span className="text-[10px] text-muted-foreground">或者</span>
