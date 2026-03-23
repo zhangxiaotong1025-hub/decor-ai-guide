@@ -51,7 +51,7 @@ const Index = () => {
 
   // Layout state
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [discoverOpen, setDiscoverOpen] = useState(false);
+  const [discoverOpen, setDiscoverOpen] = useState(true);
   const [projectTitle, setProjectTitle] = useState<string | undefined>();
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -234,7 +234,7 @@ const Index = () => {
         <div className="max-w-2xl mx-auto px-4 py-4 pb-2">
           <AnimatePresence mode="popLayout">
             {phase === "welcome" && messages.length === 0 && (
-              <WelcomeScreen onStartChat={handleSend} onOpenDiscover={() => setDiscoverOpen(true)} />
+              <WelcomeScreen onFillPrompt={(text) => inputRef.current?.fillText(text)} onOpenDiscover={() => setDiscoverOpen(true)} />
             )}
 
             {messages.map((msg) => (

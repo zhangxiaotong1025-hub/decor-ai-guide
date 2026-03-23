@@ -14,6 +14,7 @@ export interface ChatInputProps {
 
 export interface ChatInputHandle {
   focus: () => void;
+  fillText: (text: string) => void;
 }
 
 export interface Attachment {
@@ -53,6 +54,10 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(
 
     useImperativeHandle(ref, () => ({
       focus: () => inputRef.current?.focus(),
+      fillText: (value: string) => {
+        setText(value);
+        setTimeout(() => inputRef.current?.focus(), 50);
+      },
     }));
 
     const handleSend = useCallback(() => {
