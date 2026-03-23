@@ -51,7 +51,7 @@ const Index = () => {
 
   // Layout state
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [discoverOpen, setDiscoverOpen] = useState(false);
+  const [discoverOpen, setDiscoverOpen] = useState(true);
   const [projectTitle, setProjectTitle] = useState<string | undefined>();
 
   const scrollRef = useRef<HTMLDivElement>(null);
