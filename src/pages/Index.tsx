@@ -7,7 +7,7 @@ import AnalysisProcess from "@/components/chat/AnalysisProcess";
 import AnalysisResult from "@/components/chat/AnalysisResult";
 import DesignSolutionCard from "@/components/chat/DesignSolutionCard";
 import SolutionSheet from "@/components/chat/SolutionSheet";
-import WelcomeScreen from "@/components/chat/WelcomeScreen";
+import DiscoveryFeed from "@/components/discovery/DiscoveryFeed";
 import ProductDetailCard from "@/components/chat/ProductDetailCard";
 import QuickActionBar, { type QuickActionType } from "@/components/chat/QuickActionBar";
 import AgentPanel from "@/components/chat/AgentPanel";
