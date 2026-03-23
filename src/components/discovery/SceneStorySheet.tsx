@@ -9,9 +9,11 @@ interface SceneStorySheetProps {
   bottomInset?: number;
   onClose: () => void;
   onStartChat: (prompt: string) => void;
+  /** 填入输入框而非直接发送 */
+  onFillPrompt?: (prompt: string) => void;
 }
 
-const SceneStorySheet = ({ story, isOpen, bottomInset = 0, onClose, onStartChat }: SceneStorySheetProps) => {
+const SceneStorySheet = ({ story, isOpen, bottomInset = 0, onClose, onStartChat, onFillPrompt }: SceneStorySheetProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
 
@@ -27,6 +29,17 @@ const SceneStorySheet = ({ story, isOpen, bottomInset = 0, onClose, onStartChat 
       setScrolled(scrollRef.current.scrollTop > 50);
     }
   }, []);
+
+  const handleCustomize = useCallback((prompt: string) => {
+    onClose();
+    setTimeout(() => {
+      if (onFillPrompt) {
+        onFillPrompt(prompt);
+      } else {
+        onStartChat(prompt);
+      }
+    }, 300);
+  }, [onClose, onFillPrompt, onStartChat]);
 
   if (!story) return null;
 
@@ -156,7 +169,7 @@ const SceneStorySheet = ({ story, isOpen, bottomInset = 0, onClose, onStartChat 
                 </div>
               </div>
 
-              {/* ═══ 第三层：省钱明细 — 核心钩子 ═══ */}
+              {/* ═══ 第三层：省钱明细 ═══ */}
               <div className="px-5 pb-6">
                 <SectionTitle emoji="💰" title="每一分钱花在哪" />
                 <div className="mt-3 space-y-2">
@@ -217,23 +230,20 @@ const SceneStorySheet = ({ story, isOpen, bottomInset = 0, onClose, onStartChat 
                 </motion.div>
               </div>
 
-              {/* ═══ 第四层：社交证明 + 行动钩子 ═══ */}
+              {/* ═══ 第四层：社交证明 ═══ */}
               <div className="px-5 pb-8">
                 <SectionTitle emoji="🔥" title="和你一样的人都在行动" />
 
-                {/* Social proof */}
                 <div className="mt-3 flex items-center gap-3 py-3 px-4 bg-secondary/15 rounded-xl">
                   <Users className="w-4 h-4 text-primary flex-shrink-0" />
                   <span className="text-sm text-foreground">{story.socialProof}</span>
                 </div>
 
-                {/* Factory trust */}
                 <div className="mt-2 flex items-center gap-3 py-3 px-4 bg-secondary/15 rounded-xl">
                   <Factory className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                   <span className="text-sm text-muted-foreground">全部来自品牌同源代工厂，品质一模一样</span>
                 </div>
 
-                {/* Urgency hook */}
                 <div className="mt-4 p-4 bg-shock/5 border border-shock/10 rounded-xl">
                   <div className="flex items-center gap-2 mb-1.5">
                     <span className="relative flex h-2 w-2">
@@ -247,35 +257,30 @@ const SceneStorySheet = ({ story, isOpen, bottomInset = 0, onClose, onStartChat 
                   </p>
                 </div>
 
-                {/* CTA Buttons */}
-                <div className="mt-6 space-y-3">
-                  <motion.button
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => {
-                      onClose();
-                      setTimeout(() => onStartChat(story.chatPrompt), 300);
-                    }}
-                    className="w-full flex items-center justify-center gap-2 py-3.5 bg-foreground text-background text-sm font-semibold rounded-xl shadow-elevated"
-                  >
-                    <Sparkles className="w-4 h-4" />
-                    我也要这样的家，帮我定制一套
-                  </motion.button>
-
-                  <button
-                    onClick={() => {
-                      onClose();
-                      setTimeout(() => onStartChat(`我喜欢${story.persona}这套方案的风格，但我的情况不太一样，帮我调整一下`), 300);
-                    }}
-                    className="w-full flex items-center justify-center gap-2 py-3 border border-border text-foreground text-sm rounded-xl hover:bg-secondary transition-colors"
-                  >
-                    喜欢这个风格，但我要改改
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-
-                <p className="text-center text-[10px] text-muted-foreground mt-3">
+                <p className="text-center text-[10px] text-muted-foreground mt-6">
                   AI 会根据你的面积和预算，生成你的专属方案
                 </p>
+              </div>
+            </div>
+
+            {/* ═══ 底部固定 CTA ═══ */}
+            <div className="flex-shrink-0 px-5 py-3 border-t border-border bg-background/95 backdrop-blur-sm">
+              <div className="flex gap-2.5">
+                <button
+                  onClick={() => handleCustomize(`我喜欢${story.persona}这套方案的风格，但我的情况不太一样，帮我调整一下`)}
+                  className="flex-1 flex items-center justify-center gap-1 py-3 border border-border text-foreground text-xs font-medium rounded-xl hover:bg-secondary transition-colors"
+                >
+                  改改再用
+                  <ChevronRight className="w-3 h-3" />
+                </button>
+                <motion.button
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => handleCustomize(story.chatPrompt)}
+                  className="flex-[1.5] flex items-center justify-center gap-1.5 py-3 bg-foreground text-background text-xs font-semibold rounded-xl shadow-elevated"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  开始定制我的方案
+                </motion.button>
               </div>
             </div>
           </motion.div>
