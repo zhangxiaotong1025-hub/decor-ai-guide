@@ -201,7 +201,7 @@ export const mockSceneStories: SceneStory[] = [
       { name: "模块化书架", category: "收纳", ourPrice: 3200, brandPrice: 10000 },
       { name: "护眼台灯套装", category: "灯具", ourPrice: 1800, brandPrice: 5500 },
     ],
-    chatPrompt: "在家办公需要一个好用的书房，8平左右，要能放升降桌和书架，预算1万多",
+    chatPrompt: "在家远程办公快一年了，餐桌上班腰都废了，次卧8平能不能搞个正经工位，预算1万多",
     socialProof: "1,567 位远程打工人的选择",
     category: "office",
   },
