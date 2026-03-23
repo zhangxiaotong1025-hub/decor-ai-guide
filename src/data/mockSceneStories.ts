@@ -277,7 +277,7 @@ export const mockSceneStories: SceneStory[] = [
       { name: "嵌入式收纳组", category: "收纳", ourPrice: 5600, brandPrice: 18000 },
       { name: "餐厅吊灯组合", category: "灯具", ourPrice: 3800, brandPrice: 12000 },
     ],
-    chatPrompt: "想做开放式厨房加中岛，大概18平，预算4-5万，要能拍视频好看的",
+    chatPrompt: "想做开放式厨房带中岛，平时做饭也拍视频，18平左右，要好看也实用，预算4到5万",
     socialProof: "534 位美食爱好者的选择",
     category: "kitchen",
   },
