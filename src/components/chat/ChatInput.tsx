@@ -309,7 +309,10 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(
             <textarea
               ref={inputRef}
               value={text}
-              onChange={(e) => setText(e.target.value)}
+              onChange={(e) => {
+                setText(e.target.value);
+                autoResize();
+              }}
               onKeyDown={handleKeyDown}
               placeholder={placeholder || "描述您的装修需求..."}
               disabled={disabled}
