@@ -157,7 +157,7 @@ const Index = () => {
             {
               id: crypto.randomUUID(),
               role: "assistant",
-              content: "好的，我来分析一下您的需求。请稍等片刻...",
+              content: "收到！这个需求太多人问了 🔥 让我马上帮你规划一下——",
               timestamp: Date.now(),
             },
           ]);
