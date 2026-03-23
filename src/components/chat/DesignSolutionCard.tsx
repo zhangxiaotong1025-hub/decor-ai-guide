@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Users, TrendingDown, Zap } from "lucide-react";
 import type { DesignSolution } from "@/types/chat";
 
 interface DesignSolutionCardProps {
@@ -14,14 +15,16 @@ const DesignSolutionCard = ({ solution, onViewDetail, onModify }: DesignSolution
   const [showActions, setShowActions] = useState(false);
 
   useEffect(() => {
-    // Staggered reveal: curtain → content → actions
     const t1 = setTimeout(() => setRevealed(true), 300);
     const t2 = setTimeout(() => setShowContent(true), 900);
     const t3 = setTimeout(() => setShowActions(true), 1400);
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, []);
 
-  const savedAmount = solution.costOptimization.canSave.reduce((s, i) => s + i.savings, 0);
+  const brandTotal = 38600; // mock: 品牌店总价
+  const ourTotal = solution.costOptimization.current;
+  const savedTotal = brandTotal - ourTotal;
+  const savedPercent = Math.round((savedTotal / brandTotal) * 100);
 
   return (
     <motion.div
@@ -30,29 +33,31 @@ const DesignSolutionCard = ({ solution, onViewDetail, onModify }: DesignSolution
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       className="bg-card shadow-layered rounded-outer overflow-hidden"
     >
-      {/* Header with typing effect */}
-      <div className="px-4 py-2.5 border-b border-border">
+      {/* Header - personal & warm */}
+      <div className="px-4 py-2.5 border-b border-border flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <motion.span
-            animate={{ rotate: [0, 15, -15, 0] }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-sm"
-          >
-            🎨
-          </motion.span>
-          <span className="text-xs font-semibold">方案A：{solution.name}</span>
-          <motion.span
-            initial={{ opacity: 0, x: -8 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.5 }}
-            className="ml-auto text-[10px] px-1.5 py-0.5 bg-accent/10 text-accent rounded-button font-mono"
-          >
+          <span className="text-sm">🎨</span>
+          <span className="text-xs font-semibold">{solution.name}</span>
+          <span className="text-[10px] px-1.5 py-0.5 bg-accent/10 text-accent rounded-button font-medium">
             AI 推荐
-          </motion.span>
+          </span>
         </div>
+        {/* Live viewers */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 }}
+          className="flex items-center gap-1 text-[10px] text-muted-foreground"
+        >
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-saving opacity-75" />
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-saving" />
+          </span>
+          <span>23人在看</span>
+        </motion.div>
       </div>
 
-      {/* Render image with curtain reveal */}
+      {/* Render image */}
       <button onClick={onViewDetail} className="relative w-full text-left overflow-hidden">
         <motion.div
           initial={{ clipPath: "inset(0 0 100% 0)" }}
@@ -66,7 +71,7 @@ const DesignSolutionCard = ({ solution, onViewDetail, onModify }: DesignSolution
           />
         </motion.div>
 
-        {/* Annotations with delayed pop */}
+        {/* Annotations */}
         <AnimatePresence>
           {revealed &&
             solution.annotations.map((ann, i) => (
@@ -85,7 +90,6 @@ const DesignSolutionCard = ({ solution, onViewDetail, onModify }: DesignSolution
             ))}
         </AnimatePresence>
 
-        {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/30 to-transparent flex items-end justify-center pb-3">
           <motion.span
             initial={{ opacity: 0, y: 8 }}
@@ -98,7 +102,7 @@ const DesignSolutionCard = ({ solution, onViewDetail, onModify }: DesignSolution
         </div>
       </button>
 
-      {/* Content with stagger reveal */}
+      {/* Content */}
       <AnimatePresence>
         {showContent && (
           <motion.div
@@ -108,106 +112,83 @@ const DesignSolutionCard = ({ solution, onViewDetail, onModify }: DesignSolution
             className="overflow-hidden"
           >
             <div className="p-4 space-y-3">
-              {/* Concept */}
-              <motion.div
-                initial={{ opacity: 0, x: -12 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1 }}
-              >
-                <span className="text-label text-primary font-mono block mb-1">CONCEPT</span>
-                <p className="text-xs leading-relaxed text-muted-foreground">
-                  {solution.designThinking.concept.slice(0, 80)}...
-                </p>
-              </motion.div>
-
-              {/* Key highlights */}
-              <div className="grid grid-cols-3 gap-2">
-                {[
-                  { icon: "📐", label: "布局", value: "黄金比例" },
-                  { icon: "🎯", label: "动线", value: "3条设计" },
-                  { icon: "💡", label: "照明", value: "3层系统" },
-                ].map((h, i) => (
-                  <motion.div
-                    key={h.label}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 + i * 0.1 }}
-                  >
-                    <Highlight {...h} />
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Life scenarios */}
-              <div>
-                <span className="text-label text-muted-foreground font-mono block mb-1.5">生活场景</span>
-                <div className="flex flex-wrap gap-1">
-                  {solution.lifeScenarios.map((s, i) => (
-                    <motion.span
-                      key={s.name}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.3 + i * 0.05 }}
-                      className="text-[10px] px-1.5 py-0.5 bg-secondary rounded-button"
-                    >
-                      {s.name}
-                    </motion.span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Price reveal — the hook */}
+              {/* Price comparison - the core hook */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="py-3 border-t border-b border-border"
+                transition={{ delay: 0.1 }}
+                className="rounded-inner bg-saving/5 border border-saving/15 p-3"
               >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] text-muted-foreground">
-                      含 {solution.productSelection.items.length} 件精选商品
-                    </span>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-1.5">
+                    <TrendingDown className="w-3.5 h-3.5 text-saving" />
+                    <span className="text-[11px] font-semibold text-saving">价格脱水</span>
                   </div>
-                  <div className="text-right">
-                    <motion.span
-                      initial={{ opacity: 0, scale: 1.2 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.7, type: "spring", stiffness: 200 }}
-                      className="font-mono-data text-base font-bold text-primary"
-                    >
-                      ¥{solution.costOptimization.current.toLocaleString()}
-                    </motion.span>
-                    <motion.span
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.9 }}
-                      className="text-[10px] text-accent ml-1.5"
-                    >
-                      预算内 ✓
-                    </motion.span>
-                  </div>
-                </div>
-
-                {/* Savings hook */}
-                <motion.div
-                  initial={{ opacity: 0, y: 4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.1 }}
-                  className="mt-2 flex items-center gap-1.5 text-[10px]"
-                >
-                  <span className="px-1.5 py-0.5 bg-accent/10 text-accent rounded-button font-medium">
-                    💡 还能再省 ¥{savedAmount.toLocaleString()}
+                  <span className="text-[10px] text-muted-foreground line-through">
+                    品牌店总价 ¥{brandTotal.toLocaleString()}
                   </span>
-                  <span className="text-muted-foreground/60">查看方案了解详情</span>
-                </motion.div>
+                </div>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-mono text-xl font-bold text-foreground">
+                    ¥{ourTotal.toLocaleString()}
+                  </span>
+                  <span className="text-[11px] font-semibold text-saving">
+                    省 {savedPercent}%
+                  </span>
+                </div>
+                <p className="text-[10px] text-muted-foreground mt-1">
+                  {solution.productSelection.items.length} 件商品，同款同质，工厂直发
+                </p>
+              </motion.div>
+
+              {/* Product mini-ticker - social proof + urgency */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="space-y-1.5"
+              >
+                {solution.productSelection.items.slice(0, 2).map((item, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center justify-between px-3 py-2 rounded-inner bg-secondary/50 border border-border"
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="text-sm flex-shrink-0">{item.category.slice(0, 2)}</span>
+                      <div className="min-w-0">
+                        <span className="text-[11px] font-medium block truncate">{item.name}</span>
+                        <span className="text-[10px] text-muted-foreground">{item.brief.slice(0, 20)}</span>
+                      </div>
+                    </div>
+                    <div className="flex-shrink-0 text-right">
+                      <span className="text-[11px] font-mono font-semibold block">¥{item.price.toLocaleString()}</span>
+                      <div className="flex items-center gap-0.5 text-gold">
+                        <Users className="w-2.5 h-2.5" />
+                        <span className="text-[9px] font-medium">{8 + i * 3}人拼</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </motion.div>
+
+              {/* Group-buy nudge */}
+              <motion.div
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-inner bg-gold/5 border border-gold/15"
+              >
+                <Zap className="w-3 h-3 text-gold flex-shrink-0" />
+                <span className="text-[10px] text-foreground/80">
+                  加入拼团还能再省 <span className="font-semibold text-gold">¥{(savedTotal * 0.15).toFixed(0)}</span>，当前 3 个商品接近成团
+                </span>
               </motion.div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Actions with final pop */}
+      {/* Actions */}
       <AnimatePresence>
         {showActions && (
           <motion.div
@@ -220,13 +201,13 @@ const DesignSolutionCard = ({ solution, onViewDetail, onModify }: DesignSolution
               onClick={onViewDetail}
               className="flex-1 py-2.5 bg-primary text-primary-foreground text-xs font-medium rounded-button active:scale-[0.97] transition-transform"
             >
-              查看完整方案
+              看完整方案和底价
             </button>
             <button
               onClick={onModify}
               className="flex-1 py-2.5 bg-secondary text-secondary-foreground text-xs font-medium rounded-button active:scale-[0.97] transition-transform"
             >
-              对话修改方案
+              帮我调一调
             </button>
           </motion.div>
         )}
@@ -234,13 +215,5 @@ const DesignSolutionCard = ({ solution, onViewDetail, onModify }: DesignSolution
     </motion.div>
   );
 };
-
-const Highlight = ({ icon, label, value }: { icon: string; label: string; value: string }) => (
-  <div className="bg-secondary/50 rounded-inner p-2 text-center">
-    <span className="text-sm block">{icon}</span>
-    <span className="text-[10px] text-muted-foreground block">{label}</span>
-    <span className="text-[11px] font-medium">{value}</span>
-  </div>
-);
 
 export default DesignSolutionCard;
