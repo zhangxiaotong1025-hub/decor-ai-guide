@@ -64,12 +64,15 @@ export interface SceneStory {
   chatPrompt: string;
   socialProof: string;
   category: string;
-  /** Detail gallery images */
   detailImages?: DetailImage[];
-  /** Before image for comparison */
   beforeImage?: string;
-  /** Life scene storyboard */
   lifeScenes?: LifeScene[];
+  /** Immersive "imagine yourself" narrative */
+  imagineScene?: string;
+  /** Relatable cost reframing */
+  costReframe?: string;
+  /** Mini user review */
+  userReview?: { name: string; text: string; avatar?: string };
 }
 
 export const storyCategories = [
