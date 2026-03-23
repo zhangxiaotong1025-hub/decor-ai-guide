@@ -314,15 +314,13 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(
             <textarea
               ref={inputRef}
               value={text}
-              onChange={(e) => {
-                setText(e.target.value);
-                autoResize();
-              }}
+              onChange={(e) => setText(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder={placeholder || "描述您的装修需求..."}
               disabled={disabled}
               rows={1}
-              className="flex-1 bg-transparent text-sm resize-none outline-none placeholder:text-muted-foreground/40 max-h-32 py-1.5 px-1 leading-relaxed"
+              className="flex-1 bg-transparent text-sm resize-none outline-none placeholder:text-muted-foreground/40 py-1.5 px-1 leading-relaxed overflow-y-auto"
+              style={{ maxHeight: "6.5rem" }}
             />
 
             {/* Voice button */}
