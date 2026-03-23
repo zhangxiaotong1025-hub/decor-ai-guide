@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronRight, Shield, Factory, Award, Truck, Users, Zap, Box } from "lucide-react";
+import { X, ChevronRight, Shield, Factory, Award, Truck, Users, Zap, Box, Eye, Sparkles, ArrowDown } from "lucide-react";
 import type { DesignSolution } from "@/types/chat";
 import { mockProducts } from "@/data/mockProducts";
 import type { ProductItem } from "@/types/product";
@@ -8,6 +8,9 @@ import sceneMorning from "@/assets/scene-morning.jpg";
 import sceneNight from "@/assets/scene-night.jpg";
 import fabricMacro from "@/assets/fabric-macro.jpg";
 import floorplanImg from "@/assets/floorplan-layout.png";
+import render1 from "@/assets/design-render-1.jpg";
+import render2 from "@/assets/design-render-2.jpg";
+import render3 from "@/assets/design-render-3.jpg";
 
 interface SolutionSheetProps {
   solution: DesignSolution;
@@ -20,18 +23,18 @@ interface SolutionSheetProps {
 }
 
 const TABS = [
-  { key: "immerse", label: "沉浸" },
-  { key: "why", label: "设计" },
-  { key: "items", label: "拼团清单" },
-  { key: "trust", label: "保障" },
+  { key: "immerse", label: "方案感受" },
+  { key: "why", label: "专业设计" },
+  { key: "items", label: "商品清单" },
+  { key: "save", label: "拼团省钱" },
 ];
 
 type SceneMode = "morning" | "night";
 
 const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, onSelectProduct, onOpen3DEditor }: SolutionSheetProps) => {
   const [activeTab, setActiveTab] = useState("immerse");
-  const isFullScreen = true;
   const [sceneMode, setSceneMode] = useState<SceneMode>("morning");
+  const [activeRender, setActiveRender] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
@@ -62,8 +65,11 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
   }, []);
 
   const sceneImages: Record<SceneMode, string> = { morning: sceneMorning, night: sceneNight };
+  const renderImages = [render1, render2, render3];
 
-  const totalPrice = solution.productSelection.items.reduce((s, i) => s + i.price, 0);
+  const totalPrice = mockProducts.reduce((s, p) => s + p.price, 0);
+  const totalBrandPrice = mockProducts.reduce((s, p) => s + p.brandPrice, 0);
+  const totalGroupBuyPrice = mockProducts.reduce((s, p) => s + p.groupBuy.targetPrice, 0);
 
   return (
     <AnimatePresence>
@@ -119,19 +125,18 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
             {/* Scrollable content */}
             <div ref={scrollRef} className="flex-1 overflow-y-auto overscroll-contain scroll-smooth">
 
-              {/* ═══════════════════════════════════════════════════
-                  💥 第一层：情感暴击 — 沉浸式场景 + 专属设计信
-                  ═══════════════════════════════════════════════════ */}
+              {/* ═══════════════════════════════════════════════
+                  ✨ 第一层：沉浸式空间感受 — 这就是你未来的家
+                  ═══════════════════════════════════════════════ */}
               <div ref={ref("immerse")}>
-                {/* Scene hero with 3D entry */}
+                {/* Scene hero - full immersion */}
                 <div className="relative overflow-hidden">
-                  {/* 3D Editor entry button - top right */}
                   <button
                     onClick={onOpen3DEditor}
                     className="absolute top-3 right-3 z-20 flex items-center gap-1.5 px-3 py-2 rounded-lg backdrop-blur-md bg-foreground/70 text-background text-[10px] font-medium border border-foreground/10 hover:bg-foreground/90 transition-all"
                   >
                     <Box className="w-3.5 h-3.5" />
-                    进入 3D 编辑
+                    进入 3D 漫游
                   </button>
 
                   <motion.img
@@ -141,16 +146,15 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                     transition={{ duration: 1.2, ease: "easeOut" }}
                     src={sceneImages[sceneMode]}
                     alt="你未来的家"
-                    className={`w-full object-cover ${isFullScreen ? "h-80" : "h-56"}`}
+                    className="w-full h-80 object-cover"
                   />
-                  {/* Gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
 
                   {/* Scene mode switches */}
-                  <div className="absolute bottom-16 left-5 flex gap-2">
+                  <div className="absolute bottom-20 left-5 flex gap-2">
                     {([
-                      { key: "morning" as SceneMode, icon: "☀️", label: "晨光" },
-                      { key: "night" as SceneMode, icon: "🌙", label: "夜读" },
+                      { key: "morning" as SceneMode, icon: "☀️", label: "晨光模式" },
+                      { key: "night" as SceneMode, icon: "🌙", label: "夜读模式" },
                     ]).map((s) => (
                       <button
                         key={s.key}
@@ -166,204 +170,378 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                       </button>
                     ))}
                   </div>
+
+                  {/* Emotional overlay text */}
+                  <div className="absolute bottom-6 left-5 right-5">
+                    <motion.p
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5 }}
+                      className="text-lg font-medium text-foreground tracking-wide"
+                    >
+                      {sceneMode === "morning" ? "推开窗，阳光洒满客厅" : "关上灯，整个世界安静下来"}
+                    </motion.p>
+                  </div>
                 </div>
 
                 {/* ── 专属设计信 ── */}
-                <div className="px-6 -mt-4 relative z-10">
-                  <div className="mb-8">
+                <div className="px-6 mt-2">
+                  <div className="mb-6">
                     <p className="font-serif text-sm text-muted-foreground italic mb-3 tracking-wide">致 渴望呼吸感的你：</p>
                     <p className="text-sm text-foreground leading-relaxed">
-                      你说<span className="underline decoration-primary/40 underline-offset-4 font-medium">每天下班回家感到疲惫</span>，预算 2 万，想要一个能
-                      <span className="underline decoration-primary/40 underline-offset-4 font-medium">彻底放松</span>的角落。
+                      你说<span className="underline decoration-primary/40 underline-offset-4 font-medium">每天下班回家感到疲惫</span>，
+                      想要一个能<span className="underline decoration-primary/40 underline-offset-4 font-medium">彻底放松</span>的角落。
                     </p>
-                    <p className="text-sm text-foreground leading-relaxed mt-3">
-                      我为你去掉了多余的繁杂，用大面积的燕麦色和低矮重心的设计，在 25㎡ 的物理空间里，为你延展出无限的心理余地。
+                    <p className="text-sm text-foreground leading-relaxed mt-2">
+                      我用大面积的燕麦色和低矮重心的设计，在 25㎡ 里给你留出了无限的心理余地。
                     </p>
-                    <p className="text-xs text-muted-foreground mt-5 tracking-wide">
-                      —— 你的专属 AI 生活设计师
-                    </p>
+                  </div>
+
+                  {/* Multi-angle renders - horizontal scroll */}
+                  <div className="mb-6">
+                    <p className="text-[10px] text-muted-foreground/60 tracking-wider uppercase mb-3">多角度效果图</p>
+                    <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1 snap-x">
+                      {renderImages.map((img, i) => (
+                        <button
+                          key={i}
+                          onClick={() => setActiveRender(i)}
+                          className={`flex-shrink-0 w-[70%] rounded-xl overflow-hidden snap-start transition-all ${
+                            activeRender === i ? "ring-2 ring-primary/30" : "opacity-70"
+                          }`}
+                        >
+                          <img src={img} alt={`效果图 ${i + 1}`} className="w-full h-40 object-cover" />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Life scenarios - emotional connection */}
+                  <div className="mb-6">
+                    <p className="text-[10px] text-muted-foreground/60 tracking-wider uppercase mb-3">想象你的日常</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {solution.lifeScenarios.slice(0, 4).map((scene, i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, y: 8 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: i * 0.08 }}
+                          className="bg-secondary/20 rounded-xl p-3"
+                        >
+                          <p className="text-sm font-medium text-foreground mb-1">{scene.name}</p>
+                          <p className="text-[11px] text-muted-foreground leading-relaxed">{scene.description}</p>
+                        </motion.div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* ═══════════════════════════════════════════════════
-                  🧐 第二层：设计理念 — 动线 + 色彩心理 + 材质叙事
-                  ═══════════════════════════════════════════════════ */}
+              {/* ═══════════════════════════════════════════════
+                  🧐 第二层：专业设计 — 让你看懂为什么这样设计
+                  ═══════════════════════════════════════════════ */}
               <div ref={ref("why")}>
-                <SectionLabel>为什么这是最适合你的方案</SectionLabel>
+                <SectionLabel>专业设计，每一处都有依据</SectionLabel>
 
-                {/* 空间动线 */}
-                <div className="px-6 mb-8">
-                  <h3 className="text-[13px] font-medium text-foreground mb-2">空间动线</h3>
-                  <p className="text-[11px] text-muted-foreground leading-[1.9] font-light mb-4">
-                    抛弃了传统笨重的茶几，采用不规则小岛岩板，<br />
-                    为你每晚的瑜伽垫留出了完美的 2㎡ 专属地带。
-                  </p>
-
-                  {/* Floorplan */}
-                  <div className="rounded-2xl overflow-hidden border border-border/20 mb-4">
-                    <img src={floorplanImg} alt="空间动线图" className="w-full" />
+                {/* Design concept */}
+                <div className="px-6 mb-6">
+                  <div className="bg-primary/[0.03] border border-primary/10 rounded-2xl p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Sparkles className="w-3.5 h-3.5 text-primary" />
+                      <span className="text-xs font-medium text-primary">设计理念</span>
+                    </div>
+                    <p className="text-sm text-foreground leading-relaxed">
+                      "Less is More" — 不追求填满空间，而是追求空间的呼吸感。通过精心的留白、合理的比例，营造一个真正用来生活的家。
+                    </p>
                   </div>
+                </div>
 
-                  {/* Circulation cards */}
+                {/* 空间布局 - visual with floorplan */}
+                <div className="px-6 mb-8">
+                  <h3 className="text-sm font-medium text-foreground mb-1">空间布局</h3>
+                  <p className="text-[11px] text-muted-foreground mb-4">黄金比例分区：沙发区 60% + 视听区 30% + 动线 10%</p>
+
+                  {/* Floorplan with interactive overlay */}
+                  <div className="relative rounded-2xl overflow-hidden border border-border/20 mb-4">
+                    <img src={floorplanImg} alt="空间布局图" className="w-full" />
+                    {/* Hotspot annotations */}
+                    {solution.annotations.map((anno, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ scale: 0 }}
+                        whileInView={{ scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.3 + i * 0.15, type: "spring" }}
+                        className="absolute group"
+                        style={{ left: `${anno.position.x}%`, top: `${anno.position.y}%` }}
+                      >
+                        <div className="relative">
+                          <div className="w-5 h-5 rounded-full bg-primary/80 flex items-center justify-center animate-pulse">
+                            <div className="w-2 h-2 rounded-full bg-background" />
+                          </div>
+                          <div className="absolute left-6 top-1/2 -translate-y-1/2 bg-foreground/90 text-background px-2.5 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                            <p className="text-[10px] font-medium">{anno.label}</p>
+                            <p className="text-[9px] opacity-80">{anno.description}</p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 动线设计 */}
+                <div className="px-6 mb-8">
+                  <h3 className="text-sm font-medium text-foreground mb-1">动线设计</h3>
+                  <p className="text-[11px] text-muted-foreground mb-3">三条动线，让你在家里的每一步都是顺的</p>
                   <div className="space-y-2">
                     {[
-                      { path: "入户 → 沙发 → 阳台", width: "1.2m", note: "一路畅通，推婴儿车也没问题" },
-                      { path: "沙发 → 厨房", width: "0.8m", note: "拿杯水不用绕路" },
-                      { path: "沙发 → 电视", width: "2.8m", note: "55寸的最佳观影距离" },
+                      { path: "入户 → 沙发 → 阳台", width: "1.2m", note: "主动线，推婴儿车也没问题", emoji: "🚶" },
+                      { path: "沙发 → 厨房", width: "0.8m", note: "拿杯水不用绕路", emoji: "☕" },
+                      { path: "沙发 → 电视", width: "2.8m", note: "55寸最佳观影距离", emoji: "📺" },
                     ].map((c, i) => (
-                      <div key={i} className="flex items-center gap-3 py-3 px-4 bg-secondary/20 rounded-xl">
-                        <span className="font-mono text-[13px] font-light text-foreground w-12 flex-shrink-0">{c.width}</span>
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -12 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.1 }}
+                        className="flex items-center gap-3 py-3 px-4 bg-secondary/20 rounded-xl"
+                      >
+                        <span className="text-lg">{c.emoji}</span>
                         <div className="flex-1 min-w-0">
-                          <span className="text-[11px] font-medium text-foreground block">{c.path}</span>
-                          <span className="text-[9px] text-muted-foreground/70 font-light">{c.note}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[12px] font-medium text-foreground">{c.path}</span>
+                            <span className="font-mono text-[11px] text-primary font-medium">{c.width}</span>
+                          </div>
+                          <span className="text-[10px] text-muted-foreground/70">{c.note}</span>
                         </div>
-                      </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 三层照明 */}
+                <div className="px-6 mb-8">
+                  <h3 className="text-sm font-medium text-foreground mb-1">三层照明系统</h3>
+                  <p className="text-[11px] text-muted-foreground mb-3">不是炫技，是让你一键切换到最放松的状态</p>
+                  <div className="flex gap-2">
+                    {[
+                      { layer: "基础照明", temp: "4000K", desc: "自然光，看书不累", color: "hsl(var(--primary))" },
+                      { layer: "氛围照明", temp: "3000K", desc: "暖光，下班后放松", color: "hsl(36 80% 60%)" },
+                      { layer: "重点照明", temp: "可调", desc: "突出装饰，提升质感", color: "hsl(30 20% 70%)" },
+                    ].map((l, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, y: 12 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.1 }}
+                        className="flex-1 rounded-xl p-3 border border-border/20"
+                        style={{ background: `linear-gradient(180deg, ${l.color}08 0%, transparent 100%)` }}
+                      >
+                        <div className="w-6 h-6 rounded-full mb-2 mx-auto" style={{ background: l.color, boxShadow: `0 0 12px ${l.color}60` }} />
+                        <p className="text-[10px] font-medium text-foreground text-center">{l.layer}</p>
+                        <p className="text-[9px] text-muted-foreground text-center mt-0.5">{l.temp}</p>
+                        <p className="text-[9px] text-muted-foreground/70 text-center">{l.desc}</p>
+                      </motion.div>
                     ))}
                   </div>
                 </div>
 
                 {/* 色彩心理学 */}
                 <div className="px-6 mb-8">
-                  <h3 className="text-sm font-medium text-foreground mb-2">治愈系色彩</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">
-                    配色不只是为了好看，<br />而是让你下班后的心理压力一点点卸掉。
-                  </p>
-
-                  {/* Moodboard color bar */}
-                  <div className="flex h-14 rounded-2xl overflow-hidden mb-3">
+                  <h3 className="text-sm font-medium text-foreground mb-1">治愈系色彩</h3>
+                  <p className="text-[11px] text-muted-foreground mb-3">让你下班后的心理压力一点点卸掉</p>
+                  <div className="flex h-16 rounded-2xl overflow-hidden mb-2">
                     <div className="flex-[4] relative" style={{ backgroundColor: "hsl(36 28% 78%)" }}>
-                      <span className="absolute bottom-2 left-3 text-[9px] font-light" style={{ color: "hsl(36 28% 40%)" }}>燕麦色 · 平静温和</span>
+                      <span className="absolute bottom-2 left-3 text-[9px] font-light" style={{ color: "hsl(36 28% 40%)" }}>燕麦色 · 40%</span>
                     </div>
                     <div className="flex-[4] relative" style={{ backgroundColor: "hsl(30 20% 88%)" }}>
-                      <span className="absolute bottom-2 left-3 text-[9px] font-light" style={{ color: "hsl(30 20% 50%)" }}>奶白 · 透气舒展</span>
+                      <span className="absolute bottom-2 left-3 text-[9px] font-light" style={{ color: "hsl(30 20% 50%)" }}>奶白色 · 40%</span>
                     </div>
-                    <div className="flex-[2] relative" style={{ backgroundColor: "hsl(25 40% 42%)" }}>
-                      <span className="absolute bottom-2 left-2 text-[9px] font-light text-background/80">胡桃木 · 温度</span>
+                    <div className="flex-[2] relative" style={{ backgroundColor: "hsl(150 30% 35%)" }}>
+                      <span className="absolute bottom-2 left-2 text-[9px] font-light text-background/80">绿植 · 20%</span>
                     </div>
                   </div>
                 </div>
 
-                {/* 微观材质叙事 */}
+                {/* 材质微距 */}
                 <div className="px-6 mb-8">
-                  <h3 className="text-sm font-medium text-foreground mb-2">肉眼可见的质感</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                    不只是写"科技布"三个字——<br />看看水滴在面料上滚落，不留一点痕迹。
-                  </p>
-
-                  {/* Fabric macro hero */}
-                  <div className="rounded-2xl overflow-hidden mb-3">
-                    <img src={fabricMacro} alt="科技布微距特写" className="w-full h-48 object-cover" />
+                  <h3 className="text-sm font-medium text-foreground mb-1">肉眼可见的质感</h3>
+                  <p className="text-[11px] text-muted-foreground mb-3">不只是"科技布"三个字 —— 看看水滴在面料上滚落</p>
+                  <div className="rounded-2xl overflow-hidden">
+                    <img src={fabricMacro} alt="科技布微距特写" className="w-full h-44 object-cover" />
                   </div>
-                  <p className="text-xs text-muted-foreground text-center">
+                  <p className="text-[10px] text-muted-foreground text-center mt-2">
                     纳米级防抓防污科技布 · 水滴滚落不留痕 · 养猫家庭的救星
                   </p>
                 </div>
               </div>
 
-              {/* ═══════════════════════════════════════════════════
-                  🛋️ 第三层：方案清单与拼团详情（双引擎模式）
-                  ═══════════════════════════════════════════════════ */}
+              {/* ═══════════════════════════════════════════════
+                  🛋️ 第三层：商品清单 — 买的明明白白
+                  ═══════════════════════════════════════════════ */}
               <div ref={ref("items")}>
-                <SectionLabel>方案清单与拼团详情</SectionLabel>
+                <SectionLabel>每一件都帮你挑明白了</SectionLabel>
 
-                <div className="px-6 space-y-4">
-                  {mockProducts.map((product, i) => (
-                    <GroupBuyProductCard key={product.id} product={product} index={i} onSelect={onSelectProduct} />
-                  ))}
+                {/* Price transparency summary */}
+                <div className="px-6 mb-5">
+                  <div className="bg-accent/[0.04] border border-accent/15 rounded-2xl p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Eye className="w-3.5 h-3.5 text-accent" />
+                      <span className="text-xs font-medium text-accent">价格全透明</span>
+                    </div>
+                    <div className="flex items-baseline gap-3">
+                      <span className="text-xs text-muted-foreground line-through">品牌总价 ¥{totalBrandPrice.toLocaleString()}</span>
+                      <ArrowDown className="w-3 h-3 text-accent" />
+                      <span className="font-mono text-lg font-medium text-foreground">¥{totalPrice.toLocaleString()}</span>
+                    </div>
+                    <p className="text-[11px] text-accent mt-1">
+                      去掉品牌溢价，直接对接同源工厂，已帮你省 ¥{(totalBrandPrice - totalPrice).toLocaleString()}
+                    </p>
+                  </div>
                 </div>
 
-                {/* Total + group buy summary */}
-                <div className="px-6 mt-6 mb-4">
-                  <div className="bg-secondary/20 rounded-2xl p-5">
-                    <div className="flex items-baseline justify-between mb-2">
-                      <span className="text-xs text-muted-foreground">全套直供总价</span>
-                      <span className="font-mono text-2xl text-foreground">
-                        ¥{mockProducts.reduce((s, p) => s + p.price, 0).toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="pt-3 border-t border-border/20">
-                      <p className="text-xs text-accent leading-relaxed">
-                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-primary mr-1.5 animate-pulse" />
-                        预计拼团后可再省 ¥{mockProducts.reduce((s, p) => s + (p.price - p.groupBuy.targetPrice), 0).toLocaleString()}
-                      </p>
-                    </div>
-                  </div>
+                {/* Product cards with anchor images */}
+                <div className="px-6 space-y-3">
+                  {mockProducts.map((product, i) => (
+                    <ProductAnchorCard key={product.id} product={product} index={i} onSelect={onSelectProduct} />
+                  ))}
                 </div>
               </div>
 
-              {/* ═══════════════════════════════════════════════════
-                  🛡️ 第四层：信任保障 + 行动
-                  ═══════════════════════════════════════════════════ */}
-              <div ref={ref("trust")} className="px-6 pb-8">
-                <SectionLabel>让你安心的生活保障</SectionLabel>
+              {/* ═══════════════════════════════════════════════
+                  ⚡ 第四层：拼团再省 — 最后的跷板
+                  ═══════════════════════════════════════════════ */}
+              <div ref={ref("save")} className="mt-2">
+                <SectionLabel>拼团再省一笔，最后的底价</SectionLabel>
 
-                <p className="text-sm text-muted-foreground leading-relaxed mb-5">
-                  我们不造家具，<br />我们只是世界级工厂与你之间的桥梁。
-                </p>
+                <div className="px-6 mb-6">
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                    同样的品质，一群人买就是比一个人买便宜。<br />
+                    <span className="text-foreground font-medium">先占位锁价，成团后再决定。</span>
+                  </p>
 
-                <div className="space-y-3 mb-8">
-                  {[
-                    { icon: Factory, text: "100% 头部品牌同源大厂发货" },
-                    { icon: Shield, text: "材质弄虚作假，平台全额免单" },
-                    { icon: Truck, text: "送装一体，拆包摆放，带走垃圾" },
-                    { icon: Award, text: "365天只换不修，三年质保" },
-                  ].map((g, i) => (
-                    <div key={i} className="flex items-center gap-3 py-3 px-4 bg-secondary/15 rounded-xl">
-                      <g.icon className="w-4 h-4 text-muted-foreground/50 flex-shrink-0" />
-                      <span className="text-sm text-foreground">{g.text}</span>
+                  {/* Group buy savings visualization */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="bg-primary/[0.03] border border-primary/15 rounded-2xl p-5 mb-4"
+                  >
+                    <div className="text-center mb-4">
+                      <p className="text-[10px] text-muted-foreground/60 uppercase tracking-wider mb-1">拼团后全套底价</p>
+                      <div className="flex items-center justify-center gap-3">
+                        <span className="text-sm text-muted-foreground line-through">¥{totalPrice.toLocaleString()}</span>
+                        <motion.span
+                          initial={{ scale: 0.8, opacity: 0 }}
+                          whileInView={{ scale: 1, opacity: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: 0.3, type: "spring" }}
+                          className="font-mono text-3xl font-bold text-primary"
+                        >
+                          ¥{totalGroupBuyPrice.toLocaleString()}
+                        </motion.span>
+                      </div>
+                      <p className="text-xs text-primary mt-1 font-medium">
+                        再省 ¥{(totalPrice - totalGroupBuyPrice).toLocaleString()}
+                      </p>
                     </div>
-                  ))}
+
+                    {/* Per-item group buy status */}
+                    <div className="space-y-2.5">
+                      {mockProducts.map((product) => {
+                        const progress = (product.groupBuy.current / product.groupBuy.target) * 100;
+                        const isCustom = product.groupBuy.type === "custom";
+                        return (
+                          <div key={product.id} className="bg-background/60 rounded-xl p-3">
+                            <div className="flex items-center justify-between mb-1.5">
+                              <span className="text-[11px] font-medium text-foreground">{product.name}</span>
+                              <div className="flex items-center gap-1">
+                                {isCustom ? <Zap className="w-3 h-3 text-primary" /> : <Users className="w-3 h-3 text-primary" />}
+                                <span className="text-[10px] text-primary">
+                                  {product.groupBuy.current}/{product.groupBuy.target}{isCustom ? "㎡" : "人"}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="relative h-1 bg-secondary rounded-full overflow-hidden">
+                              <motion.div
+                                initial={{ width: 0 }}
+                                whileInView={{ width: `${progress}%` }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8, ease: "easeOut" }}
+                                className="absolute inset-y-0 left-0 bg-primary rounded-full"
+                              />
+                            </div>
+                            <div className="flex items-center justify-between mt-1">
+                              <span className="text-[9px] text-muted-foreground">{product.groupBuy.estimatedTime}</span>
+                              <span className="text-[10px] text-accent font-medium">
+                                底价 ¥{product.groupBuy.targetPrice.toLocaleString()}{isCustom ? `/${product.unit}` : ""}
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                </div>
+
+                {/* Trust guarantees */}
+                <div className="px-6 mb-6">
+                  <p className="text-[10px] text-muted-foreground/60 uppercase tracking-wider mb-3">安心保障</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { icon: Factory, text: "头部品牌同源大厂" },
+                      { icon: Shield, text: "弄虚作假，全额免单" },
+                      { icon: Truck, text: "送装一体，带走垃圾" },
+                      { icon: Award, text: "365天只换不修" },
+                    ].map((g, i) => (
+                      <div key={i} className="flex items-center gap-2 py-2.5 px-3 bg-secondary/10 rounded-xl">
+                        <g.icon className="w-3.5 h-3.5 text-muted-foreground/40 flex-shrink-0" />
+                        <span className="text-[11px] text-foreground">{g.text}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Budget flexibility */}
-                <div className="space-y-3 mb-8">
-                  <div className="p-4 border border-accent/15 rounded-2xl">
-                     <span className="text-xs font-medium text-accent block mb-2">预算紧一点？</span>
-                    {solution.costOptimization.canSave.map((s, i) => (
-                      <div key={i} className="mb-2 last:mb-0">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-foreground">{s.item}</span>
-                          <span className="font-mono text-sm text-accent">-¥{s.savings.toLocaleString()}</span>
+                <div className="px-6 mb-6">
+                  <div className="flex gap-2">
+                    <div className="flex-1 p-3 border border-accent/15 rounded-xl">
+                      <span className="text-[10px] font-medium text-accent block mb-1">预算紧一点？</span>
+                      {solution.costOptimization.canSave.slice(0, 1).map((s, i) => (
+                        <div key={i}>
+                          <span className="text-[11px] text-foreground">{s.item}</span>
+                          <span className="font-mono text-[11px] text-accent ml-1">-¥{s.savings.toLocaleString()}</span>
                         </div>
-                        <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{s.tradeoff}</p>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="p-4 border border-primary/15 rounded-2xl">
-                    <span className="text-xs font-medium text-primary block mb-2">想再好一点？</span>
-                    {solution.costOptimization.canUpgrade.map((u, i) => (
-                      <div key={i} className="mb-2 last:mb-0">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-foreground">{u.item}</span>
-                          <span className="font-mono text-sm text-primary">+¥{u.cost.toLocaleString()}</span>
+                      ))}
+                    </div>
+                    <div className="flex-1 p-3 border border-primary/15 rounded-xl">
+                      <span className="text-[10px] font-medium text-primary block mb-1">想再好一点？</span>
+                      {solution.costOptimization.canUpgrade.slice(0, 1).map((u, i) => (
+                        <div key={i}>
+                          <span className="text-[11px] text-foreground">{u.item}</span>
+                          <span className="font-mono text-[11px] text-primary ml-1">+¥{u.cost.toLocaleString()}</span>
                         </div>
-                        <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{u.benefit}</p>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
-
-                {/* Real talk */}
-                <div className="bg-secondary/10 rounded-xl p-3.5 mb-8">
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    💡 {solution.costOptimization.recommendation}
-                  </p>
                 </div>
 
                 {/* CTA */}
-                <div className="flex gap-3">
-                  <button onClick={onClose} className="flex-1 py-3.5 bg-foreground text-background text-sm font-medium rounded-xl tracking-wide">
-                    ⚡ 一键拿下这套生活
-                  </button>
-                  <button onClick={() => { onModify(); }} className="flex-[0.6] py-3.5 border border-border text-foreground text-sm rounded-xl tracking-wide">
-                    💬 微调一下
-                  </button>
+                <div className="px-6 pb-8">
+                  <div className="flex gap-3">
+                    <button onClick={onClose} className="flex-1 py-3.5 bg-foreground text-background text-sm font-medium rounded-xl tracking-wide">
+                      ⚡ 一键锁定这套方案
+                    </button>
+                    <button onClick={() => { onModify(); }} className="flex-[0.5] py-3.5 border border-border text-foreground text-sm rounded-xl tracking-wide">
+                      💬 微调
+                    </button>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground text-center mt-2">
+                    先占位锁价 · 0 成本 · 成团后再决定
+                  </p>
                 </div>
-                <p className="text-xs text-muted-foreground text-center mt-2.5">
-                  全套 ¥{totalPrice.toLocaleString()} · 预计拼团后可再省 ¥1,300
-                </p>
               </div>
             </div>
           </motion.div>
@@ -386,9 +564,10 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
   </div>
 );
 
-const GroupBuyProductCard = ({ product, index, onSelect }: { product: ProductItem; index: number; onSelect: (product: ProductItem) => void }) => {
-  const isCustom = product.groupBuy.type === "custom";
-  const progress = (product.groupBuy.current / product.groupBuy.target) * 100;
+/** 商品锚点卡片 — 带产品图，点击进入详情 */
+const ProductAnchorCard = ({ product, index, onSelect }: { product: ProductItem; index: number; onSelect: (product: ProductItem) => void }) => {
+  const heroImg = product.heroImage || product.textureImage;
+  const savingPct = Math.round(((product.brandPrice - product.price) / product.brandPrice) * 100);
 
   return (
     <motion.div
@@ -396,91 +575,56 @@ const GroupBuyProductCard = ({ product, index, onSelect }: { product: ProductIte
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.4, delay: index * 0.06 }}
-      className="bg-secondary/10 rounded-2xl overflow-hidden"
+      onClick={() => onSelect(product)}
+      className="bg-secondary/10 rounded-2xl overflow-hidden active:scale-[0.98] transition-transform cursor-pointer"
     >
-      {/* Header + type badge */}
-      <div className="p-4 pb-3">
-        <div className="flex items-center justify-between mb-1.5">
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">{product.category}</span>
-            <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
-              isCustom
-                ? "bg-primary/10 text-primary"
-                : "bg-accent/10 text-accent"
-            }`}>
-              {isCustom ? "定制·生产拼团" : "成品·优惠拼团"}
+      <div className="flex">
+        {/* Product anchor image */}
+        {heroImg && (
+          <div className="w-28 h-28 flex-shrink-0">
+            <img src={heroImg} alt={product.name} className="w-full h-full object-cover" />
+          </div>
+        )}
+
+        {/* Info */}
+        <div className="flex-1 p-3 min-w-0 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center gap-1.5 mb-1">
+              <span className="text-[10px] text-muted-foreground">{product.category}</span>
+            </div>
+            <h3 className="text-[13px] font-medium text-foreground leading-snug">{product.name}</h3>
+            <p className="text-[10px] text-muted-foreground mt-0.5 line-clamp-1">{product.why.slice(0, 30)}...</p>
+          </div>
+
+          <div className="flex items-center justify-between mt-2">
+            <div className="flex items-baseline gap-1.5">
+              <span className="font-mono text-sm font-medium text-foreground">
+                ¥{product.price.toLocaleString()}
+              </span>
+              <span className="text-[10px] text-muted-foreground line-through">
+                ¥{product.brandPrice.toLocaleString()}
+              </span>
+            </div>
+            <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-accent/10 text-accent font-medium">
+              省{savingPct}%
             </span>
           </div>
         </div>
-        <h3 className="text-sm font-medium text-foreground">{product.name}</h3>
-        <p className="text-sm text-muted-foreground leading-relaxed mt-1 line-clamp-2">{product.why}</p>
-      </div>
 
-      {/* Factory hint */}
-      <div className="px-4 pb-3">
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <Factory className="w-3 h-3" />
-          <span>{product.factory.location} · {product.factory.name}</span>
+        {/* Arrow indicator */}
+        <div className="flex items-center pr-3">
+          <ChevronRight className="w-4 h-4 text-muted-foreground/30" />
         </div>
       </div>
 
-      {/* Price row */}
-      <div className="px-4 pb-3 flex items-baseline justify-between">
-        <div className="flex items-baseline gap-2">
-          <span className="font-mono text-base font-medium text-foreground">
-            ¥{product.groupBuy.currentPrice.toLocaleString()}{isCustom ? `/${product.unit}` : ""}
-          </span>
-          <span className="text-xs text-muted-foreground line-through">
-            ¥{product.brandPrice.toLocaleString()}
-          </span>
-        </div>
-        <span className="text-xs text-accent">省 ¥{(product.brandPrice - product.price).toLocaleString()}</span>
+      {/* Factory origin - subtle */}
+      <div className="px-3 pb-2.5 flex items-center gap-1.5">
+        <Factory className="w-2.5 h-2.5 text-muted-foreground/40" />
+        <span className="text-[9px] text-muted-foreground/60">{product.factory.location} · {product.factory.name}</span>
+        <span className="text-[9px] text-muted-foreground/40 ml-auto">
+          {product.groupBuy.current}/{product.groupBuy.target}{product.groupBuy.type === "custom" ? "㎡ 拼团中" : "人 拼团中"}
+        </span>
       </div>
-
-      {/* Group buy progress */}
-      <div className="px-4 pb-3">
-        <div className="bg-primary/[0.04] border border-primary/10 rounded-xl p-3">
-          <div className="flex items-center gap-1.5 mb-2">
-            {isCustom ? <Zap className="w-3 h-3 text-primary" /> : <Users className="w-3 h-3 text-primary" />}
-            <span className="text-xs font-medium text-foreground">
-              {isCustom ? "柔性生产拼板" : "阶梯拼团进行中"}
-            </span>
-          </div>
-
-          {/* Progress bar */}
-          <div className="relative h-1.5 bg-secondary rounded-full mb-2 overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: `${progress}%` }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="absolute inset-y-0 left-0 bg-primary rounded-full"
-            />
-          </div>
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-muted-foreground">
-              {product.groupBuy.current}/{product.groupBuy.target}{isCustom ? "㎡" : "人"}
-            </span>
-            <span className="text-primary">
-              满{product.groupBuy.target}{isCustom ? "㎡" : "人"}底价 ¥{product.groupBuy.targetPrice.toLocaleString()}{isCustom ? `/${product.unit}` : ""}
-            </span>
-          </div>
-          {isCustom && product.groupBuy.explanation && (
-            <p className="text-xs text-muted-foreground leading-relaxed mt-2 pt-2 border-t border-border/10">
-              💡 {product.groupBuy.explanation}
-            </p>
-          )}
-        </div>
-      </div>
-
-      {/* CTA: go to detail */}
-      <button
-        onClick={() => onSelect(product)}
-        className="w-full px-4 py-3 border-t border-border/10 flex items-center justify-between hover:bg-secondary/20 transition-colors"
-      >
-        <span className="text-xs text-primary">查看详情与拼团</span>
-        <ChevronRight className="w-3.5 h-3.5 text-primary" />
-      </button>
     </motion.div>
   );
 };
