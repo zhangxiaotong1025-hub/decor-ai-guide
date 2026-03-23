@@ -183,6 +183,13 @@ const DiscoverOverlay = ({ isOpen, onClose, onStartChat, onFillPrompt }: Discove
             bottomInset={0}
             onClose={() => setStorySheetOpen(false)}
             onStartChat={handleStartChat}
+            onFillPrompt={(prompt) => {
+              setStorySheetOpen(false);
+              setTimeout(() => {
+                onClose();
+                onFillPrompt?.(prompt);
+              }, 200);
+            }}
           />
         </motion.div>
       )}
