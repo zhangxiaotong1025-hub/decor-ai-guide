@@ -136,14 +136,21 @@ export const mockSceneStories: SceneStory[] = [
     painPoint: "婚房想要高级感，品牌店一套客厅 15 万，两个人月供已经很紧",
     highlights: ["进口丝绒质感沙发，触感媲美大牌", "法式弧形餐桌，仪式感满分", "水晶吊灯 + 壁灯组合，ins 风氛围拉满"],
     products: [
-      { name: "法式弧形沙发", category: "沙发", ourPrice: 12800, brandPrice: 35000 },
-      { name: "大理石餐桌", category: "餐桌", ourPrice: 5600, brandPrice: 18000 },
+      { name: "法式弧形沙发", category: "沙发", ourPrice: 12800, brandPrice: 35000, image: frenchDetail1 },
+      { name: "大理石餐桌", category: "餐桌", ourPrice: 5600, brandPrice: 18000, image: frenchDetail2 },
       { name: "水晶吊灯组合", category: "灯具", ourPrice: 4800, brandPrice: 15000 },
       { name: "丝绒窗帘套装", category: "软装", ourPrice: 3200, brandPrice: 8000 },
     ],
     chatPrompt: "刚结婚想布置婚房，客厅加餐厅35平，想要那种朋友来了会夸好看的感觉，两个人攒了4万预算",
     socialProof: "632 对新人选了这套方案",
     category: "living",
+    detailImages: [
+      { src: frenchDetail1, caption: "进口丝绒触感，媲美大牌品质" },
+      { src: frenchDetail2, caption: "法式弧形餐桌，每餐都是仪式感" },
+    ],
+    lifeScenes: [
+      { src: frenchLife1, time: "周末早晨", caption: "在大理石餐桌前，两个人的早餐时光" },
+    ],
   },
   {
     id: "story-japanese",
