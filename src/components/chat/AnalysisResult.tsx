@@ -20,139 +20,140 @@ interface AnalysisResultProps {
 const AnalysisResult = ({ collapsed = false }: AnalysisResultProps) => {
   const [expanded, setExpanded] = useState(false);
 
-  if (collapsed && !expanded) {
-    return (
-      <motion.div
-        layout="position"
-        onClick={() => setExpanded(true)}
-        className="bg-card shadow-layered rounded-outer px-4 py-3 mb-3 cursor-pointer active:scale-[0.98] transition-transform"
-      >
-        <div className="flex items-center gap-2 mb-2">
-          <span className="text-accent text-sm">✨</span>
-          <span className="text-[11px] font-medium text-foreground">需求理解</span>
-          <span className="text-[10px] text-muted-foreground/50 ml-auto">点击展开 ›</span>
-        </div>
-        {/* Key info summary */}
-        <div className="flex items-center gap-3 text-[11px]">
-          <span className="text-muted-foreground">
-            {RESULT.space.type} {RESULT.space.area} · {RESULT.style.primary}
-          </span>
-          <span className="font-mono-data font-semibold text-primary">{RESULT.budget.range}</span>
-          <div className="flex gap-1 ml-auto">
-            {RESULT.style.colors.map((c) => (
-              <div key={c} className="w-3.5 h-3.5 rounded-full border border-border" style={{ backgroundColor: c }} />
-            ))}
-          </div>
-        </div>
-      </motion.div>
-    );
-  }
+  const isCollapsed = collapsed && !expanded;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="bg-card shadow-layered rounded-outer overflow-hidden"
-    >
-      <div className="px-4 py-2.5 border-b border-border">
-        <div className="flex items-center gap-2">
-          <span className="text-accent text-sm">✨</span>
-          <span className="text-xs font-semibold">我理解您的需求是：</span>
+    <div className="bg-card shadow-layered rounded-outer overflow-hidden transition-all duration-500 ease-in-out">
+      {/* Header - always visible, tappable when collapsed */}
+      <div
+        className={`px-4 py-2.5 border-b border-border flex items-center gap-2 ${isCollapsed ? "cursor-pointer" : ""}`}
+        onClick={isCollapsed ? () => setExpanded(true) : undefined}
+      >
+        <span className="text-accent text-sm">✨</span>
+        <span className="text-xs font-semibold">我理解您的需求是：</span>
+        {/* Summary info when collapsed */}
+        {isCollapsed && (
+          <span className="text-[10px] text-muted-foreground truncate">
+            {RESULT.space.type} {RESULT.space.area} · {RESULT.style.primary} · {RESULT.budget.range}
+          </span>
+        )}
+        <div className="ml-auto flex items-center gap-1.5 flex-shrink-0">
+          {isCollapsed && (
+            <>
+              <div className="flex gap-1">
+                {RESULT.style.colors.map((c) => (
+                  <div key={c} className="w-3 h-3 rounded-full border border-border" style={{ backgroundColor: c }} />
+                ))}
+              </div>
+              <span className="text-[10px] text-muted-foreground/50">展开 ›</span>
+            </>
+          )}
           {collapsed && expanded && (
-            <button onClick={() => setExpanded(false)} className="ml-auto text-[10px] text-muted-foreground">
+            <button
+              onClick={(e) => { e.stopPropagation(); setExpanded(false); }}
+              className="text-[10px] text-muted-foreground"
+            >
               收起 ‹
             </button>
           )}
         </div>
       </div>
 
-      <div className="p-4 space-y-3">
-        <InfoRow icon="🏠" label="SPACE">
-          <span className="text-xs">
-            {RESULT.space.type} · {RESULT.space.area} · {RESULT.space.shape}
-          </span>
-          <div className="flex gap-1 mt-1">
-            {RESULT.space.features.map((f) => (
-              <Tag key={f}>{f}</Tag>
-            ))}
-          </div>
-        </InfoRow>
+      {/* Collapsible body */}
+      <div
+        className="transition-[max-height,opacity] duration-500 ease-in-out overflow-hidden"
+        style={{
+          maxHeight: isCollapsed ? "0px" : "500px",
+          opacity: isCollapsed ? 0 : 1,
+        }}
+      >
+        <div className="p-4 space-y-3">
+          <InfoRow icon="🏠" label="SPACE">
+            <span className="text-xs">
+              {RESULT.space.type} · {RESULT.space.area} · {RESULT.space.shape}
+            </span>
+            <div className="flex gap-1 mt-1">
+              {RESULT.space.features.map((f) => (
+                <Tag key={f}>{f}</Tag>
+              ))}
+            </div>
+          </InfoRow>
 
-        <InfoRow icon="🎨" label="STYLE">
-          <span className="text-xs">
-            {RESULT.style.primary} · {RESULT.style.mood}
-          </span>
-          <div className="flex gap-1.5 mt-1.5">
-            {RESULT.style.colors.map((c) => (
-              <div
-                key={c}
-                className="w-5 h-5 rounded-button shadow-layered"
-                style={{ backgroundColor: c }}
-              />
-            ))}
-          </div>
-        </InfoRow>
+          <InfoRow icon="🎨" label="STYLE">
+            <span className="text-xs">
+              {RESULT.style.primary} · {RESULT.style.mood}
+            </span>
+            <div className="flex gap-1.5 mt-1.5">
+              {RESULT.style.colors.map((c) => (
+                <div
+                  key={c}
+                  className="w-5 h-5 rounded-button shadow-layered"
+                  style={{ backgroundColor: c }}
+                />
+              ))}
+            </div>
+          </InfoRow>
 
-        <InfoRow icon="💰" label="BUDGET">
-          <span className="font-mono-data text-sm font-semibold">{RESULT.budget.range}</span>
-          <span className="text-[10px] text-muted-foreground ml-2">{RESULT.budget.flexibility}</span>
-        </InfoRow>
+          <InfoRow icon="💰" label="BUDGET">
+            <span className="font-mono-data text-sm font-semibold">{RESULT.budget.range}</span>
+            <span className="text-[10px] text-muted-foreground ml-2">{RESULT.budget.flexibility}</span>
+          </InfoRow>
 
-        <InfoRow icon="🎯" label="PRIORITY">
-          <div className="space-y-1.5 w-full">
-            {RESULT.priority.map((p) => (
-              <div key={p.label} className="flex items-center gap-2">
-                <span className="text-[11px] w-12 flex-shrink-0">{p.label}</span>
-                <div className="flex-1 h-1 bg-secondary rounded-full overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${p.value}%` }}
-                    transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-                    className="h-full bg-primary rounded-full"
-                  />
+          <InfoRow icon="🎯" label="PRIORITY">
+            <div className="space-y-1.5 w-full">
+              {RESULT.priority.map((p) => (
+                <div key={p.label} className="flex items-center gap-2">
+                  <span className="text-[11px] w-12 flex-shrink-0">{p.label}</span>
+                  <div className="flex-1 h-1 bg-secondary rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${p.value}%` }}
+                      transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+                      className="h-full bg-primary rounded-full"
+                    />
+                  </div>
+                  <span className="font-mono-data text-[10px] text-muted-foreground w-7 text-right">
+                    {p.value}
+                  </span>
                 </div>
-                <span className="font-mono-data text-[10px] text-muted-foreground w-7 text-right">
-                  {p.value}
-                </span>
-              </div>
-            ))}
-          </div>
-        </InfoRow>
+              ))}
+            </div>
+          </InfoRow>
 
-        <InfoRow icon="🛋️" label="LIFE">
-          <span className="text-xs">{RESULT.lifestyle}</span>
-        </InfoRow>
-      </div>
-
-      <div className="px-4 pb-3">
-        <div className="flex items-center gap-2">
-          <span className="text-[10px] text-muted-foreground">置信度</span>
-          <div className="flex-1 h-1 bg-secondary rounded-full overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: "92%" }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="h-full bg-accent rounded-full"
-            />
-          </div>
-          <span className="font-mono-data text-[10px] font-semibold text-accent">92%</span>
+          <InfoRow icon="🛋️" label="LIFE">
+            <span className="text-xs">{RESULT.lifestyle}</span>
+          </InfoRow>
         </div>
-      </div>
 
-      {!collapsed && (
         <div className="px-4 pb-3">
-          <div className="flex items-center gap-1.5">
-            <motion.div
-              animate={{ opacity: [0.3, 1, 0.3] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="w-1.5 h-1.5 rounded-full bg-primary"
-            />
-            <span className="text-[10px] text-muted-foreground">正在根据分析结果生成设计方案...</span>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-muted-foreground">置信度</span>
+            <div className="flex-1 h-1 bg-secondary rounded-full overflow-hidden">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: "92%" }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                className="h-full bg-accent rounded-full"
+              />
+            </div>
+            <span className="font-mono-data text-[10px] font-semibold text-accent">92%</span>
           </div>
         </div>
-      )}
-    </motion.div>
+
+        {!collapsed && (
+          <div className="px-4 pb-3">
+            <div className="flex items-center gap-1.5">
+              <motion.div
+                animate={{ opacity: [0.3, 1, 0.3] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="w-1.5 h-1.5 rounded-full bg-primary"
+              />
+              <span className="text-[10px] text-muted-foreground">正在根据分析结果生成设计方案...</span>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
