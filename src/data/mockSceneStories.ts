@@ -101,15 +101,24 @@ export const mockSceneStories: SceneStory[] = [
     painPoint: "品牌店一套客厅要 8 万多，月薪 8K 根本不敢想",
     highlights: ["纳米防猫抓科技布沙发，猫随便挠", "不规则茶几留出瑜伽空间", "三层照明，下班一键切换放松模式"],
     products: [
-      { name: "悬浮云朵沙发", category: "沙发", ourPrice: 8999, brandPrice: 15000 },
+      { name: "悬浮云朵沙发", category: "沙发", ourPrice: 8999, brandPrice: 15000, image: nordicDetail1 },
       { name: "岩板不规则茶几", category: "茶几", ourPrice: 1680, brandPrice: 4200 },
       { name: "悬浮电视柜", category: "电视柜", ourPrice: 2560, brandPrice: 6000 },
-      { name: "三层照明套装", category: "灯具", ourPrice: 2300, brandPrice: 5500 },
+      { name: "三层照明套装", category: "灯具", ourPrice: 2300, brandPrice: 5500, image: nordicDetail2 },
       { name: "软装搭配套装", category: "软装", ourPrice: 3500, brandPrice: 7000 },
     ],
     chatPrompt: "我养了只猫，客厅25平，想回家能窝在沙发上撸猫看剧，沙发别太怕猫挠，预算2万出头就行",
     socialProof: "847 人照着这个方案装了家",
     category: "living",
+    detailImages: [
+      { src: nordicDetail1, caption: "纳米科技布，猫爪无痕" },
+      { src: nordicDetail2, caption: "三层照明，一键切换放松模式" },
+    ],
+    beforeImage: nordicBefore,
+    lifeScenes: [
+      { src: nordicLife1, time: "清晨", caption: "阳光洒进来，茶几旁做个晨间瑜伽" },
+      { src: nordicLife2, time: "下班后", caption: "窝在沙发上撸猫看剧，忘掉 996" },
+    ],
   },
   {
     id: "story-french",
