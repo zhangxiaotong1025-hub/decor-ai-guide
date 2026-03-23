@@ -11,11 +11,38 @@ import sceneRetro from "@/assets/scene-retro-vintage.jpg";
 import sceneBath from "@/assets/scene-modern-bath.jpg";
 import sceneDorm from "@/assets/scene-student-dorm.jpg";
 
+// Nordic story detail images
+import nordicDetail1 from "@/assets/story-nordic-detail1.jpg";
+import nordicDetail2 from "@/assets/story-nordic-detail2.jpg";
+import nordicLife1 from "@/assets/story-nordic-life1.jpg";
+import nordicLife2 from "@/assets/story-nordic-life2.jpg";
+import nordicBefore from "@/assets/story-nordic-before.jpg";
+
+// French story detail images
+import frenchDetail1 from "@/assets/story-french-detail1.jpg";
+import frenchDetail2 from "@/assets/story-french-detail2.jpg";
+import frenchLife1 from "@/assets/story-french-life1.jpg";
+
 export interface StoryProduct {
   name: string;
   category: string;
   ourPrice: number;
   brandPrice: number;
+  /** Product scene image */
+  image?: string;
+}
+
+/** Detail gallery image with caption overlay */
+export interface DetailImage {
+  src: string;
+  caption: string;
+}
+
+/** Life scene for storyboard */
+export interface LifeScene {
+  src: string;
+  time: string;
+  caption: string;
 }
 
 export interface SceneStory {
