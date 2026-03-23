@@ -1,5 +1,6 @@
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { motion, useMotionValue, useTransform, animate } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { Users, Factory, Shield, Truck, Award, Clock, TrendingDown, Eye, Flame, ChevronRight } from "lucide-react";
 import type { ProductItem } from "@/types/product";
 import sceneMorning from "@/assets/scene-morning.jpg";
 
@@ -14,21 +15,58 @@ const fadeUp = {
   transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] as const },
 };
 
+/** Animated counter */
+const AnimatedNumber = ({ value, duration = 1.2 }: { value: number; duration?: number }) => {
+  const ref = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    let start = 0;
+    const step = (ts: number) => {
+      if (!start) start = ts;
+      const progress = Math.min((ts - start) / (duration * 1000), 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      node.textContent = Math.round(value * eased).toLocaleString();
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [value, duration]);
+  return <span ref={ref}>0</span>;
+};
+
+/** Fake live viewer count that ticks up */
+const useLiveViewers = (base: number) => {
+  const [count, setCount] = useState(base);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (Math.random() > 0.6) setCount((c) => c + 1);
+    }, 3000 + Math.random() * 5000);
+    return () => clearInterval(interval);
+  }, []);
+  return count;
+};
+
 const StandardProductDetail = ({ product }: Props) => {
   const progress = (product.groupBuy.current / product.groupBuy.target) * 100;
-  const groupSavings = product.groupBuy.currentPrice - product.groupBuy.targetPrice;
+  const brandSaving = product.brandPrice - product.price;
+  const brandSavingPct = Math.round((brandSaving / product.brandPrice) * 100);
+  const groupSaving = product.price - product.groupBuy.targetPrice;
+  const totalSaving = product.brandPrice - product.groupBuy.targetPrice;
+  const totalSavingPct = Math.round((totalSaving / product.brandPrice) * 100);
+  const viewers = useLiveViewers(18 + Math.floor(Math.random() * 12));
+  const remaining = product.groupBuy.target - product.groupBuy.current;
   const [activeGallery, setActiveGallery] = useState(0);
   const gallery = product.gallery || [];
 
   return (
     <div className="bg-background">
-      {/* ━━━ 第一屏：全幅沉浸式 Hero ━━━ */}
+      {/* ━━━ Hero: 全幅产品图 + 价格锚定 ━━━ */}
       <div className="relative">
         <motion.div
           initial={{ scale: 1.05, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-          className="w-full h-[85vh] min-h-[520px] overflow-hidden"
+          className="w-full h-[70vh] min-h-[420px] overflow-hidden"
         >
           <img
             src={product.heroImage || sceneMorning}
@@ -36,52 +74,95 @@ const StandardProductDetail = ({ product }: Props) => {
             className="w-full h-full object-cover"
           />
         </motion.div>
-        {/* Subtle bottom gradient for text */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
+
+        {/* Live viewers badge */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.8 }}
+          className="absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full backdrop-blur-md bg-foreground/60 text-background"
+        >
+          <Eye className="w-3 h-3" />
+          <span className="text-[10px] font-medium">{viewers} 人正在看</span>
+        </motion.div>
+
+        {/* Hero info overlay */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="absolute bottom-8 left-5 right-5"
+          className="absolute bottom-6 left-5 right-5"
         >
-          <p className="text-xs tracking-widest text-foreground/70 uppercase mb-2">{product.category}</p>
-          <h1 className="text-xl font-medium text-foreground leading-tight mb-3">
-            这款{product.name}，放在普通客厅里会比较轻松
-          </h1>
-          <div className="flex items-baseline gap-3">
-            <span className="font-mono text-2xl font-semibold text-foreground">
-              ¥{product.groupBuy.currentPrice.toLocaleString()}
-            </span>
-            <span className="text-sm text-muted-foreground line-through">
-              ¥{product.price.toLocaleString()}
-            </span>
+          <p className="text-[10px] tracking-widest text-foreground/60 uppercase mb-1.5">{product.category}</p>
+          <h1 className="text-xl font-medium text-foreground leading-tight mb-3">{product.name}</h1>
+
+          {/* Price anchoring - the kill shot */}
+          <div className="bg-background/80 backdrop-blur-md rounded-2xl p-4 border border-border/20">
+            <div className="flex items-center gap-2 mb-2">
+              <Flame className="w-3.5 h-3.5 text-destructive" />
+              <span className="text-[10px] font-medium text-destructive">限时工厂直供价</span>
+            </div>
+            <div className="flex items-baseline gap-3 mb-1">
+              <span className="font-mono text-3xl font-bold text-foreground">
+                ¥<AnimatedNumber value={product.groupBuy.currentPrice} />
+              </span>
+              <span className="text-sm text-muted-foreground line-through">
+                品牌价 ¥{product.brandPrice.toLocaleString()}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] px-2 py-0.5 rounded-md bg-destructive/10 text-destructive font-bold">
+                省 {brandSavingPct}%
+              </span>
+              <span className="text-[11px] text-accent font-medium">
+                已帮你省 ¥{brandSaving.toLocaleString()}
+              </span>
+            </div>
           </div>
         </motion.div>
       </div>
 
-      {/* ━━━ 图片画廊横滑 ━━━ */}
+      {/* ━━━ 紧迫感条幅 ━━━ */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1 }}
+        className="mx-5 mt-4 mb-2 bg-destructive/[0.06] border border-destructive/15 rounded-xl p-3 flex items-center gap-3"
+      >
+        <div className="flex-shrink-0">
+          <Clock className="w-4 h-4 text-destructive" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-[11px] text-foreground font-medium">
+            还差 {remaining} 人成团，底价再降 ¥{groupSaving.toLocaleString()}
+          </p>
+          <p className="text-[10px] text-muted-foreground">{product.groupBuy.estimatedTime}</p>
+        </div>
+        <span className="text-[10px] font-bold text-destructive whitespace-nowrap">
+          总省 ¥{totalSaving.toLocaleString()}
+        </span>
+      </motion.div>
+
+      {/* ━━━ 图片画廊 ━━━ */}
       {gallery.length > 0 && (
-        <div className="py-6">
-          <div className="flex gap-3 overflow-x-auto px-5 snap-x snap-mandatory scrollbar-hide pb-2">
+        <div className="py-4">
+          <div className="flex gap-2.5 overflow-x-auto px-5 snap-x snap-mandatory scrollbar-hide pb-2">
             {gallery.map((img, i) => (
               <motion.div
                 key={i}
                 {...fadeUp}
                 transition={{ ...fadeUp.transition, delay: i * 0.08 }}
-                className="flex-shrink-0 snap-center w-[75vw] max-w-[320px]"
+                className="flex-shrink-0 snap-center w-[72vw] max-w-[300px]"
                 onClick={() => setActiveGallery(i)}
               >
-                <div className="relative rounded-2xl overflow-hidden aspect-[4/3]">
+                <div className={`relative rounded-2xl overflow-hidden aspect-[4/3] transition-all ${
+                  activeGallery === i ? "ring-2 ring-primary" : ""
+                }`}>
                   <img src={img.src} alt={img.alt} className="w-full h-full object-cover" />
-                  {i === activeGallery && (
-                    <motion.div
-                      layoutId="gallery-ring"
-                      className="absolute inset-0 rounded-2xl ring-2 ring-primary"
-                    />
-                  )}
                 </div>
                 {img.caption && (
-                  <p className="text-xs text-muted-foreground mt-2 px-1">{img.caption}</p>
+                  <p className="text-[11px] text-muted-foreground mt-2 px-1">{img.caption}</p>
                 )}
               </motion.div>
             ))}
@@ -89,11 +170,13 @@ const StandardProductDetail = ({ product }: Props) => {
         </div>
       )}
 
-      {/* ━━━ 第二屏：适合什么情况 — 图文叠加 ━━━ */}
+      {/* ━━━ 为什么适合你 — 生活场景代入 ━━━ */}
       <Section>
-        <SectionLabel>适合你吗</SectionLabel>
-        <SectionTitle>这款大概适合什么情况</SectionTitle>
-        <div className="relative rounded-2xl overflow-hidden mb-5">
+        <SectionTag>为你挑选</SectionTag>
+        <h2 className="text-base font-medium text-foreground mb-1">为什么是这一款</h2>
+        <p className="text-[11px] text-muted-foreground mb-4">不是"好看就选"，是放在你家里最合适</p>
+
+        <div className="relative rounded-2xl overflow-hidden mb-4">
           <img
             src={product.lifestyleImage || product.heroImage || sceneMorning}
             alt="使用场景"
@@ -101,197 +184,173 @@ const StandardProductDetail = ({ product }: Props) => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 to-transparent" />
           <div className="absolute bottom-4 left-4 right-4">
-            {product.lifeReasons.slice(0, 3).map((reason, i) => (
+            {product.lifeReasons.map((reason, i) => (
               <motion.p
                 key={i}
                 {...fadeUp}
                 transition={{ ...fadeUp.transition, delay: i * 0.1 }}
-                className="text-sm text-white/90 leading-relaxed mb-1.5 last:mb-0"
+                className="text-[12px] text-white/90 leading-relaxed mb-1 last:mb-0"
               >
                 ✔ {reason}
               </motion.p>
             ))}
           </div>
         </div>
-        <p className="text-sm text-muted-foreground">
-          👉 属于那种不挑空间、用着也舒服的类型
-        </p>
+
+        {/* AI recommendation badge */}
+        <div className="bg-primary/[0.04] border border-primary/10 rounded-xl p-3 flex items-start gap-2.5">
+          <span className="text-sm">🤖</span>
+          <p className="text-[11px] text-foreground leading-relaxed">
+            <span className="font-medium">AI 选品理由：</span>{product.why}
+          </p>
+        </div>
       </Section>
 
-      {/* ━━━ 第三屏：材质微距 ━━━ */}
+      {/* ━━━ 材质微距 — 触感可视化 ━━━ */}
       {product.textureImage && (
         <div className="relative">
-          <motion.div {...fadeUp} className="w-full">
-            <img
-              src={product.textureImage}
-              alt="材质微距"
-              className="w-full aspect-square object-cover"
-            />
+          <motion.div {...fadeUp}>
+            <img src={product.textureImage} alt="材质微距" className="w-full aspect-[4/3] object-cover" />
           </motion.div>
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/30" />
-          <motion.div
-            {...fadeUp}
-            className="absolute bottom-6 left-5 right-5"
-          >
-            <p className="text-xs tracking-widest text-foreground/60 uppercase mb-2">Material</p>
-            <h2 className="text-base font-medium text-foreground mb-2">
-              {product.material}
-            </h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {product.texture ? `质感${product.texture}` : "坐下去是偏软一点的"}
-              ，不是那种很塌的感觉，是可以久坐不累的
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/20" />
+          <motion.div {...fadeUp} className="absolute bottom-6 left-5 right-5">
+            <p className="text-[10px] tracking-widest text-foreground/50 uppercase mb-1.5">Material</p>
+            <h2 className="text-base font-medium text-foreground mb-1">{product.material}</h2>
+            <p className="text-sm text-foreground/80 leading-relaxed">
+              {product.texture}，{product.performance}
             </p>
           </motion.div>
         </div>
       )}
 
-      {/* ━━━ 第四屏：为什么选这一款 ━━━ */}
+      {/* ━━━ 价格脱水 — 买的明明白白 ━━━ */}
       <Section>
-        <SectionLabel>选品逻辑</SectionLabel>
-        <SectionTitle>为什么会选这一款</SectionTitle>
-        <p className="text-sm text-muted-foreground mb-5">
-          这款不是"好看就选"，主要是它放在这种客厅里更合适：
-        </p>
-        <div className="space-y-4">
-          {[
-            { icon: "◻", text: `${product.style}，不会压空间` },
-            { icon: "◻", text: `${product.color}比较中性，不容易和其他家具冲突` },
-            { icon: "◻", text: "尺寸刚好，不会影响走动" },
-          ].map((item, i) => (
-            <motion.div
-              key={i}
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: i * 0.08 }}
-              className="flex items-start gap-3 bg-secondary/40 rounded-xl p-3.5"
-            >
-              <span className="text-primary text-sm mt-0.5">✔</span>
-              <span className="text-sm text-foreground leading-relaxed">{item.text}</span>
-            </motion.div>
-          ))}
-        </div>
-      </Section>
+        <SectionTag>价格透明</SectionTag>
+        <h2 className="text-base font-medium text-foreground mb-1">每一分钱花在哪里</h2>
+        <p className="text-[11px] text-muted-foreground mb-4">去掉品牌溢价，只为真实价值买单</p>
 
-      {/* ━━━ 第五屏：空间布局图 ━━━ */}
-      {product.spaceImage && (
-        <motion.div {...fadeUp} className="px-5 py-2">
-          <SectionLabel>空间感受</SectionLabel>
-          <SectionTitle>放在家里的感觉</SectionTitle>
-          <div className="relative rounded-2xl overflow-hidden mb-4">
-            <img
-              src={product.spaceImage}
-              alt="空间布局"
-              className="w-full aspect-square object-cover"
-            />
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-foreground/70 to-transparent p-4 pt-12">
-              <p className="text-sm text-white/90 leading-relaxed">进门不会觉得拥挤</p>
-              <p className="text-sm text-white/90 leading-relaxed">中间还能留出一块活动空间</p>
-            </div>
+        {/* Price waterfall */}
+        <div className="space-y-3 mb-4">
+          <PriceRow
+            label="品牌专柜价"
+            price={product.brandPrice}
+            highlight={false}
+            strikethrough
+            note="含品牌溢价、渠道费用、广告费"
+          />
+          <div className="flex items-center gap-2 px-2">
+            <TrendingDown className="w-3.5 h-3.5 text-accent" />
+            <span className="text-[10px] text-accent font-medium">去掉品牌溢价 -{brandSavingPct}%</span>
           </div>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            平时坐着、躺着都比较自然，不用刻意去调整位置
-          </p>
-        </motion.div>
-      )}
-
-      <Divider />
-
-      {/* ━━━ 第六屏：拼团解释 — 视觉化 ━━━ */}
-      <Section>
-        <SectionLabel>一起买</SectionLabel>
-        <SectionTitle>这次一起买是怎么回事</SectionTitle>
-        <div className="space-y-4 mb-6">
-          {[
-            { num: "01", text: "先把想买的人凑在一起" },
-            { num: "02", text: "人数差不多了，去帮大家谈价格" },
-            { num: "03", text: "价格不合适，也可以不买" },
-          ].map((step, i) => (
-            <motion.div
-              key={i}
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: i * 0.1 }}
-              className="flex items-start gap-4"
-            >
-              <span className="font-mono text-2xl font-light text-primary/40">{step.num}</span>
-              <span className="text-sm text-foreground leading-relaxed pt-2">{step.text}</span>
-            </motion.div>
-          ))}
+          <PriceRow
+            label="工厂直供价"
+            price={product.price}
+            highlight={false}
+            note="同源工厂、同等品质、零中间商"
+          />
+          <div className="flex items-center gap-2 px-2">
+            <Users className="w-3.5 h-3.5 text-primary" />
+            <span className="text-[10px] text-primary font-medium">拼团集采再降</span>
+          </div>
+          <PriceRow
+            label="🔥 拼团底价"
+            price={product.groupBuy.targetPrice}
+            highlight
+            note={`满${product.groupBuy.target}人即达，总省 ¥${totalSaving.toLocaleString()}（${totalSavingPct}%）`}
+          />
         </div>
       </Section>
 
-      {/* ━━━ 第七屏：拼团进度 — 全幅卡片 ━━━ */}
+      {/* ━━━ 拼团进度 — 紧迫感 ━━━ */}
       <motion.div {...fadeUp} className="mx-5 mb-6">
-        <div className="bg-secondary/30 rounded-2xl p-5 relative overflow-hidden">
-          {/* Decorative accent */}
-          <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+        <div className="relative overflow-hidden rounded-2xl border border-primary/15 bg-primary/[0.03]">
+          {/* Animated glow */}
+          <div className="absolute -top-12 -right-12 w-32 h-32 bg-primary/10 rounded-full blur-2xl" />
           
-          <p className="text-sm text-foreground font-medium mb-4">
-            现在已经有 {product.groupBuy.current} 个人在看这款
-          </p>
-
-          {/* Animated progress */}
-          <div className="relative h-3 bg-secondary rounded-full mb-3 overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: `${progress}%` }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
-              className="absolute inset-y-0 left-0 bg-primary rounded-full"
-            />
-            <motion.div
-              initial={{ width: 0, opacity: 0 }}
-              whileInView={{ width: `${progress}%`, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
-              className="absolute inset-y-0 left-0 bg-primary/30 rounded-full blur-sm"
-            />
-          </div>
-
-          <div className="flex items-center justify-between text-sm mb-4">
-            <span className="text-muted-foreground">
-              {product.groupBuy.current}/{product.groupBuy.target} 人
-            </span>
-            <span className="text-muted-foreground">{product.groupBuy.estimatedTime}</span>
-          </div>
-
-          <div className="border-t border-border/30 pt-4">
-            <div className="flex items-baseline justify-between mb-1">
-              <span className="text-sm text-muted-foreground">当前价</span>
-              <span className="font-mono text-lg font-medium text-foreground">
-                ¥{product.groupBuy.currentPrice.toLocaleString()}
+          <div className="p-5 relative">
+            <div className="flex items-center gap-2 mb-3">
+              <Users className="w-4 h-4 text-primary" />
+              <span className="text-xs font-medium text-foreground">拼团进度</span>
+              <span className="ml-auto text-[10px] text-primary font-bold">
+                还差 {remaining} 人
               </span>
             </div>
-            <div className="flex items-baseline justify-between">
-              <span className="text-sm text-muted-foreground">满{product.groupBuy.target}人底价</span>
-              <span className="font-mono text-lg font-semibold text-primary">
-                ¥{product.groupBuy.targetPrice.toLocaleString()}
-                <span className="text-xs text-muted-foreground ml-1.5 font-normal">
-                  再省 ¥{groupSavings.toLocaleString()}
-                </span>
+
+            {/* Glowing progress bar */}
+            <div className="relative h-3 bg-secondary rounded-full mb-3 overflow-hidden">
+              <motion.div
+                initial={{ width: 0 }}
+                whileInView={{ width: `${progress}%` }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.2, ease: "easeOut" }}
+                className="absolute inset-y-0 left-0 bg-primary rounded-full"
+              />
+              <motion.div
+                initial={{ width: 0, opacity: 0 }}
+                whileInView={{ width: `${progress}%`, opacity: 0.6 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.2, ease: "easeOut" }}
+                className="absolute inset-y-0 left-0 bg-primary rounded-full blur-md"
+              />
+            </div>
+
+            <div className="flex items-center justify-between text-[11px] mb-4">
+              <span className="text-muted-foreground">
+                已有 {product.groupBuy.current} 人 · 目标 {product.groupBuy.target} 人
               </span>
+              <span className="text-muted-foreground">{product.groupBuy.estimatedTime}</span>
+            </div>
+
+            {/* Price comparison in group buy */}
+            <div className="bg-background/60 rounded-xl p-3.5 border border-border/10">
+              <div className="flex items-baseline justify-between mb-1.5">
+                <span className="text-[11px] text-muted-foreground">当前价</span>
+                <span className="font-mono text-base text-foreground">¥{product.groupBuy.currentPrice.toLocaleString()}</span>
+              </div>
+              <div className="flex items-baseline justify-between">
+                <span className="text-[11px] text-primary font-medium">成团底价</span>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-mono text-xl font-bold text-primary">¥{product.groupBuy.targetPrice.toLocaleString()}</span>
+                  <span className="text-[10px] text-accent font-medium">
+                    再省 ¥{groupSaving.toLocaleString()}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </motion.div>
 
-      {/* ━━━ 第八屏：工厂溯源 ━━━ */}
+      {/* ━━━ 空间布局图 ━━━ */}
+      {product.spaceImage && (
+        <div className="relative">
+          <motion.div {...fadeUp}>
+            <img src={product.spaceImage} alt="空间布局" className="w-full aspect-[4/3] object-cover" />
+          </motion.div>
+          <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 to-transparent" />
+          <motion.div {...fadeUp} className="absolute bottom-5 left-5 right-5">
+            <p className="text-[10px] tracking-widest text-background/60 uppercase mb-1.5">Space</p>
+            <p className="text-sm text-white/90 leading-relaxed">放在你家客厅，进门不觉得挤</p>
+            <p className="text-sm text-white/80 leading-relaxed">中间留出活动空间，走动自如</p>
+          </motion.div>
+        </div>
+      )}
+
+      {/* ━━━ 工厂溯源 — 信任背书 ━━━ */}
       {product.factoryImage && (
         <div className="relative">
           <motion.div {...fadeUp}>
-            <img
-              src={product.factoryImage}
-              alt="工厂实景"
-              className="w-full aspect-[16/9] object-cover"
-            />
+            <img src={product.factoryImage} alt="工厂实景" className="w-full aspect-[16/9] object-cover" />
           </motion.div>
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
           <motion.div {...fadeUp} className="absolute bottom-5 left-5 right-5">
-            <p className="text-xs tracking-widest text-foreground/60 uppercase mb-2">Factory</p>
+            <p className="text-[10px] tracking-widest text-foreground/50 uppercase mb-1.5">Factory</p>
             <p className="text-sm font-medium text-foreground mb-1">
               {product.factory.location} · {product.factory.name}
             </p>
             <div className="flex flex-wrap gap-1.5 mt-2">
               {product.factory.certifications.map((cert, i) => (
-                <span key={i} className="text-xs bg-background/80 backdrop-blur-sm text-muted-foreground px-2 py-1 rounded-full">
+                <span key={i} className="text-[10px] bg-background/80 backdrop-blur-sm text-muted-foreground px-2 py-1 rounded-full">
                   {cert}
                 </span>
               ))}
@@ -300,11 +359,26 @@ const StandardProductDetail = ({ product }: Props) => {
         </div>
       )}
 
-      {/* ━━━ 第九屏：补充信息 ━━━ */}
+      {/* ━━━ 信任保障 ━━━ */}
       <Section>
-        <SectionLabel>Detail</SectionLabel>
-        <SectionTitle>补充信息</SectionTitle>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-2">
+          {[
+            { icon: Factory, text: "头部品牌同源工厂" },
+            { icon: Shield, text: "品质造假，全额免单" },
+            { icon: Truck, text: "送装一体，带走垃圾" },
+            { icon: Award, text: "365天只换不修" },
+          ].map((g, i) => (
+            <div key={i} className="flex items-center gap-2 py-2.5 px-3 bg-secondary/15 rounded-xl">
+              <g.icon className="w-3.5 h-3.5 text-muted-foreground/40 flex-shrink-0" />
+              <span className="text-[11px] text-foreground">{g.text}</span>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* ━━━ 补充参数 ━━━ */}
+      <Section>
+        <div className="grid grid-cols-2 gap-2">
           <InfoCard label="材质" value={product.material} />
           <InfoCard label="填充" value={product.performance} />
           <InfoCard label="颜色" value={product.color} />
@@ -312,7 +386,6 @@ const StandardProductDetail = ({ product }: Props) => {
         </div>
       </Section>
 
-      {/* Bottom spacer */}
       <div className="h-4" />
     </div>
   );
@@ -321,19 +394,31 @@ const StandardProductDetail = ({ product }: Props) => {
 /* ─── Sub-components ─── */
 
 const Section = ({ children }: { children: React.ReactNode }) => (
-  <div className="px-5 py-6">{children}</div>
+  <div className="px-5 py-5">{children}</div>
 );
 
-const SectionLabel = ({ children }: { children: React.ReactNode }) => (
-  <p className="text-xs tracking-widest text-primary/60 uppercase mb-2">{children}</p>
+const SectionTag = ({ children }: { children: React.ReactNode }) => (
+  <p className="text-[10px] tracking-widest text-primary/60 uppercase mb-2">{children}</p>
 );
 
-const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="text-lg font-medium text-foreground mb-4">{children}</h2>
-);
-
-const Divider = () => (
-  <div className="mx-5 my-2 h-px bg-border/20" />
+const PriceRow = ({ label, price, highlight, strikethrough, note }: {
+  label: string;
+  price: number;
+  highlight: boolean;
+  strikethrough?: boolean;
+  note?: string;
+}) => (
+  <div className={`rounded-xl p-3.5 ${highlight ? "bg-primary/[0.06] border border-primary/15" : "bg-secondary/20"}`}>
+    <div className="flex items-baseline justify-between mb-0.5">
+      <span className={`text-[12px] ${highlight ? "text-primary font-medium" : "text-muted-foreground"}`}>{label}</span>
+      <span className={`font-mono text-lg ${
+        strikethrough ? "line-through text-muted-foreground/60" : highlight ? "font-bold text-primary" : "font-medium text-foreground"
+      }`}>
+        ¥{price.toLocaleString()}
+      </span>
+    </div>
+    {note && <p className={`text-[10px] ${highlight ? "text-primary/70" : "text-muted-foreground/60"}`}>{note}</p>}
+  </div>
 );
 
 const InfoCard = ({ label, value }: { label: string; value: string }) => (
@@ -341,10 +426,10 @@ const InfoCard = ({ label, value }: { label: string; value: string }) => (
     initial={{ opacity: 0, y: 10 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
-    className="bg-secondary/30 rounded-xl p-3.5"
+    className="bg-secondary/20 rounded-xl p-3"
   >
-    <p className="text-xs text-muted-foreground mb-1">{label}</p>
-    <p className="text-sm text-foreground font-medium">{value}</p>
+    <p className="text-[10px] text-muted-foreground mb-0.5">{label}</p>
+    <p className="text-[12px] text-foreground font-medium">{value}</p>
   </motion.div>
 );
 
