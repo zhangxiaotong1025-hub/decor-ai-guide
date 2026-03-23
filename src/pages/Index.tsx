@@ -292,7 +292,17 @@ const Index = () => {
         onOpen3DEditor={handleOpen3DEditor}
       />
 
-      <Suspense fallback={null}>
+      <SceneStorySheet
+        story={selectedStory}
+        isOpen={storySheetOpen}
+        bottomInset={chatInputHeight}
+        onClose={() => setStorySheetOpen(false)}
+        onStartChat={(prompt) => {
+          setStorySheetOpen(false);
+          setTimeout(() => handleSend(prompt), 300);
+        }}
+      />
+
         <ThreeDEditor isOpen={threeDEditorOpen} onClose={() => setThreeDEditorOpen(false)} />
       </Suspense>
 
