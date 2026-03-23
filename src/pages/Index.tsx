@@ -43,6 +43,8 @@ const Index = () => {
   const [groupBuyOpen, setGroupBuyOpen] = useState(false);
   const [hasActiveGroupBuy, setHasActiveGroupBuy] = useState(false);
   const [threeDEditorOpen, setThreeDEditorOpen] = useState(false);
+  const [selectedStory, setSelectedStory] = useState<SceneStory | null>(null);
+  const [storySheetOpen, setStorySheetOpen] = useState(false);
   const [chatInputHeight, setChatInputHeight] = useState(DEFAULT_CHAT_INPUT_HEIGHT);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<ChatInputHandle>(null);
