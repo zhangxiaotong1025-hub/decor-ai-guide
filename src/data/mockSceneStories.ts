@@ -176,7 +176,7 @@ export const mockSceneStories: SceneStory[] = [
       { name: "防摔软包墙板", category: "墙面", ourPrice: 2200, brandPrice: 6500 },
       { name: "星空主题灯组", category: "灯具", ourPrice: 1500, brandPrice: 4000 },
     ],
-    chatPrompt: "家里两个小朋友，想装一间12平的儿童房，要安全环保，预算1.5万左右",
+    chatPrompt: "两个孩子要共用一间12平的房，大的6岁小的3岁，最怕甲醛和磕碰，1.5万能搞定吗",
     socialProof: "923 位家长选了这套方案",
     category: "kids",
   },
