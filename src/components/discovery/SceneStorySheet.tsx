@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Users, Sparkles, Factory, TrendingDown, Zap, Gift } from "lucide-react";
+import { X, Zap, Sparkles, TrendingDown, ChevronRight, Gift } from "lucide-react";
 import type { SceneStory } from "@/data/mockSceneStories";
 
 interface SceneStorySheetProps {
@@ -9,10 +9,10 @@ interface SceneStorySheetProps {
   bottomInset?: number;
   onClose: () => void;
   onStartChat: (prompt: string) => void;
-  /** 填入输入框而非直接发送 */
   onFillPrompt?: (prompt: string) => void;
 }
 
+/* ─── Main Sheet ─── */
 const SceneStorySheet = ({ story, isOpen, bottomInset = 0, onClose, onStartChat, onFillPrompt }: SceneStorySheetProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
@@ -25,19 +25,14 @@ const SceneStorySheet = ({ story, isOpen, bottomInset = 0, onClose, onStartChat,
   }, [isOpen, story?.id]);
 
   const handleScroll = useCallback(() => {
-    if (scrollRef.current) {
-      setScrolled(scrollRef.current.scrollTop > 50);
-    }
+    if (scrollRef.current) setScrolled(scrollRef.current.scrollTop > 120);
   }, []);
 
   const handleCustomize = useCallback((prompt: string) => {
     onClose();
     setTimeout(() => {
-      if (onFillPrompt) {
-        onFillPrompt(prompt);
-      } else {
-        onStartChat(prompt);
-      }
+      if (onFillPrompt) onFillPrompt(prompt);
+      else onStartChat(prompt);
     }, 300);
   }, [onClose, onFillPrompt, onStartChat]);
 
@@ -67,211 +62,225 @@ const SceneStorySheet = ({ story, isOpen, bottomInset = 0, onClose, onStartChat,
             exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 28, stiffness: 300 }}
             className="fixed left-0 right-0 z-[70] bg-background flex flex-col top-[env(safe-area-inset-top,0px)] rounded-t-[20px]"
-            style={{
-              bottom: bottomInset,
-              boxShadow: "0 -4px 40px rgba(0,0,0,0.08)",
-            }}
+            style={{ bottom: bottomInset, boxShadow: "0 -4px 40px rgba(0,0,0,0.08)" }}
           >
-            {/* Header */}
-            <div className="flex-shrink-0 relative z-10">
+            {/* Floating header */}
+            <div className="absolute top-0 left-0 right-0 z-20">
               <div className="flex justify-center pt-2 pb-1">
-                <div className="w-10 h-[3px] bg-muted-foreground/15 rounded-full" />
+                <div className="w-10 h-[3px] bg-primary-foreground/30 rounded-full" />
               </div>
-              <div className="flex items-center px-5 py-1">
+              <div className="flex items-center justify-between px-4 py-1">
                 <motion.span
                   initial={{ opacity: 0 }}
                   animate={{ opacity: scrolled ? 1 : 0 }}
-                  className="text-xs font-medium text-foreground truncate flex-1"
+                  className="text-xs font-medium text-foreground bg-background/80 backdrop-blur-sm px-2 py-0.5 rounded-full truncate"
                 >
                   {story.persona}的家
                 </motion.span>
                 <button
                   onClick={onClose}
-                  className="p-1.5 hover:bg-secondary rounded-full transition-colors"
+                  className="p-1.5 bg-foreground/20 backdrop-blur-sm rounded-full transition-colors hover:bg-foreground/30"
                 >
-                  <X className="w-3.5 h-3.5 text-muted-foreground" />
+                  <X className="w-3.5 h-3.5 text-primary-foreground" />
                 </button>
               </div>
             </div>
 
             {/* Scrollable content */}
-            <div
-              ref={scrollRef}
-              onScroll={handleScroll}
-              className="flex-1 overflow-y-auto overscroll-contain"
-            >
-              {/* ═══ Hero image ═══ */}
-              <div className="relative">
+            <div ref={scrollRef} onScroll={handleScroll} className="flex-1 overflow-y-auto overscroll-contain">
+
+              {/* ═══ 1. CINEMATIC HERO ═══ */}
+              <div className="relative h-[85vh] min-h-[520px] max-h-[700px]">
                 <img
                   src={story.heroImage}
                   alt={story.hook}
-                  className="w-full h-72 object-cover"
+                  className="absolute inset-0 w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
+                {/* Cinematic gradient — subtle top, strong bottom */}
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-foreground/10" />
 
-                {/* Price shock overlay */}
-                <div className="absolute bottom-0 left-0 right-0 px-5 pb-5">
-                  <div className="flex items-center gap-1.5 mb-2">
-                    <span className="text-[10px] px-2 py-0.5 rounded-button bg-primary-foreground/90 text-foreground font-medium">
+                {/* Hero content at bottom */}
+                <div className="absolute bottom-0 left-0 right-0 px-5 pb-8">
+                  {/* Persona pill */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="flex items-center gap-2 mb-3"
+                  >
+                    <span className="text-[10px] px-2.5 py-1 rounded-full bg-primary-foreground/90 text-foreground font-medium tracking-wide">
                       {story.persona}
                     </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-button bg-foreground/40 text-primary-foreground backdrop-blur-sm">
-                      {story.area} {story.roomType}
+                    <span className="text-[10px] px-2.5 py-1 rounded-full bg-foreground/30 text-primary-foreground backdrop-blur-sm">
+                      {story.area} · {story.roomType}
                     </span>
-                  </div>
-                  <h2 className="text-lg font-semibold text-foreground leading-snug mb-3">
+                  </motion.div>
+
+                  {/* Hook — large serif for editorial feel */}
+                  <motion.h2
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="font-serif text-[22px] leading-[1.3] font-medium text-foreground tracking-display mb-4"
+                  >
                     {story.hook}
-                  </h2>
-                  <div className="flex items-baseline gap-3">
-                    <span className="font-mono-data text-2xl font-bold text-foreground">
+                  </motion.h2>
+
+                  {/* Price hero — dramatic */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.45 }}
+                    className="flex items-baseline gap-3"
+                  >
+                    <span className="font-mono-data text-3xl font-bold text-foreground">
                       ¥{story.ourTotal.toLocaleString()}
                     </span>
                     <span className="text-sm text-muted-foreground line-through font-mono-data">
                       ¥{story.brandTotal.toLocaleString()}
                     </span>
-                    <span className="text-xs font-bold px-2 py-0.5 rounded-button bg-shock/90 text-primary-foreground">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-saving text-saving-foreground">
                       省 {savedPct}%
                     </span>
-                  </div>
+                  </motion.div>
                 </div>
               </div>
 
-              {/* ═══ 第一层：故事共鸣 ═══ */}
-              <div className="px-5 pt-5 pb-6">
-                <SectionTitle emoji="📖" title="TA 的故事" />
-                <p className="text-sm text-foreground leading-relaxed mt-3">
-                  {story.backstory}
-                </p>
-                <div className="mt-4 px-4 py-3 bg-shock/5 border border-shock/10 rounded-xl">
-                  <p className="text-xs text-shock font-medium">
-                    💢 {story.painPoint}
+              {/* ═══ 2. LIFE STORY — immersive quote ═══ */}
+              <div className="px-6 py-10">
+                <motion.blockquote
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  className="relative"
+                >
+                  <span className="absolute -top-4 -left-1 text-4xl text-muted-foreground/20 font-serif select-none">"</span>
+                  <p className="text-base text-foreground leading-relaxed font-light pl-3 italic">
+                    {story.backstory}
                   </p>
-                </div>
+                </motion.blockquote>
+
+                {/* Pain point — editorial callout */}
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  className="mt-6 flex items-start gap-3 pl-3"
+                >
+                  <div className="w-[3px] h-full min-h-[32px] bg-shock/60 rounded-full flex-shrink-0" />
+                  <p className="text-sm text-shock/90 leading-relaxed">
+                    {story.painPoint}
+                  </p>
+                </motion.div>
               </div>
 
-              {/* ═══ 第二层：方案亮点 ═══ */}
-              <div className="px-5 pb-6">
-                <SectionTitle emoji="✨" title="方案怎么解决的" />
-                <div className="mt-3 space-y-2.5">
+              {/* ═══ 3. SOLUTION HIGHLIGHTS — visual cards ═══ */}
+              <div className="pb-8">
+                <h3 className="px-6 text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-semibold mb-4">
+                  方案亮点
+                </h3>
+                <div className="flex gap-3 overflow-x-auto px-6 pb-2 scrollbar-hide">
                   {story.highlights.map((h, i) => (
                     <motion.div
                       key={i}
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
+                      initial={{ opacity: 0, y: 12 }}
+                      whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: i * 0.1 }}
-                      className="flex items-start gap-2.5 py-2.5 px-3.5 bg-secondary/30 rounded-xl"
+                      className="flex-shrink-0 w-[200px] p-4 bg-secondary/40 rounded-2xl border border-border/50"
                     >
-                      <span className="text-sm mt-0.5">✓</span>
-                      <span className="text-sm text-foreground leading-relaxed">{h}</span>
+                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+                        <Sparkles className="w-4 h-4 text-primary" />
+                      </div>
+                      <p className="text-sm text-foreground leading-relaxed">{h}</p>
                     </motion.div>
                   ))}
                 </div>
               </div>
 
-              {/* ═══ 第三层：省钱明细 ═══ */}
-              <div className="px-5 pb-6">
-                <SectionTitle emoji="💰" title="每一分钱花在哪" />
-                <div className="mt-3 space-y-2">
-                  {story.products.map((p, i) => {
-                    const itemSaved = p.brandPrice - p.ourPrice;
-                    return (
-                      <motion.div
-                        key={i}
-                        initial={{ opacity: 0, y: 8 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: i * 0.06 }}
-                        className="flex items-center justify-between py-3 px-4 bg-secondary/15 rounded-xl"
-                      >
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[10px] text-muted-foreground">{p.category}</span>
-                          </div>
-                          <span className="text-sm font-medium text-foreground">{p.name}</span>
-                        </div>
-                        <div className="text-right flex-shrink-0 ml-3">
-                          <div className="flex items-baseline gap-1.5">
-                            <span className="font-mono-data text-sm font-semibold text-foreground">
-                              ¥{p.ourPrice.toLocaleString()}
-                            </span>
-                            <span className="text-[10px] text-muted-foreground line-through font-mono-data">
-                              ¥{p.brandPrice.toLocaleString()}
-                            </span>
-                          </div>
-                          <span className="text-[10px] text-saving font-medium">
-                            省 ¥{itemSaved.toLocaleString()}
-                          </span>
-                        </div>
-                      </motion.div>
-                    );
-                  })}
+              {/* ═══ 4. PRODUCTS — clean visual list ═══ */}
+              <div className="px-6 pb-8">
+                <h3 className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-semibold mb-4">
+                  方案清单 · {story.products.length} 件
+                </h3>
+                <div className="space-y-1">
+                  {story.products.map((p, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.05 }}
+                      className="flex items-center justify-between py-3.5 border-b border-border/40 last:border-0"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span className="text-[10px] text-muted-foreground w-10 flex-shrink-0">{p.category}</span>
+                        <span className="text-sm text-foreground truncate">{p.name}</span>
+                      </div>
+                      <div className="flex items-baseline gap-2 flex-shrink-0 ml-3">
+                        <span className="font-mono-data text-sm font-semibold text-foreground">
+                          ¥{p.ourPrice.toLocaleString()}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground line-through font-mono-data">
+                          {p.brandPrice.toLocaleString()}
+                        </span>
+                      </div>
+                    </motion.div>
+                  ))}
                 </div>
 
-                {/* Total savings banner */}
+                {/* Total savings */}
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
-                  className="mt-4 p-4 bg-saving/8 border border-saving/15 rounded-xl"
+                  className="mt-5 flex items-center justify-between py-4 px-4 bg-saving/5 border border-saving/10 rounded-2xl"
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <TrendingDown className="w-4 h-4 text-saving" />
-                      <span className="text-sm font-medium text-foreground">总共省下</span>
-                    </div>
-                    <span className="font-mono-data text-xl font-bold text-saving">
-                      ¥{saved.toLocaleString()}
-                    </span>
+                  <div className="flex items-center gap-2">
+                    <TrendingDown className="w-4 h-4 text-saving" />
+                    <span className="text-sm text-foreground">总共省下</span>
                   </div>
-                  <p className="text-[10px] text-muted-foreground mt-1.5">
-                    同样的品质，品牌店要 ¥{story.brandTotal.toLocaleString()}，我们直接工厂拿货
-                  </p>
+                  <span className="font-mono-data text-xl font-bold text-saving">
+                    ¥{saved.toLocaleString()}
+                  </span>
                 </motion.div>
               </div>
 
-              {/* ═══ 第四层：社交证明 ═══ */}
-              <div className="px-5 pb-8">
-                <SectionTitle emoji="🔥" title="和你一样的人都在行动" />
-
-                <div className="mt-3 flex items-center gap-3 py-3 px-4 bg-secondary/15 rounded-xl">
-                  <Users className="w-4 h-4 text-primary flex-shrink-0" />
-                  <span className="text-sm text-foreground">{story.socialProof}</span>
-                </div>
-
-                <div className="mt-2 flex items-center gap-3 py-3 px-4 bg-secondary/15 rounded-xl">
-                  <Factory className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                  <span className="text-sm text-muted-foreground">全部来自品牌同源代工厂，品质一模一样</span>
-                </div>
-
-                <div className="mt-4 p-4 bg-shock/5 border border-shock/10 rounded-xl">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-shock opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-shock" />
-                    </span>
-                    <span className="text-xs font-medium text-shock">拼团进行中</span>
+              {/* ═══ 5. SOCIAL PROOF — minimal, trust-building ═══ */}
+              <div className="px-6 pb-10">
+                <div className="flex items-center gap-3 py-3">
+                  {/* Stacked avatars placeholder */}
+                  <div className="flex -space-x-2">
+                    {[0, 1, 2].map(i => (
+                      <div
+                        key={i}
+                        className="w-7 h-7 rounded-full bg-secondary border-2 border-background flex items-center justify-center"
+                      >
+                        <span className="text-[9px] text-muted-foreground">
+                          {["🏠", "✨", "🛋️"][i]}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                  <p className="text-sm text-foreground leading-relaxed">
-                    同款方案还有 <span className="font-mono-data font-bold text-shock">3</span> 个拼团坑位，满员后价格可能上调
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    {story.socialProof}
                   </p>
                 </div>
 
-                <p className="text-center text-[10px] text-muted-foreground mt-6">
+                <p className="text-center text-[10px] text-muted-foreground/60 mt-6">
                   AI 会根据你的面积和预算，生成你的专属方案
                 </p>
               </div>
             </div>
 
-            {/* ═══ 底部固定 CTA ═══ */}
-            <div className="flex-shrink-0 border-t border-border bg-background/95 backdrop-blur-sm">
-              {/* 氛围引导条 */}
+            {/* ═══ BOTTOM CTA ═══ */}
+            <div className="flex-shrink-0 border-t border-border/50 bg-background/95 backdrop-blur-sm">
               <div className="px-5 pt-2.5 pb-1">
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-shock/6 rounded-lg">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-shock/5 rounded-lg">
                   <Gift className="w-3.5 h-3.5 text-shock flex-shrink-0" />
                   <p className="text-[10px] text-shock leading-tight">
                     <span className="font-semibold">首次参团享折上折</span>
-                    <span className="text-shock/70 ml-1">· 已有 {story.joinedCount} 人参与此方案拼团</span>
+                    <span className="text-shock/70 ml-1">· 已有 {story.joinedCount} 人参与</span>
                   </p>
                 </div>
               </div>
@@ -303,12 +312,5 @@ const SceneStorySheet = ({ story, isOpen, bottomInset = 0, onClose, onStartChat,
     </AnimatePresence>
   );
 };
-
-const SectionTitle = ({ emoji, title }: { emoji: string; title: string }) => (
-  <div className="flex items-center gap-2">
-    <span className="text-sm">{emoji}</span>
-    <h3 className="text-sm font-semibold text-foreground">{title}</h3>
-  </div>
-);
 
 export default SceneStorySheet;
