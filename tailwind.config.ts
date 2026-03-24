@@ -67,6 +67,12 @@ export default {
           DEFAULT: "hsl(var(--gold))",
           foreground: "hsl(var(--gold-foreground))",
         },
+        "menu-image": "hsl(var(--menu-image))",
+        "menu-file": "hsl(var(--menu-file))",
+        "menu-floorplan": "hsl(var(--menu-floorplan))",
+        "menu-product": "hsl(var(--menu-product))",
+        "warm-light": "hsl(var(--warm-light))",
+        "warm-neutral": "hsl(var(--warm-neutral))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

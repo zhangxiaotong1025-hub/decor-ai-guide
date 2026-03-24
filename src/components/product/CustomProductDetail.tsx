@@ -164,7 +164,7 @@ const CustomProductDetail = ({ product }: Props) => {
                 key={i}
                 {...fadeUp}
                 transition={{ ...fadeUp.transition, delay: i * 0.1 }}
-                className="text-[12px] text-white/90 leading-relaxed mb-1 last:mb-0"
+                className="text-[12px] text-primary-foreground/90 leading-relaxed mb-1 last:mb-0"
               >
                 ✔ {reason}
               </motion.p>
@@ -189,9 +189,9 @@ const CustomProductDetail = ({ product }: Props) => {
           </motion.div>
           <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 to-transparent" />
           <motion.div {...fadeUp} className="absolute bottom-5 left-5 right-5">
-            <p className="text-[10px] tracking-widest text-background/60 uppercase mb-1.5">Space</p>
-            <p className="text-sm text-white/90 leading-relaxed">严丝合缝，告别积灰死角</p>
-            <p className="text-sm text-white/80 leading-relaxed">悬浮离地，扫地机器人自由通行</p>
+            <p className="text-[10px] tracking-widest text-primary-foreground/60 uppercase mb-1.5">Space</p>
+            <p className="text-sm text-primary-foreground/90 leading-relaxed">严丝合缝，告别积灰死角</p>
+            <p className="text-sm text-primary-foreground/80 leading-relaxed">悬浮离地，扫地机器人自由通行</p>
           </motion.div>
         </div>
       )}
@@ -327,7 +327,7 @@ const CustomProductDetail = ({ product }: Props) => {
               key={i}
               {...fadeUp}
               transition={{ ...fadeUp.transition, delay: i * 0.1 }}
-              className="flex items-start gap-4 bg-secondary/15 rounded-xl p-4"
+              className="flex items-start gap-4 bg-secondary/20 rounded-xl p-4"
             >
               <span className="font-mono text-2xl font-light text-primary/40 leading-none">{step.num}</span>
               <div className="pt-0.5">
@@ -371,7 +371,7 @@ const CustomProductDetail = ({ product }: Props) => {
             { icon: Truck, text: "送装一体，带走垃圾" },
             { icon: Award, text: "365天只换不修" },
           ].map((g, i) => (
-            <div key={i} className="flex items-center gap-2 py-2.5 px-3 bg-secondary/15 rounded-xl">
+            <div key={i} className="flex items-center gap-2 py-2.5 px-3 bg-secondary/20 rounded-xl">
               <g.icon className="w-3.5 h-3.5 text-muted-foreground/40 flex-shrink-0" />
               <span className="text-[11px] text-foreground">{g.text}</span>
             </div>

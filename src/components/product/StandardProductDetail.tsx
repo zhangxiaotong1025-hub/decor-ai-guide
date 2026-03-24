@@ -189,7 +189,7 @@ const StandardProductDetail = ({ product }: Props) => {
                 key={i}
                 {...fadeUp}
                 transition={{ ...fadeUp.transition, delay: i * 0.1 }}
-                className="text-[12px] text-white/90 leading-relaxed mb-1 last:mb-0"
+                className="text-[12px] text-primary-foreground/90 leading-relaxed mb-1 last:mb-0"
               >
                 ✔ {reason}
               </motion.p>
@@ -329,9 +329,9 @@ const StandardProductDetail = ({ product }: Props) => {
           </motion.div>
           <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 to-transparent" />
           <motion.div {...fadeUp} className="absolute bottom-5 left-5 right-5">
-            <p className="text-[10px] tracking-widest text-background/60 uppercase mb-1.5">Space</p>
-            <p className="text-sm text-white/90 leading-relaxed">放在你家客厅，进门不觉得挤</p>
-            <p className="text-sm text-white/80 leading-relaxed">中间留出活动空间，走动自如</p>
+            <p className="text-[10px] tracking-widest text-primary-foreground/60 uppercase mb-1.5">Space</p>
+            <p className="text-sm text-primary-foreground/90 leading-relaxed">放在你家客厅，进门不觉得挤</p>
+            <p className="text-sm text-primary-foreground/80 leading-relaxed">中间留出活动空间，走动自如</p>
           </motion.div>
         </div>
       )}
@@ -368,7 +368,7 @@ const StandardProductDetail = ({ product }: Props) => {
             { icon: Truck, text: "送装一体，带走垃圾" },
             { icon: Award, text: "365天只换不修" },
           ].map((g, i) => (
-            <div key={i} className="flex items-center gap-2 py-2.5 px-3 bg-secondary/15 rounded-xl">
+            <div key={i} className="flex items-center gap-2 py-2.5 px-3 bg-secondary/20 rounded-xl">
               <g.icon className="w-3.5 h-3.5 text-muted-foreground/40 flex-shrink-0" />
               <span className="text-[11px] text-foreground">{g.text}</span>
             </div>

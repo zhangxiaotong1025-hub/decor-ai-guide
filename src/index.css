@@ -44,6 +44,16 @@
 
     --radius: 0.5rem;
 
+    /* Attachment menu tokens */
+    --menu-image: 152 56% 40%;
+    --menu-file: 217 70% 50%;
+    --menu-floorplan: 36 70% 50%;
+    --menu-product: 270 50% 50%;
+
+    /* Warm material tones */
+    --warm-light: 36 80% 60%;
+    --warm-neutral: 30 20% 70%;
+
     /* Custom tokens */
     --shadow-layered: 0 0 0 1px rgba(0,0,0,.04), 0 2px 4px rgba(0,0,0,.02), 0 8px 16px rgba(0,0,0,.04);
     --shadow-elevated: 0 0 0 1px rgba(0,0,0,.04), 0 4px 8px rgba(0,0,0,.04), 0 16px 32px rgba(0,0,0,.06);
@@ -86,6 +96,12 @@
     --border: 217 33% 17%;
     --input: 217 33% 17%;
     --ring: 213 27% 84%;
+    --menu-image: 152 56% 40%;
+    --menu-file: 217 70% 50%;
+    --menu-floorplan: 36 70% 50%;
+    --menu-product: 270 50% 50%;
+    --warm-light: 36 80% 60%;
+    --warm-neutral: 30 20% 70%;
     --shadow-price: 0 4px 20px -4px hsl(142 71% 45% / 0.15);
   }
 }

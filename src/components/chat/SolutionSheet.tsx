@@ -188,7 +188,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                 </div>
 
                 {/* ── 专属设计信 ── */}
-                <div className="px-6 mt-2">
+                <div className="px-5 mt-2">
                   <div className="mb-6">
                     <p className="font-serif text-sm text-muted-foreground italic mb-3 tracking-wide">致 渴望呼吸感的你：</p>
                     <p className="text-sm text-foreground leading-relaxed">
@@ -247,7 +247,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                 <SectionLabel>专业设计，每一处都有依据</SectionLabel>
 
                 {/* Design concept */}
-                <div className="px-6 mb-6">
+                <div className="px-5 mb-6">
                   <div className="bg-primary/[0.03] border border-primary/10 rounded-2xl p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <Sparkles className="w-3.5 h-3.5 text-primary" />
@@ -260,7 +260,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                 </div>
 
                 {/* ── 1. 空间比例解析 ── */}
-                <div className="px-6 mb-8">
+                <div className="px-5 mb-8">
                   <div className="flex items-center gap-2 mb-1">
                     <Grid3X3 className="w-3.5 h-3.5 text-primary/60" />
                     <h3 className="text-sm font-medium text-foreground">空间比例解析</h3>
@@ -295,7 +295,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                 </div>
 
                 {/* ── 2. 人体工学尺寸 ── */}
-                <div className="px-6 mb-8">
+                <div className="px-5 mb-8">
                   <div className="flex items-center gap-2 mb-1">
                     <Ruler className="w-3.5 h-3.5 text-primary/60" />
                     <h3 className="text-sm font-medium text-foreground">人体工学尺寸</h3>
@@ -319,7 +319,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: i * 0.06 }}
-                        className="flex gap-3 py-2.5 px-3 bg-secondary/10 rounded-xl"
+                        className="flex gap-3 py-2.5 px-3 bg-secondary/20 rounded-xl"
                       >
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
@@ -334,7 +334,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                 </div>
 
                 {/* ── 3. 动线设计 ── */}
-                <div className="px-6 mb-8">
+                <div className="px-5 mb-8">
                   <h3 className="text-sm font-medium text-foreground mb-1">动线设计</h3>
                   <p className="text-[11px] text-muted-foreground mb-3">三条动线，让你在家里的每一步都是顺的</p>
 
@@ -392,7 +392,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                 </div>
 
                 {/* ── 4. 三层照明系统 ── */}
-                <div className="px-6 mb-8">
+                <div className="px-5 mb-8">
                   <div className="flex items-center gap-2 mb-1">
                     <Layers className="w-3.5 h-3.5 text-primary/60" />
                     <h3 className="text-sm font-medium text-foreground">三层照明系统</h3>
@@ -401,8 +401,8 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                   <div className="flex gap-2">
                     {[
                       { layer: "基础照明", temp: "4000K", desc: "自然光，看书不累", color: "hsl(var(--primary))" },
-                      { layer: "氛围照明", temp: "3000K", desc: "暖光，下班后放松", color: "hsl(36 80% 60%)" },
-                      { layer: "重点照明", temp: "可调", desc: "突出装饰，提升质感", color: "hsl(30 20% 70%)" },
+                      { layer: "氛围照明", temp: "3000K", desc: "暖光，下班后放松", color: "hsl(var(--warm-light))" },
+                      { layer: "重点照明", temp: "可调", desc: "突出装饰，提升质感", color: "hsl(var(--warm-neutral))" },
                     ].map((l, i) => (
                       <motion.div
                         key={i}
@@ -422,7 +422,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                   </div>
 
                   {/* Scene lighting preview */}
-                  <div className="mt-3 bg-secondary/10 rounded-xl p-3">
+                  <div className="mt-3 bg-secondary/20 rounded-xl p-3">
                     <p className="text-[10px] text-muted-foreground mb-2">💡 场景模拟：回家后的 3 分钟</p>
                     <div className="space-y-1.5">
                       {[
@@ -441,7 +441,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                 </div>
 
                 {/* ── 5. 色彩心理学 ── */}
-                <div className="px-6 mb-8">
+                <div className="px-5 mb-8">
                   <div className="flex items-center gap-2 mb-1">
                     <Palette className="w-3.5 h-3.5 text-primary/60" />
                     <h3 className="text-sm font-medium text-foreground">色彩心理学</h3>
@@ -473,7 +473,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                 </div>
 
                 {/* ── 6. 材料板 Mood Board ── */}
-                <div className="px-6 mb-8">
+                <div className="px-5 mb-8">
                   <div className="flex items-center gap-2 mb-1">
                     <Layers className="w-3.5 h-3.5 text-primary/60" />
                     <h3 className="text-sm font-medium text-foreground">材料板 Mood Board</h3>
@@ -526,7 +526,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: i * 0.06 }}
-                        className="flex-shrink-0 w-36 bg-secondary/10 rounded-xl p-3 snap-start"
+                        className="flex-shrink-0 w-36 bg-secondary/20 rounded-xl p-3 snap-start"
                       >
                         <span className="text-lg block mb-1">{m.icon}</span>
                         <span className="text-[11px] font-medium text-foreground block">{m.material}</span>
@@ -538,7 +538,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                 </div>
 
                 {/* ── 7. 材质微距 ── */}
-                <div className="px-6 mb-8">
+                <div className="px-5 mb-8">
                   <h3 className="text-sm font-medium text-foreground mb-1">肉眼可见的质感</h3>
                   <p className="text-[11px] text-muted-foreground mb-3">不只是"科技布"三个字 —— 看看水滴在面料上滚落</p>
                   <div className="rounded-2xl overflow-hidden">
@@ -550,7 +550,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                 </div>
 
                 {/* ── 8. 收纳容量规划 ── */}
-                <div className="px-6 mb-8">
+                <div className="px-5 mb-8">
                   <div className="flex items-center gap-2 mb-1">
                     <Box className="w-3.5 h-3.5 text-primary/60" />
                     <h3 className="text-sm font-medium text-foreground">收纳容量规划</h3>
@@ -611,7 +611,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: i * 0.08 }}
-                        className="bg-secondary/10 rounded-xl p-3"
+                        className="bg-secondary/20 rounded-xl p-3"
                       >
                         <div className="flex items-center gap-2.5">
                           <span className="text-lg">{s.icon}</span>
@@ -650,7 +650,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                 <SectionLabel>每一件都帮你挑明白了</SectionLabel>
 
                 {/* Price transparency summary */}
-                <div className="px-6 mb-5">
+                <div className="px-5 mb-5">
                   <div className="bg-accent/[0.04] border border-accent/15 rounded-2xl p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <Eye className="w-3.5 h-3.5 text-accent" />
@@ -668,7 +668,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                 </div>
 
                 {/* Product cards with anchor images */}
-                <div className="px-6 space-y-3">
+                <div className="px-5 space-y-3">
                   {mockProducts.map((product, i) => (
                     <ProductAnchorCard key={product.id} product={product} index={i} onSelect={onSelectProduct} />
                   ))}
@@ -681,7 +681,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
               <div ref={ref("save")} className="mt-2">
                 <SectionLabel>拼团再省一笔，最后的底价</SectionLabel>
 
-                <div className="px-6 mb-6">
+                <div className="px-5 mb-6">
                   <p className="text-sm text-muted-foreground leading-relaxed mb-4">
                     同样的品质，一群人买就是比一个人买便宜。<br />
                     <span className="text-foreground font-medium">先占位锁价，成团后再决定。</span>
@@ -752,7 +752,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                 </div>
 
                 {/* Trust guarantees */}
-                <div className="px-6 mb-6">
+                <div className="px-5 mb-6">
                   <p className="text-[10px] text-muted-foreground/60 uppercase tracking-wider mb-3">安心保障</p>
                   <div className="grid grid-cols-2 gap-2">
                     {[
@@ -761,7 +761,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                       { icon: Truck, text: "送装一体，带走垃圾" },
                       { icon: Award, text: "365天只换不修" },
                     ].map((g, i) => (
-                      <div key={i} className="flex items-center gap-2 py-2.5 px-3 bg-secondary/10 rounded-xl">
+                      <div key={i} className="flex items-center gap-2 py-2.5 px-3 bg-secondary/20 rounded-xl">
                         <g.icon className="w-3.5 h-3.5 text-muted-foreground/40 flex-shrink-0" />
                         <span className="text-[11px] text-foreground">{g.text}</span>
                       </div>
@@ -770,7 +770,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                 </div>
 
                 {/* Budget flexibility */}
-                <div className="px-6 mb-6">
+                <div className="px-5 mb-6">
                   <div className="flex gap-2">
                     <div className="flex-1 p-3 border border-accent/15 rounded-xl">
                       <span className="text-[10px] font-medium text-accent block mb-1">预算紧一点？</span>
@@ -794,7 +794,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                 </div>
 
                 {/* CTA */}
-                <div className="px-6 pb-8">
+                <div className="px-5 pb-8">
                   <div className="flex gap-3">
                     <button onClick={onClose} className="flex-1 py-3.5 bg-foreground text-background text-sm font-medium rounded-xl tracking-wide">
                       ⚡ 一键锁定这套方案
@@ -819,7 +819,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
 /* ─── Sub-components ─── */
 
 const SectionLabel = ({ children }: { children: React.ReactNode }) => (
-  <div className="px-6 mb-5 mt-2">
+  <div className="px-5 mb-5 mt-2">
     <div className="flex items-center gap-3 mb-4">
       <div className="flex-1 h-[0.5px] bg-border/30" />
       <div className="w-1 h-1 rounded-full bg-border/40" />
@@ -841,7 +841,7 @@ const ProductAnchorCard = ({ product, index, onSelect }: { product: ProductItem;
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.4, delay: index * 0.06 }}
       onClick={() => onSelect(product)}
-      className="bg-secondary/10 rounded-2xl overflow-hidden active:scale-[0.98] transition-transform cursor-pointer"
+      className="bg-secondary/20 rounded-2xl overflow-hidden active:scale-[0.98] transition-transform cursor-pointer"
     >
       <div className="flex">
         {/* Product anchor image */}
