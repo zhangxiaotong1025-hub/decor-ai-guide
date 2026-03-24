@@ -30,6 +30,8 @@ export interface StoryProduct {
   brandPrice: number;
   /** Product scene image */
   image?: string;
+  /** Link to product detail page */
+  productId?: string;
 }
 
 /** Detail gallery image with caption overlay */
@@ -104,11 +106,11 @@ export const mockSceneStories: SceneStory[] = [
     painPoint: "品牌店一套客厅要 8 万多，月薪 8K 根本不敢想",
     highlights: ["纳米防猫抓科技布沙发，猫随便挠", "不规则茶几留出瑜伽空间", "三层照明，下班一键切换放松模式"],
     products: [
-      { name: "悬浮云朵沙发", category: "沙发", ourPrice: 8999, brandPrice: 15000, image: nordicDetail1 },
-      { name: "岩板不规则茶几", category: "茶几", ourPrice: 1680, brandPrice: 4200 },
-      { name: "悬浮电视柜", category: "电视柜", ourPrice: 2560, brandPrice: 6000 },
-      { name: "三层照明套装", category: "灯具", ourPrice: 2300, brandPrice: 5500, image: nordicDetail2 },
-      { name: "软装搭配套装", category: "软装", ourPrice: 3500, brandPrice: 7000 },
+      { name: "悬浮云朵沙发", category: "沙发", ourPrice: 8999, brandPrice: 15000, image: nordicDetail1, productId: "sofa-001" },
+      { name: "岩板不规则茶几", category: "茶几", ourPrice: 1680, brandPrice: 4200, productId: "coffee-table-001" },
+      { name: "悬浮电视柜", category: "电视柜", ourPrice: 2560, brandPrice: 6000, productId: "tv-cabinet-001" },
+      { name: "三层照明套装", category: "灯具", ourPrice: 2300, brandPrice: 5500, image: nordicDetail2, productId: "lighting-001" },
+      { name: "软装搭配套装", category: "软装", ourPrice: 3500, brandPrice: 7000, productId: "decor-001" },
     ],
     chatPrompt: "我养了只猫，客厅25平，想回家能窝在沙发上撸猫看剧，沙发别太怕猫挠，预算2万出头就行",
     socialProof: "847 人照着这个方案装了家",
