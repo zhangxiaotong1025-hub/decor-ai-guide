@@ -319,7 +319,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: i * 0.06 }}
-                        className="flex gap-3 py-2.5 px-3 bg-secondary/10 rounded-xl"
+                        className="flex gap-3 py-2.5 px-3 bg-secondary/20 rounded-xl"
                       >
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
@@ -422,7 +422,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                   </div>
 
                   {/* Scene lighting preview */}
-                  <div className="mt-3 bg-secondary/10 rounded-xl p-3">
+                  <div className="mt-3 bg-secondary/20 rounded-xl p-3">
                     <p className="text-[10px] text-muted-foreground mb-2">💡 场景模拟：回家后的 3 分钟</p>
                     <div className="space-y-1.5">
                       {[
@@ -526,7 +526,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: i * 0.06 }}
-                        className="flex-shrink-0 w-36 bg-secondary/10 rounded-xl p-3 snap-start"
+                        className="flex-shrink-0 w-36 bg-secondary/20 rounded-xl p-3 snap-start"
                       >
                         <span className="text-lg block mb-1">{m.icon}</span>
                         <span className="text-[11px] font-medium text-foreground block">{m.material}</span>
@@ -611,7 +611,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: i * 0.08 }}
-                        className="bg-secondary/10 rounded-xl p-3"
+                        className="bg-secondary/20 rounded-xl p-3"
                       >
                         <div className="flex items-center gap-2.5">
                           <span className="text-lg">{s.icon}</span>
@@ -761,7 +761,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                       { icon: Truck, text: "送装一体，带走垃圾" },
                       { icon: Award, text: "365天只换不修" },
                     ].map((g, i) => (
-                      <div key={i} className="flex items-center gap-2 py-2.5 px-3 bg-secondary/10 rounded-xl">
+                      <div key={i} className="flex items-center gap-2 py-2.5 px-3 bg-secondary/20 rounded-xl">
                         <g.icon className="w-3.5 h-3.5 text-muted-foreground/40 flex-shrink-0" />
                         <span className="text-[11px] text-foreground">{g.text}</span>
                       </div>
@@ -841,7 +841,7 @@ const ProductAnchorCard = ({ product, index, onSelect }: { product: ProductItem;
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.4, delay: index * 0.06 }}
       onClick={() => onSelect(product)}
-      className="bg-secondary/10 rounded-2xl overflow-hidden active:scale-[0.98] transition-transform cursor-pointer"
+      className="bg-secondary/20 rounded-2xl overflow-hidden active:scale-[0.98] transition-transform cursor-pointer"
     >
       <div className="flex">
         {/* Product anchor image */}
