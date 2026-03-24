@@ -259,15 +259,88 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                   </div>
                 </div>
 
-                {/* 空间布局 - visual with floorplan */}
+                {/* ── 1. 空间比例解析 ── */}
                 <div className="px-6 mb-8">
-                  <h3 className="text-sm font-medium text-foreground mb-1">空间布局</h3>
-                  <p className="text-[11px] text-muted-foreground mb-4">黄金比例分区：沙发区 60% + 视听区 30% + 动线 10%</p>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Grid3X3 className="w-3.5 h-3.5 text-primary/60" />
+                    <h3 className="text-sm font-medium text-foreground">空间比例解析</h3>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground mb-4">黄金比例分区，每一寸都有数学依据</p>
+
+                  <div className="rounded-2xl overflow-hidden border border-border/20 mb-3">
+                    <img src={proportionImg} alt="空间比例分析图" className="w-full" loading="lazy" width={1024} height={1024} />
+                  </div>
+
+                  {/* Proportion data cards */}
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { pct: "60%", zone: "会客区", size: "15㎡", desc: "沙发+茶几" },
+                      { pct: "30%", zone: "视听区", size: "7.5㎡", desc: "电视+电视柜" },
+                      { pct: "10%", zone: "动线区", size: "2.5㎡", desc: "留白通行" },
+                    ].map((z, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, y: 8 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.08 }}
+                        className="bg-secondary/20 rounded-xl p-2.5 text-center"
+                      >
+                        <span className="font-mono text-lg font-bold text-primary block">{z.pct}</span>
+                        <span className="text-[11px] font-medium text-foreground block">{z.zone}</span>
+                        <span className="text-[10px] text-muted-foreground">{z.size} · {z.desc}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* ── 2. 人体工学尺寸 ── */}
+                <div className="px-6 mb-8">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Ruler className="w-3.5 h-3.5 text-primary/60" />
+                    <h3 className="text-sm font-medium text-foreground">人体工学尺寸</h3>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground mb-4">每个尺寸都基于国标人体工学数据，不是拍脑袋</p>
+
+                  <div className="rounded-2xl overflow-hidden border border-border/20 mb-3">
+                    <img src={ergonomicImg} alt="人体工学示意图" className="w-full" loading="lazy" width={1024} height={1024} />
+                  </div>
+
+                  <div className="space-y-2">
+                    {[
+                      { dim: "沙发坐高 42cm", standard: "GB/T 3326", why: "膝盖自然弯曲90°，久坐不压迫血管" },
+                      { dim: "茶几高度 45cm", standard: "人机工程学", why: "坐姿手臂自然下垂可触及，拿杯无需弯腰" },
+                      { dim: "观影距 2.8m", standard: "THX 标准", why: "55寸电视最佳沉浸距，视角恰好 30°" },
+                      { dim: "电视中心 110cm", standard: "SMPTE 推荐", why: "坐姿平视线高度，颈椎零负担" },
+                    ].map((e, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -12 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.06 }}
+                        className="flex gap-3 py-2.5 px-3 bg-secondary/10 rounded-xl"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[12px] font-medium text-foreground">{e.dim}</span>
+                            <span className="text-[9px] px-1.5 py-0.5 bg-primary/8 text-primary/70 rounded font-mono">{e.standard}</span>
+                          </div>
+                          <p className="text-[10px] text-muted-foreground mt-0.5">{e.why}</p>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* ── 3. 动线设计 ── */}
+                <div className="px-6 mb-8">
+                  <h3 className="text-sm font-medium text-foreground mb-1">动线设计</h3>
+                  <p className="text-[11px] text-muted-foreground mb-3">三条动线，让你在家里的每一步都是顺的</p>
 
                   {/* Floorplan with interactive overlay */}
                   <div className="relative rounded-2xl overflow-hidden border border-border/20 mb-4">
-                    <img src={floorplanImg} alt="空间布局图" className="w-full" />
-                    {/* Hotspot annotations */}
+                    <img src={floorplanImg} alt="空间布局图" className="w-full" loading="lazy" />
                     {solution.annotations.map((anno, i) => (
                       <motion.div
                         key={i}
@@ -290,12 +363,7 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                       </motion.div>
                     ))}
                   </div>
-                </div>
 
-                {/* 动线设计 */}
-                <div className="px-6 mb-8">
-                  <h3 className="text-sm font-medium text-foreground mb-1">动线设计</h3>
-                  <p className="text-[11px] text-muted-foreground mb-3">三条动线，让你在家里的每一步都是顺的</p>
                   <div className="space-y-2">
                     {[
                       { path: "入户 → 沙发 → 阳台", width: "1.2m", note: "主动线，推婴儿车也没问题", emoji: "🚶" },
@@ -323,9 +391,12 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                   </div>
                 </div>
 
-                {/* 三层照明 */}
+                {/* ── 4. 三层照明系统 ── */}
                 <div className="px-6 mb-8">
-                  <h3 className="text-sm font-medium text-foreground mb-1">三层照明系统</h3>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Layers className="w-3.5 h-3.5 text-primary/60" />
+                    <h3 className="text-sm font-medium text-foreground">三层照明系统</h3>
+                  </div>
                   <p className="text-[11px] text-muted-foreground mb-3">不是炫技，是让你一键切换到最放松的状态</p>
                   <div className="flex gap-2">
                     {[
@@ -349,13 +420,34 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                       </motion.div>
                     ))}
                   </div>
+
+                  {/* Scene lighting preview */}
+                  <div className="mt-3 bg-secondary/10 rounded-xl p-3">
+                    <p className="text-[10px] text-muted-foreground mb-2">💡 场景模拟：回家后的 3 分钟</p>
+                    <div className="space-y-1.5">
+                      {[
+                        { time: "开门", action: "全部灯光自动开启 → 4000K 自然白光", opacity: 1 },
+                        { time: "换鞋坐下", action: "主灯调暗 50%，落地灯开启暖光", opacity: 0.7 },
+                        { time: "放松模式", action: "主灯关闭，只留 3000K 氛围灯", opacity: 0.4 },
+                      ].map((s, i) => (
+                        <div key={i} className="flex items-center gap-3">
+                          <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0" style={{ opacity: s.opacity }} />
+                          <span className="text-[10px] text-muted-foreground/60 w-12 flex-shrink-0">{s.time}</span>
+                          <span className="text-[10px] text-foreground">{s.action}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
-                {/* 色彩心理学 */}
+                {/* ── 5. 色彩心理学 ── */}
                 <div className="px-6 mb-8">
-                  <h3 className="text-sm font-medium text-foreground mb-1">治愈系色彩</h3>
-                  <p className="text-[11px] text-muted-foreground mb-3">让你下班后的心理压力一点点卸掉</p>
-                  <div className="flex h-16 rounded-2xl overflow-hidden mb-2">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Palette className="w-3.5 h-3.5 text-primary/60" />
+                    <h3 className="text-sm font-medium text-foreground">色彩心理学</h3>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground mb-3">每种颜色的比例都经过计算，让你下班后的压力一点点卸掉</p>
+                  <div className="flex h-16 rounded-2xl overflow-hidden mb-3">
                     <div className="flex-[4] relative" style={{ backgroundColor: "hsl(36 28% 78%)" }}>
                       <span className="absolute bottom-2 left-3 text-[9px] font-light" style={{ color: "hsl(36 28% 40%)" }}>燕麦色 · 40%</span>
                     </div>
@@ -366,17 +458,92 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                       <span className="absolute bottom-2 left-2 text-[9px] font-light text-background/80">绿植 · 20%</span>
                     </div>
                   </div>
+                  <div className="space-y-1.5">
+                    {[
+                      { color: "燕麦色 40%", role: "主色调", effect: "温暖安全感，降低皮质醇（压力激素）水平" },
+                      { color: "奶白色 40%", role: "辅助色", effect: "视觉扩容，25㎡ 看起来像 30㎡" },
+                      { color: "绿植 20%", role: "点缀色", effect: "自然生命力，缓解视觉疲劳、提升专注力" },
+                    ].map((c, i) => (
+                      <div key={i} className="flex items-start gap-2 text-[10px]">
+                        <span className="text-muted-foreground/50 w-20 flex-shrink-0">{c.color}</span>
+                        <span className="text-foreground">{c.effect}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
-                {/* 材质微距 */}
+                {/* ── 6. 材料板 Mood Board ── */}
+                <div className="px-6 mb-8">
+                  <h3 className="text-sm font-medium text-foreground mb-1">材料板 Mood Board</h3>
+                  <p className="text-[11px] text-muted-foreground mb-3">5 种材质的碰撞 — 每一种都不是随便选的</p>
+
+                  <div className="rounded-2xl overflow-hidden mb-3">
+                    <img src={moodboardImg} alt="材料板" className="w-full" loading="lazy" width={800} height={512} />
+                  </div>
+
+                  <div className="space-y-2">
+                    {[
+                      { material: "白橡木", where: "茶几 · 电视柜 · 地板", why: "温润手感，北欧风灵魂材质，视觉降温" },
+                      { material: "科技布", where: "沙发 · 抱枕", why: "纳米防污、透气亲肤，比真皮好打理 10 倍" },
+                      { material: "钢化玻璃", where: "茶几台面", why: "8mm 厚度，承重 50kg，通透感放大空间" },
+                      { material: "拉丝铝合金", where: "灯具 · 五金件", why: "精致细节，不指纹残留，10 年不氧化" },
+                      { material: "鲜植绿叶", where: "龟背竹 · 窗台绿植", why: "天然空气净化器，每片叶子都是装饰品" },
+                    ].map((m, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, y: 8 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.05 }}
+                        className="bg-secondary/10 rounded-xl px-3 py-2.5"
+                      >
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <span className="text-[12px] font-medium text-foreground">{m.material}</span>
+                          <span className="text-[9px] text-muted-foreground/50">→ {m.where}</span>
+                        </div>
+                        <p className="text-[10px] text-muted-foreground">{m.why}</p>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* ── 7. 材质微距 ── */}
                 <div className="px-6 mb-8">
                   <h3 className="text-sm font-medium text-foreground mb-1">肉眼可见的质感</h3>
                   <p className="text-[11px] text-muted-foreground mb-3">不只是"科技布"三个字 —— 看看水滴在面料上滚落</p>
                   <div className="rounded-2xl overflow-hidden">
-                    <img src={fabricMacro} alt="科技布微距特写" className="w-full h-44 object-cover" />
+                    <img src={fabricMacro} alt="科技布微距特写" className="w-full h-44 object-cover" loading="lazy" />
                   </div>
                   <p className="text-[10px] text-muted-foreground text-center mt-2">
                     纳米级防抓防污科技布 · 水滴滚落不留痕 · 养猫家庭的救星
+                  </p>
+                </div>
+
+                {/* ── 8. 收纳容量规划 ── */}
+                <div className="px-6 mb-8">
+                  <h3 className="text-sm font-medium text-foreground mb-1">收纳容量规划</h3>
+                  <p className="text-[11px] text-muted-foreground mb-3">看不见的整洁，才是真正的高级感</p>
+
+                  <div className="space-y-2">
+                    {[
+                      { zone: "电视柜", capacity: "120L", items: "遥控器 × 3 + 路由器 + 游戏机 + 线材", type: "隐藏式" },
+                      { zone: "茶几下层", capacity: "40L", items: "杂志 × 10 + 果盘 + 纸巾盒", type: "开放式" },
+                      { zone: "沙发底部", capacity: "80L", items: "换季毯子 × 2 + 抱枕收纳", type: "翻盖式" },
+                    ].map((s, i) => (
+                      <div key={i} className="bg-secondary/10 rounded-xl px-3 py-2.5">
+                        <div className="flex items-center justify-between mb-0.5">
+                          <span className="text-[12px] font-medium text-foreground">{s.zone}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[9px] px-1.5 py-0.5 bg-primary/8 text-primary/70 rounded">{s.type}</span>
+                            <span className="font-mono text-[11px] text-primary font-medium">{s.capacity}</span>
+                          </div>
+                        </div>
+                        <p className="text-[10px] text-muted-foreground">装得下：{s.items}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-[10px] text-muted-foreground/60 mt-2 text-center">
+                    总收纳容量 240L · 客厅零散物品全部"消失"
                   </p>
                 </div>
               </div>
