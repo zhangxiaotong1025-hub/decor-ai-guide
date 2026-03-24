@@ -551,30 +551,95 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
 
                 {/* ── 8. 收纳容量规划 ── */}
                 <div className="px-6 mb-8">
-                  <h3 className="text-sm font-medium text-foreground mb-1">收纳容量规划</h3>
-                  <p className="text-[11px] text-muted-foreground mb-3">看不见的整洁，才是真正的高级感</p>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Box className="w-3.5 h-3.5 text-primary/60" />
+                    <h3 className="text-sm font-medium text-foreground">收纳容量规划</h3>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground mb-4">看不见的整洁，才是真正的高级感</p>
 
+                  {/* Total capacity visual */}
+                  <div className="bg-primary/[0.03] border border-primary/10 rounded-2xl p-4 mb-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-[10px] text-muted-foreground/60 uppercase tracking-wider">总收纳容量</span>
+                      <span className="font-mono text-xl font-bold text-primary">240L</span>
+                    </div>
+                    {/* Stacked capacity bar */}
+                    <div className="flex h-8 rounded-xl overflow-hidden">
+                      {[
+                        { zone: "电视柜", capacity: 120, color: "hsl(var(--primary))", pct: 50 },
+                        { zone: "沙发底部", capacity: 80, color: "hsl(var(--accent))", pct: 33.3 },
+                        { zone: "茶几", capacity: 40, color: "hsl(var(--gold))", pct: 16.7 },
+                      ].map((s, i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ width: 0 }}
+                          whileInView={{ width: `${s.pct}%` }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
+                          className="flex items-center justify-center relative"
+                          style={{ backgroundColor: s.color }}
+                        >
+                          <span className="text-[9px] font-medium text-primary-foreground whitespace-nowrap">{s.capacity}L</span>
+                        </motion.div>
+                      ))}
+                    </div>
+                    {/* Legend */}
+                    <div className="flex gap-4 mt-2.5">
+                      {[
+                        { zone: "电视柜", color: "hsl(var(--primary))" },
+                        { zone: "沙发底部", color: "hsl(var(--accent))" },
+                        { zone: "茶几下层", color: "hsl(var(--gold))" },
+                      ].map((l, i) => (
+                        <div key={i} className="flex items-center gap-1.5">
+                          <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: l.color }} />
+                          <span className="text-[9px] text-muted-foreground">{l.zone}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Per-zone detail cards */}
                   <div className="space-y-2">
                     {[
-                      { zone: "电视柜", capacity: "120L", items: "遥控器 × 3 + 路由器 + 游戏机 + 线材", type: "隐藏式" },
-                      { zone: "茶几下层", capacity: "40L", items: "杂志 × 10 + 果盘 + 纸巾盒", type: "开放式" },
-                      { zone: "沙发底部", capacity: "80L", items: "换季毯子 × 2 + 抱枕收纳", type: "翻盖式" },
+                      { zone: "电视柜", capacity: 120, total: 240, items: "遥控器×3 + 路由器 + 游戏机 + 线材", type: "隐藏式", icon: "📺", color: "hsl(var(--primary))" },
+                      { zone: "沙发底部", capacity: 80, total: 240, items: "换季毯子×2 + 抱枕收纳", type: "翻盖式", icon: "🛋️", color: "hsl(var(--accent))" },
+                      { zone: "茶几下层", capacity: 40, total: 240, items: "杂志×10 + 果盘 + 纸巾盒", type: "开放式", icon: "☕", color: "hsl(var(--gold))" },
                     ].map((s, i) => (
-                      <div key={i} className="bg-secondary/10 rounded-xl px-3 py-2.5">
-                        <div className="flex items-center justify-between mb-0.5">
-                          <span className="text-[12px] font-medium text-foreground">{s.zone}</span>
-                          <div className="flex items-center gap-2">
-                            <span className="text-[9px] px-1.5 py-0.5 bg-primary/8 text-primary/70 rounded">{s.type}</span>
-                            <span className="font-mono text-[11px] text-primary font-medium">{s.capacity}</span>
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, y: 8 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.08 }}
+                        className="bg-secondary/10 rounded-xl p-3"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <span className="text-lg">{s.icon}</span>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between mb-1.5">
+                              <div className="flex items-center gap-2">
+                                <span className="text-[12px] font-medium text-foreground">{s.zone}</span>
+                                <span className="text-[9px] px-1.5 py-0.5 bg-secondary rounded text-muted-foreground">{s.type}</span>
+                              </div>
+                              <span className="font-mono text-[11px] font-medium" style={{ color: s.color }}>{s.capacity}L</span>
+                            </div>
+                            {/* Mini capacity bar */}
+                            <div className="h-1.5 bg-secondary rounded-full overflow-hidden mb-1.5">
+                              <motion.div
+                                initial={{ width: 0 }}
+                                whileInView={{ width: `${(s.capacity / s.total) * 100}%` }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }}
+                                className="h-full rounded-full"
+                                style={{ backgroundColor: s.color }}
+                              />
+                            </div>
+                            <p className="text-[10px] text-muted-foreground">装得下：{s.items}</p>
                           </div>
                         </div>
-                        <p className="text-[10px] text-muted-foreground">装得下：{s.items}</p>
-                      </div>
+                      </motion.div>
                     ))}
                   </div>
-                  <p className="text-[10px] text-muted-foreground/60 mt-2 text-center">
-                    总收纳容量 240L · 客厅零散物品全部"消失"
-                  </p>
                 </div>
               </div>
 
