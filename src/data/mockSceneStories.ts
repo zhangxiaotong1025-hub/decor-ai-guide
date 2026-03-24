@@ -30,6 +30,8 @@ export interface StoryProduct {
   brandPrice: number;
   /** Product scene image */
   image?: string;
+  /** Link to product detail page */
+  productId?: string;
 }
 
 /** Detail gallery image with caption overlay */
