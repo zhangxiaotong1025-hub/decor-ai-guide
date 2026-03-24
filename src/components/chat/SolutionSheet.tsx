@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronRight, Shield, Factory, Award, Truck, Users, Zap, Box, Eye, Sparkles, ArrowDown } from "lucide-react";
+import { X, ChevronRight, Shield, Factory, Award, Truck, Users, Zap, Box, Eye, Sparkles, ArrowDown, Ruler, Layers, Palette, Grid3X3 } from "lucide-react";
 import type { DesignSolution } from "@/types/chat";
 import { mockProducts } from "@/data/mockProducts";
 import type { ProductItem } from "@/types/product";
@@ -11,6 +11,9 @@ import floorplanImg from "@/assets/floorplan-layout.png";
 import render1 from "@/assets/design-render-1.jpg";
 import render2 from "@/assets/design-render-2.jpg";
 import render3 from "@/assets/design-render-3.jpg";
+import ergonomicImg from "@/assets/ergonomic-diagram.jpg";
+import proportionImg from "@/assets/proportion-analysis.jpg";
+import moodboardImg from "@/assets/moodboard-materials.jpg";
 
 interface SolutionSheetProps {
   solution: DesignSolution;
