@@ -189,9 +189,9 @@ const CustomProductDetail = ({ product }: Props) => {
           </motion.div>
           <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 to-transparent" />
           <motion.div {...fadeUp} className="absolute bottom-5 left-5 right-5">
-            <p className="text-[10px] tracking-widest text-background/60 uppercase mb-1.5">Space</p>
-            <p className="text-sm text-white/90 leading-relaxed">严丝合缝，告别积灰死角</p>
-            <p className="text-sm text-white/80 leading-relaxed">悬浮离地，扫地机器人自由通行</p>
+            <p className="text-[10px] tracking-widest text-primary-foreground/60 uppercase mb-1.5">Space</p>
+            <p className="text-sm text-primary-foreground/90 leading-relaxed">严丝合缝，告别积灰死角</p>
+            <p className="text-sm text-primary-foreground/80 leading-relaxed">悬浮离地，扫地机器人自由通行</p>
           </motion.div>
         </div>
       )}

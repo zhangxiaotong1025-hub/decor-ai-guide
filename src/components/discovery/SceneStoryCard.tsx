@@ -55,7 +55,7 @@ const SceneStoryCard = ({ story, index, onTap }: SceneStoryCardProps) => {
                 ¥{story.brandTotal.toLocaleString()}
               </span>
             </div>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-button bg-shock/90 text-primary-foreground">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-button bg-saving text-saving-foreground">
               省 {savedPct}%
             </span>
           </div>
