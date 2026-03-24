@@ -327,7 +327,7 @@ const CustomProductDetail = ({ product }: Props) => {
               key={i}
               {...fadeUp}
               transition={{ ...fadeUp.transition, delay: i * 0.1 }}
-              className="flex items-start gap-4 bg-secondary/15 rounded-xl p-4"
+              className="flex items-start gap-4 bg-secondary/20 rounded-xl p-4"
             >
               <span className="font-mono text-2xl font-light text-primary/40 leading-none">{step.num}</span>
               <div className="pt-0.5">
