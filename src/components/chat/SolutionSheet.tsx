@@ -474,34 +474,64 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
 
                 {/* ── 6. 材料板 Mood Board ── */}
                 <div className="px-6 mb-8">
-                  <h3 className="text-sm font-medium text-foreground mb-1">材料板 Mood Board</h3>
-                  <p className="text-[11px] text-muted-foreground mb-3">5 种材质的碰撞 — 每一种都不是随便选的</p>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Layers className="w-3.5 h-3.5 text-primary/60" />
+                    <h3 className="text-sm font-medium text-foreground">材料板 Mood Board</h3>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground mb-4">5 种材质的碰撞 — 每一种都不是随便选的</p>
 
+                  {/* Visual material swatches grid */}
+                  <div className="grid grid-cols-5 gap-2 mb-4">
+                    {[
+                      { material: "白橡木", color: "hsl(36 35% 72%)", pattern: "linear-gradient(135deg, hsl(36 35% 72%) 0%, hsl(36 28% 65%) 50%, hsl(36 35% 75%) 100%)" },
+                      { material: "科技布", color: "hsl(220 8% 78%)", pattern: "linear-gradient(135deg, hsl(220 8% 78%) 0%, hsl(220 10% 72%) 50%, hsl(220 8% 80%) 100%)" },
+                      { material: "钢化玻璃", color: "hsl(200 15% 88%)", pattern: "linear-gradient(135deg, hsl(200 15% 92%) 0%, hsl(200 20% 85%) 50%, hsl(200 10% 95%) 100%)" },
+                      { material: "铝合金", color: "hsl(210 5% 70%)", pattern: "linear-gradient(135deg, hsl(210 5% 75%) 0%, hsl(210 8% 65%) 50%, hsl(210 5% 80%) 100%)" },
+                      { material: "绿植", color: "hsl(150 35% 40%)", pattern: "linear-gradient(135deg, hsl(150 40% 45%) 0%, hsl(150 35% 35%) 50%, hsl(145 30% 50%) 100%)" },
+                    ].map((m, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.06, type: "spring" }}
+                        className="flex flex-col items-center gap-1.5"
+                      >
+                        <div
+                          className="w-full aspect-square rounded-2xl border border-border/20"
+                          style={{ background: m.pattern, boxShadow: `inset 0 2px 8px rgba(0,0,0,0.06)` }}
+                        />
+                        <span className="text-[9px] text-muted-foreground text-center leading-tight">{m.material}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  {/* Moodboard hero */}
                   <div className="rounded-2xl overflow-hidden mb-3">
                     <img src={moodboardImg} alt="材料板" className="w-full" loading="lazy" width={800} height={512} />
                   </div>
 
-                  <div className="space-y-2">
+                  {/* Material details - compact horizontal scroll */}
+                  <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1 snap-x">
                     {[
-                      { material: "白橡木", where: "茶几 · 电视柜 · 地板", why: "温润手感，北欧风灵魂材质，视觉降温" },
-                      { material: "科技布", where: "沙发 · 抱枕", why: "纳米防污、透气亲肤，比真皮好打理 10 倍" },
-                      { material: "钢化玻璃", where: "茶几台面", why: "8mm 厚度，承重 50kg，通透感放大空间" },
-                      { material: "拉丝铝合金", where: "灯具 · 五金件", why: "精致细节，不指纹残留，10 年不氧化" },
-                      { material: "鲜植绿叶", where: "龟背竹 · 窗台绿植", why: "天然空气净化器，每片叶子都是装饰品" },
+                      { material: "白橡木", where: "茶几·电视柜·地板", why: "温润手感，北欧灵魂材质", icon: "🪵" },
+                      { material: "科技布", where: "沙发·抱枕", why: "纳米防污，比真皮好打理10倍", icon: "🧵" },
+                      { material: "钢化玻璃", where: "茶几台面", why: "8mm厚承重50kg，通透放大空间", icon: "💎" },
+                      { material: "铝合金", where: "灯具·五金", why: "不留指纹，10年不氧化", icon: "⚙️" },
+                      { material: "鲜植绿叶", where: "龟背竹·窗台", why: "天然净化器，每片叶都是装饰", icon: "🌿" },
                     ].map((m, i) => (
                       <motion.div
                         key={i}
-                        initial={{ opacity: 0, y: 8 }}
-                        whileInView={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0, x: 16 }}
+                        whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        transition={{ delay: i * 0.05 }}
-                        className="bg-secondary/10 rounded-xl px-3 py-2.5"
+                        transition={{ delay: i * 0.06 }}
+                        className="flex-shrink-0 w-36 bg-secondary/10 rounded-xl p-3 snap-start"
                       >
-                        <div className="flex items-center gap-2 mb-0.5">
-                          <span className="text-[12px] font-medium text-foreground">{m.material}</span>
-                          <span className="text-[9px] text-muted-foreground/50">→ {m.where}</span>
-                        </div>
-                        <p className="text-[10px] text-muted-foreground">{m.why}</p>
+                        <span className="text-lg block mb-1">{m.icon}</span>
+                        <span className="text-[11px] font-medium text-foreground block">{m.material}</span>
+                        <span className="text-[9px] text-muted-foreground/60 block mb-1">{m.where}</span>
+                        <p className="text-[10px] text-muted-foreground leading-snug">{m.why}</p>
                       </motion.div>
                     ))}
                   </div>
