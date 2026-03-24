@@ -164,7 +164,7 @@ const CustomProductDetail = ({ product }: Props) => {
                 key={i}
                 {...fadeUp}
                 transition={{ ...fadeUp.transition, delay: i * 0.1 }}
-                className="text-[12px] text-white/90 leading-relaxed mb-1 last:mb-0"
+                className="text-[12px] text-primary-foreground/90 leading-relaxed mb-1 last:mb-0"
               >
                 ✔ {reason}
               </motion.p>
