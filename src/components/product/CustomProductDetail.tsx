@@ -371,7 +371,7 @@ const CustomProductDetail = ({ product }: Props) => {
             { icon: Truck, text: "送装一体，带走垃圾" },
             { icon: Award, text: "365天只换不修" },
           ].map((g, i) => (
-            <div key={i} className="flex items-center gap-2 py-2.5 px-3 bg-secondary/15 rounded-xl">
+            <div key={i} className="flex items-center gap-2 py-2.5 px-3 bg-secondary/20 rounded-xl">
               <g.icon className="w-3.5 h-3.5 text-muted-foreground/40 flex-shrink-0" />
               <span className="text-[11px] text-foreground">{g.text}</span>
             </div>
