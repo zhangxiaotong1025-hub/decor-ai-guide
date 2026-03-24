@@ -401,8 +401,8 @@ const SolutionSheet = ({ solution, isOpen, bottomInset = 0, onClose, onModify, o
                   <div className="flex gap-2">
                     {[
                       { layer: "基础照明", temp: "4000K", desc: "自然光，看书不累", color: "hsl(var(--primary))" },
-                      { layer: "氛围照明", temp: "3000K", desc: "暖光，下班后放松", color: "hsl(36 80% 60%)" },
-                      { layer: "重点照明", temp: "可调", desc: "突出装饰，提升质感", color: "hsl(30 20% 70%)" },
+                      { layer: "氛围照明", temp: "3000K", desc: "暖光，下班后放松", color: "hsl(var(--warm-light))" },
+                      { layer: "重点照明", temp: "可调", desc: "突出装饰，提升质感", color: "hsl(var(--warm-neutral))" },
                     ].map((l, i) => (
                       <motion.div
                         key={i}
