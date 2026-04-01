@@ -1,8 +1,9 @@
 import { useState, useRef, useImperativeHandle, forwardRef, useCallback, useEffect, type KeyboardEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Send, Plus, X, Image, FileText, Mic, MicOff, Home, ShoppingBag,
-  Camera, Paperclip
+  Camera, Paperclip, Presentation
 } from "lucide-react";
 
 export interface ChatInputProps {
