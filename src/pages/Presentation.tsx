@@ -87,7 +87,7 @@ const SlideOverview = () => (
         {[
           { icon: "🏠", title: "空间即货架", desc: "用整屋方案替代单品展示，提高信任与客单价", color: "from-primary/20 to-primary/5" },
           { icon: "🤖", title: "AI即导购", desc: "自动生成搭配逻辑，把卖点变成买点", color: "from-accent/20 to-accent/5" },
-          { icon: "💎", title: "交易即方案", desc: "支持整套购买、拼团、单品拆分一站式成交", color: "from-gold/20 to-gold/5" },
+          { icon: "💎", title: "方案即交易", desc: "支持整套购买、拼团、单品拆分一站式成交", color: "from-gold/20 to-gold/5" },
         ].map((item) => (
           <div key={item.title} className={`rounded-2xl bg-gradient-to-br ${item.color} p-6 border border-border/50`}>
             <span className="text-3xl">{item.icon}</span>
