@@ -1,8 +1,9 @@
 import { useState, useRef, useImperativeHandle, forwardRef, useCallback, useEffect, type KeyboardEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Send, Plus, X, Image, FileText, Mic, MicOff, Home, ShoppingBag,
-  Camera, Paperclip
+  Camera, Paperclip, Presentation
 } from "lucide-react";
 
 export interface ChatInputProps {
@@ -44,6 +45,7 @@ type PanelType = null | "menu" | "floorplan" | "product";
 
 const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(
   ({ onSend, disabled, placeholder, compact }, ref) => {
+    const navigate = useNavigate();
     const [text, setText] = useState("");
     const [attachments, setAttachments] = useState<Attachment[]>([]);
     const [activePanel, setActivePanel] = useState<PanelType>(null);
@@ -163,12 +165,13 @@ const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(
               className="overflow-hidden border-b border-border/30"
             >
               <div className="max-w-2xl mx-auto px-4 py-3">
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-5 gap-2">
                   {[
                     { icon: Image, label: "图片", color: "text-menu-image", bg: "bg-menu-image/10", action: () => imageInputRef.current?.click() },
                     { icon: Paperclip, label: "文件", color: "text-menu-file", bg: "bg-menu-file/10", action: () => fileInputRef.current?.click() },
                     { icon: Home, label: "选户型", color: "text-menu-floorplan", bg: "bg-menu-floorplan/10", action: () => setActivePanel("floorplan") },
                     { icon: ShoppingBag, label: "选商品", color: "text-menu-product", bg: "bg-menu-product/10", action: () => setActivePanel("product") },
+                    { icon: Presentation, label: "产品介绍", color: "text-primary", bg: "bg-primary/10", action: () => { setActivePanel(null); navigate("/presentation"); } },
                   ].map((item) => (
                     <button
                       key={item.label}
