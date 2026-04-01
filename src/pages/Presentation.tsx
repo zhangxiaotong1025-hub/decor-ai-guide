@@ -77,7 +77,7 @@ const SlideOverview = () => (
       <div>
         <p className="text-label text-primary mb-3">PRODUCT OVERVIEW</p>
         <h2 className="text-4xl font-bold text-foreground leading-snug">
-          基于AI的<span className="text-primary">「空间化卖货引擎」</span>
+          基于AI的<span className="text-primary">「以空间方案卖货」</span>
         </h2>
         <p className="text-lg text-muted-foreground mt-3 max-w-2xl">
           用空间方案替代传统货架，提升商品转化率
