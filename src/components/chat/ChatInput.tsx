@@ -45,6 +45,7 @@ type PanelType = null | "menu" | "floorplan" | "product";
 
 const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(
   ({ onSend, disabled, placeholder, compact }, ref) => {
+    const navigate = useNavigate();
     const [text, setText] = useState("");
     const [attachments, setAttachments] = useState<Attachment[]>([]);
     const [activePanel, setActivePanel] = useState<PanelType>(null);
