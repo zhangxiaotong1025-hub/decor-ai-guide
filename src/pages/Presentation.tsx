@@ -15,12 +15,12 @@ const SlideCover = () => (
     <div className="relative z-10 space-y-8">
       <div className="flex items-center justify-center gap-3 mb-4">
         <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-          <span className="text-white font-bold text-2xl font-serif italic">灵</span>
+          <span className="text-white font-bold text-2xl font-serif italic">智</span>
         </div>
-        <span className="text-white/60 text-lg tracking-widest">LINGDONG DESIGN</span>
+        <span className="text-white/60 text-lg tracking-widest">智能电商</span>
       </div>
       <h1 className="text-5xl md:text-7xl font-bold text-white leading-tight tracking-display">
-        AI空间导购<br />
+        AI空间设计<br />
         <span className="bg-gradient-to-r from-primary via-blue-400 to-accent bg-clip-text text-transparent">
           解决方案
         </span>
